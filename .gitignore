@@ -1,0 +1,11 @@
+**/node_modules
+node_modules
+build
+**/.DS_Store
+*.DS_Store
+*.iml
+.idea
+*.sublime-project
+*.sublime-workspace
+*.log
+atlassian-ide-plugin.xml

@@ -1,0 +1,3 @@
+{
+    "INSERT_USER": "INSERT INTO `user` (`first_name`, `last_name`, `email`, `password`, `last_auth_timestamp`, `created_timestamp`, `address`, `phone_number`, `enabled`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"
+}

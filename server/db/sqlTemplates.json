@@ -4,5 +4,8 @@
     "SELECT_USERS_BY_EMAIL": "SELECT * FROM `user` WHERE ",
     "INSERT_CUSTOMER": "INSERT INTO `customer` (`name`, `address`, `phone`, `email`) VALUES (?, ?, ?, ?);",
     "SELECT_CUSTOMERS_BY_ID": "SELECT * FROM `customer` WHERE ",
-    "SELECT_CUSTOMERS_BY_EMAIL": "SELECT * FROM `customer` WHERE "
+    "SELECT_CUSTOMERS_BY_EMAIL": "SELECT * FROM `customer` WHERE ",
+    "INSERT_PRODUCT": "INSERT INTO `product` (`name`, `description`, `unit_id`, `base_unit_price`, `enabled`) VALUES (?, ?, ?, ?, ?);",
+    "SELECT_PRODUCTS_BY_ID": "SELECT * FROM `product` WHERE ",
+    "SELECT_PRODUCTS": "SELECT * FROM `product`"
 }

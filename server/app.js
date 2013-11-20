@@ -5,7 +5,8 @@ var express = require('express'),
 
 // Routes
 var users = require('./routes/users'),
-    customers = require('./routes/customers');
+    customers = require('./routes/customers'),
+    products = require('./routes/products');
 
 var app = express();
 
@@ -30,6 +31,9 @@ app.post('/services/v1/users', users.create);
 
 app.get('/services/v1/customers', customers.list);
 app.post('/services/v1/customers', customers.create);
+
+app.get('/services/v1/products', products.list);
+app.post('/services/v1/products', products.create);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

@@ -10,6 +10,23 @@ var mysql = require('mysql'),
     bcrypt = require('bcrypt'),
     _ = require('lodash');
 
+function cc (obj) {
+    if(_.isObject(obj)) {
+        return _.transform(obj, function (result, value, key) {
+            if(_.isString(key)) {
+                var ccKey = key.replace(/(\_[a-z])/g, function($1) {
+                    return $1.toUpperCase().replace('_', '');
+                });
+                result[ccKey] = cc(value);
+            } else {
+                result[key] = cc(value);
+            }
+        });
+    } else {
+        return obj;
+    }
+}
+
 module.exports = {
     /**
      * Inserts a new user into the database.
@@ -17,7 +34,7 @@ module.exports = {
      * @param newUsers  An object or array of objects specifying the new user(s) to be created.
      * @param cb        Callback to be passed the result of the action.
      */
-    insertUsers: function DBInsertUsers (newUsers, cb) {
+    insertUsers: function insertUsers (newUsers, cb) {
         var results = [],
             requests = _.isArray(newUsers) ? newUsers : [ newUsers ],
             done = function (result) {
@@ -70,11 +87,11 @@ module.exports = {
         });
     },
 
-    selectUsersById: function DBSelectUsersById (userIds, cb) {},
+    selectUsersById: function selectUsersById (userIds, cb) {},
 
-    selectUsersByEmail: function DBSelectUsersByEmail (userEmails, cb) {},
+    selectUsersByEmail: function selectUsersByEmail (userEmails, cb) {},
 
-    insertCustomers: function DBInsertCustomers (newCustomers, cb) {
+    insertCustomers: function insertCustomers (newCustomers, cb) {
         var results = [],
             requests = _.isArray(newCustomers) ? newCustomers : [ newCustomers ],
             done = function (result) {
@@ -111,5 +128,55 @@ module.exports = {
         });
     },
 
-    selectCustomersById: function DBSelectCustomersById (customerIds, cb) {}
+    selectCustomersById: function selectCustomersById (customerIds, cb) {},
+
+    insertProducts: function insertProducts (newProducts, cb) {
+        var results = [],
+            requests = _.isArray(newProducts) ? newProducts : [ newProducts ],
+            done = function (result) {
+                results.push(result);
+
+                if(results.length === requests.length) {
+                    if(_.isFunction(cb)) {
+                        if(results.length === 1) {
+                            cb.apply(results[0], results[0]);
+                        } else {
+                            cb(false, results);
+                        }
+                    }
+                }
+            };
+
+        _.forEach(requests, function (newProduct) {
+            if('name' in newProduct && 'unitId' in newProduct && 'baseUnitPrice' in newProduct && 'enabled' in newProduct) {
+                dbc.query(sqlTemplates.INSERT_PRODUCT, [
+                    newProduct.name,
+                    newProduct.description,
+                    newProduct.unitId,
+                    newProduct.baseUnitPrice,
+                    newProduct.enabled
+                ], function (err, result) {
+                    if(err) {
+                        done([ err ]);
+                    } else {
+                        done([ false, _.extend(result, newProduct) ]);
+                    }
+                });
+            } else {
+                done([ 'Missing required information in newProduct.' ]);
+            }
+        });
+    },
+
+    selectProducts: function selectProducts (cb) {
+        if(_.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_PRODUCTS, function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, cc(result));
+                }
+            });
+        }
+    }
 };

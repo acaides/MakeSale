@@ -1,3 +1,8 @@
 {
-    "INSERT_USER": "INSERT INTO `user` (`first_name`, `last_name`, `email`, `password`, `last_auth_timestamp`, `created_timestamp`, `address`, `phone_number`, `enabled`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"
+    "INSERT_USER": "INSERT INTO `user` (`first_name`, `last_name`, `email`, `password`, `last_auth_timestamp`, `created_timestamp`, `address`, `phone`, `enabled`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);",
+    "SELECT_USERS_BY_ID": "SELECT * FROM `user` WHERE ",
+    "SELECT_USERS_BY_EMAIL": "SELECT * FROM `user` WHERE ",
+    "INSERT_CUSTOMER": "INSERT INTO `customer` (`name`, `address`, `phone`, `email`) VALUES (?, ?, ?, ?);",
+    "SELECT_CUSTOMERS_BY_ID": "SELECT * FROM `customer` WHERE ",
+    "SELECT_CUSTOMERS_BY_EMAIL": "SELECT * FROM `customer` WHERE "
 }

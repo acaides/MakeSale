@@ -2,9 +2,9 @@ var db = require('../db'),
     _ = require('lodash');
 
 module.exports = {
-    create: function createUsers (req, res) {
+    create: function createCustomers (req, res) {
         if(_.isPlainObject(req.body) || _.isArray(req.body)) {
-            db.insertUsers(req.body, function (err, result) {
+            db.insertCustomers(req.body, function (err, result) {
                 if(err) {
                     res.send(400, {
                         error: err
@@ -19,10 +19,9 @@ module.exports = {
                         if(result) {
                             response.push({
                                 id: result.insertId,
-                                firstName: result.firstName,
-                                lastName: result.lastName,
+                                name: result.firstName,
                                 email: result.email,
-                                address: result.address,
+                                address: 'address' in result ? result.address : undefined,
                                 phone: 'phone' in result ? result.phone : undefined
                             });
                         } else {
@@ -38,19 +37,7 @@ module.exports = {
         }
     },
 
-    list: function listUsers (req, res) {
-        res.send(501, { error: 'User listing is not yet implemented.' });
+    list: function listCustomers (req, res) {
+        res.send(501, { error: 'Customer listing is not yet implemented.' });
     }
 };
-
-/*
- * GET users listing.
- */
-
-//exports.list = function(req, res){
-//  res.send({
-//      one: 1,
-//      two: '2',
-//      three: [ 3, '3' ]
-//  });
-//};

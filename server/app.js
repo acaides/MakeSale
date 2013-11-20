@@ -1,12 +1,11 @@
+// External dependencies.
+var express = require('express'),
+    http = require('http'),
+    path = require('path');
 
-/**
- * Module dependencies.
- */
-
-var express = require('express');
-var users = require('./routes/users');
-var http = require('http');
-var path = require('path');
+// Routes
+var users = require('./routes/users'),
+    customers = require('./routes/customers');
 
 var app = express();
 
@@ -26,8 +25,11 @@ if ('development' == app.get('env')) {
 }
 
 //app.get('/', routes.index);
-//app.get('/users', user.list);
+app.get('/services/v1/users', users.list);
 app.post('/services/v1/users', users.create);
+
+app.get('/services/v1/customers', customers.list);
+app.post('/services/v1/customers', customers.create);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

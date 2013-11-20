@@ -12,13 +12,12 @@ var mysql = require('mysql'),
 
 module.exports = {
     /**
-     * Create a new user.
+     * Inserts a new user into the database.
      *
-     * @param authUser  The existing user authorizing the creation of the new user.
      * @param newUsers  An object or array of objects specifying the new user(s) to be created.
      * @param cb        Callback to be passed the result of the action.
      */
-    createUser: function DBCreateUser (authUser, newUsers, cb) {
+    insertUsers: function DBInsertUsers (newUsers, cb) {
         var results = [],
             requests = _.isArray(newUsers) ? newUsers : [ newUsers ],
             done = function (result) {
@@ -69,5 +68,48 @@ module.exports = {
                 done([ 'Missing required information in newUser.' ]);
             }
         });
-    }
+    },
+
+    selectUsersById: function DBSelectUsersById (userIds, cb) {},
+
+    selectUsersByEmail: function DBSelectUsersByEmail (userEmails, cb) {},
+
+    insertCustomers: function DBInsertCustomers (newCustomers, cb) {
+        var results = [],
+            requests = _.isArray(newCustomers) ? newCustomers : [ newCustomers ],
+            done = function (result) {
+                results.push(result);
+
+                if(results.length === requests.length) {
+                    if(_.isFunction(cb)) {
+                        if(results.length === 1) {
+                            cb.apply(results[0], results[0]);
+                        } else {
+                            cb(false, results);
+                        }
+                    }
+                }
+            };
+
+        _.forEach(requests, function (newCustomer) {
+            if('name' in newCustomer && 'email' in newCustomer) {
+                dbc.query(sqlTemplates.INSERT_CUSTOMER, [
+                    newCustomer.name,
+                    newCustomer.address,
+                    newCustomer.phone,
+                    newCustomer.email
+                ], function (err, result) {
+                    if(err) {
+                        done([ err ]);
+                    } else {
+                        done([ false, _.extend(result, newCustomer) ]);
+                    }
+                });
+            } else {
+                done([ 'Missing required information in newCustomer.' ]);
+            }
+        });
+    },
+
+    selectCustomersById: function DBSelectCustomersById (customerIds, cb) {}
 };

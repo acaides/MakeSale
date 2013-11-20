@@ -7,5 +7,8 @@
     "SELECT_CUSTOMERS_BY_EMAIL": "SELECT * FROM `customer` WHERE ",
     "INSERT_PRODUCT": "INSERT INTO `product` (`name`, `description`, `unit_id`, `base_unit_price`, `enabled`) VALUES (?, ?, ?, ?, ?);",
     "SELECT_PRODUCTS_BY_ID": "SELECT * FROM `product` WHERE ",
-    "SELECT_PRODUCTS": "SELECT * FROM `product`"
+    "SELECT_PRODUCTS": "SELECT * FROM `product`;",
+    "INSERT_ORDER": "INSERT INTO `order` (`customer_id`, `created_user_id`, `modified_user_id`, `type_id`, `status_id`, `subtotal`, `total`, `tax`, `created_timestamp`, `modified_timestamp`, `filled_timestamp`, `paid_timestamp`) VALUES (?, ?, NULL, ?, 1, 0.00, 0.00, 0.00, NOW(), NULL, NULL, NULL);",
+    "SELECT_ORDERS_BY_ID": "SELECT * FROM `order` WHERE id IN(?);",
+    "SELECT_ORDERS": "SELECT * FROM `order`;"
 }

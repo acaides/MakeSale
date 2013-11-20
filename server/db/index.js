@@ -11,7 +11,7 @@ var mysql = require('mysql'),
     _ = require('lodash');
 
 function cc (obj) {
-    if(_.isObject(obj)) {
+    if(_.isObject(obj) && !_.isDate(obj)) {
         return _.transform(obj, function (result, value, key) {
             if(_.isString(key)) {
                 var ccKey = key.replace(/(\_[a-z])/g, function($1) {
@@ -171,6 +171,66 @@ module.exports = {
     selectProducts: function selectProducts (cb) {
         if(_.isFunction(cb)) {
             dbc.query(sqlTemplates.SELECT_PRODUCTS, function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, cc(result));
+                }
+            });
+        }
+    },
+
+    insertOrders: function insertOrders (newOrders, cb) {
+        var results = [],
+            requests = _.isArray(newOrders) ? newOrders : [ newOrders ],
+            done = function (result) {
+                results.push(result);
+
+                if(results.length === requests.length) {
+                    if(_.isFunction(cb)) {
+                        if(results.length === 1) {
+                            cb.apply(results[0], results[0]);
+                        } else {
+                            cb(false, results);
+                        }
+                    }
+                }
+            };
+
+        _.forEach(requests, function (newOrder) {
+            if('customerId' in newOrder && 'createdUserId' in newOrder && 'typeId' in newOrder) {
+                dbc.query(sqlTemplates.INSERT_ORDER, [
+                    newOrder.customerId,
+                    newOrder.createdUserId,
+                    newOrder.typeId
+                ], function (err, result) {
+                    if(err) {
+                        done([ err ]);
+                    } else {
+                        done([ false, _.extend(result, newOrder) ]);
+                    }
+                });
+            } else {
+                done([ 'Missing required information in newOrder.' ]);
+            }
+        });
+    },
+
+    selectOrdersById: function selectOrdersById(orderIds, cb) {
+        if(_.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_ORDERS_BY_ID, [ _.isArray(orderIds) ? orderIds : [ orderIds ] ], function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, cc(result));
+                }
+            });
+        }
+    },
+
+    selectOrders: function selectOrders (cb) {
+        if(_.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_ORDERS, function (err, result) {
                 if(err) {
                     cb(err);
                 } else {

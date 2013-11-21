@@ -39,6 +39,7 @@ app.post('/services/v1/products', products.create);
 
 app.get('/services/v1/orders', orders.list);
 app.post('/services/v1/orders', orders.create);
+app.get('/services/v1/orders/:orderId', orders.retrieve);
 
 app.get('/services/v1/orders/:orderId/items', orderItems.list);
 app.post('/services/v1/orders/:orderId/items', orderItems.create);

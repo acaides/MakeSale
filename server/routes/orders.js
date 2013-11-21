@@ -49,5 +49,21 @@ module.exports = {
                 res.send(200, orders);
             }
         });
+    },
+
+    retrieve: function retrieveOrder (req, res) {
+        var orderId = parseInt(req.param('orderId'), 10);
+
+        if(_.isNumber(orderId) && orderId > 0) {
+            db.selectOrdersById(orderId, function (err, order) {
+                if(err) {
+                    res.send(500, { error: err });
+                } else {
+                    res.send(200, order);
+                }
+            });
+        } else {
+            res.send(400, { error: 'Invalid order id.' });
+        }
     }
 };

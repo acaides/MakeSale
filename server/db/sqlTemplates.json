@@ -6,6 +6,7 @@
     "SELECT_CUSTOMERS_BY_ID": "SELECT * FROM `customer` WHERE ",
     "SELECT_CUSTOMERS_BY_EMAIL": "SELECT * FROM `customer` WHERE ",
     "INSERT_PRODUCT": "INSERT INTO `product` (`name`, `description`, `unit_id`, `enabled`) VALUES (?, ?, ?, ?);",
+    "UPDATE_PRODUCT": "UPDATE `product` SET ?",
     "INSERT_PRODUCT_PRICE": "INSERT INTO `product_price` (`product_id`, `order_type_id`, `unit_price`) VALUES (?, ?, ?);",
     "SELECT_PRODUCT_PRICES_BY_PRODUCT_ID": "SELECT * FROM `product_price` WHERE `product_id` = ?;",
     "UPDATE_PRODUCT_PRICE": "UPDATE `product_price` SET `unit_price` = ? WHERE `product_id` = ? AND `order_type_id` = ?;",

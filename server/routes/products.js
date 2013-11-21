@@ -63,5 +63,27 @@ module.exports = {
         } else {
             res.send(400, { error: 'Invalid product id.' });
         }
+    },
+
+    modify: function modifyProduct (req, res) {
+        var pMods = req.body,
+            productId = parseInt(req.param('productId'), 10);
+
+        if(!_.isNumber(productId) || productId < 1) {
+            res.send(400, { error: 'Invalid product id.' });
+            return;
+        }
+
+        if(_.isPlainObject(pMods)) {
+            db.updateProduct(productId, pMods, function (err, product) {
+                if(err) {
+                    res.send(500, { error: err });
+                } else {
+                    res.send(200, product);
+                }
+            });
+        } else {
+            res.send(400, { error: 'No product modifications specified.' });
+        }
     }
 };

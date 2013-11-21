@@ -42,6 +42,8 @@ app.post(V1_SERVICES_BASE + 'customers', customers.create);
 // Products routes
 app.get(V1_SERVICES_BASE + 'products', products.list);
 app.get(V1_SERVICES_BASE + 'products/:productId', products.retrieve);
+app.put(V1_SERVICES_BASE + 'products/:productId', products.modify);
+app.patch(V1_SERVICES_BASE + 'products/:productId', products.modify);
 app.post(V1_SERVICES_BASE + 'products', products.create);
 app.get(V1_SERVICES_BASE + 'products/:productId/prices', productPrices.list);
 app.post(V1_SERVICES_BASE + 'products/:productId/prices', productPrices.create);

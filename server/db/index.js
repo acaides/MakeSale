@@ -10,16 +10,33 @@ var mysql = require('mysql'),
     bcrypt = require('bcrypt'),
     _ = require('lodash');
 
-function cc (obj) {
+function us2cc (obj) {
     if(_.isObject(obj) && !_.isDate(obj)) {
         return _.transform(obj, function (result, value, key) {
             if(_.isString(key)) {
                 var ccKey = key.replace(/(\_[a-z])/g, function($1) {
                     return $1.toUpperCase().replace('_', '');
                 });
-                result[ccKey] = cc(value);
+                result[ccKey] = us2cc(value);
             } else {
-                result[key] = cc(value);
+                result[key] = us2cc(value);
+            }
+        });
+    } else {
+        return obj;
+    }
+}
+
+function cc2us (obj) {
+    if(_.isObject(obj) && !_.isDate(obj)) {
+        return _.transform(obj, function (result, value, key) {
+            if(_.isString(key)) {
+                    var ccKey = key.replace(/([A-Z])/g, function ($1) {
+                    return '_' + $1.toLowerCase();
+                });
+                result[ccKey] = cc2us(value);
+            } else {
+                result[key] = cc2us(value);
             }
         });
     } else {
@@ -167,6 +184,20 @@ module.exports = {
         });
     },
 
+    updateProduct: function updateProduct (productId, mods, cb) {
+        if(productId && mods) {
+            dbc.query(sqlTemplates.UPDATE_PRODUCT + ' WHERE `id` = ' + productId + ';', cc2us(mods), function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, result);
+                }
+            });
+        } else {
+            cb('Missing required input.');
+        }
+    },
+
     insertProductPrices: function insertProductPrices (newProductPrices, cb) {
         var results = [],
             requests = _.isArray(newProductPrices) ? newProductPrices : [ newProductPrices ],
@@ -209,7 +240,7 @@ module.exports = {
                 if(err) {
                     cb(err);
                 } else {
-                    cb(false, cc(result));
+                    cb(false, us2cc(result));
                 }
             });
         }
@@ -221,7 +252,7 @@ module.exports = {
                 if(err) {
                     cb(err);
                 } else {
-                    cb(false, cc(result));
+                    cb(false, us2cc(result));
                 }
             });
         }
@@ -233,7 +264,7 @@ module.exports = {
                 if(err) {
                     cb(err);
                 } else {
-                    cb(false, cc(result));
+                    cb(false, us2cc(result));
                 }
             });
         }
@@ -297,7 +328,7 @@ module.exports = {
                 if(err) {
                     cb(err);
                 } else {
-                    cb(false, cc(result));
+                    cb(false, us2cc(result));
                 }
             });
         }
@@ -309,7 +340,7 @@ module.exports = {
                 if(err) {
                     cb(err);
                 } else {
-                    cb(false, cc(result));
+                    cb(false, us2cc(result));
                 }
             });
         }
@@ -324,7 +355,7 @@ module.exports = {
                     if(err) {
                         cb(err);
                     } else {
-                        cb(false, cc(result));
+                        cb(false, us2cc(result));
                     }
                 });
             } else {

@@ -167,6 +167,54 @@ module.exports = {
         });
     },
 
+    insertProductPrices: function insertProductPrices (newProductPrices, cb) {
+        var results = [],
+            requests = _.isArray(newProductPrices) ? newProductPrices : [ newProductPrices ],
+            done = function (result) {
+                results.push(result);
+
+                if(results.length === requests.length) {
+                    if(_.isFunction(cb)) {
+                        if(results.length === 1) {
+                            cb.apply(results[0], results[0]);
+                        } else {
+                            cb(false, results);
+                        }
+                    }
+                }
+            };
+
+        _.forEach(requests, function (newProductPrice) {
+            if('productId' in newProductPrice && 'orderTypeId' in newProductPrice && 'unitPrice' in newProductPrice) {
+                dbc.query(sqlTemplates.INSERT_PRODUCT_PRICE, [
+                    newProductPrice.productId,
+                    newProductPrice.orderTypeId,
+                    newProductPrice.unitPrice
+                ], function (err, result) {
+                    if(err) {
+                        done([ err ]);
+                    } else {
+                        done([ false, _.extend(result, newProductPrice) ]);
+                    }
+                });
+            } else {
+                done([ 'Missing required information in newProductPrice.' ]);
+            }
+        });
+    },
+
+    selectProductPricesByProductId: function selectProductPricesByProductId (productId, cb) {
+        if(_.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_PRODUCT_PRICES_BY_PRODUCT_ID, [ productId ], function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, cc(result));
+                }
+            });
+        }
+    },
+
     selectProducts: function selectProducts (cb) {
         if(_.isFunction(cb)) {
             dbc.query(sqlTemplates.SELECT_PRODUCTS, function (err, result) {
@@ -176,6 +224,34 @@ module.exports = {
                     cb(false, cc(result));
                 }
             });
+        }
+    },
+
+    selectProductsById: function selectProductsById (productIds, cb) {
+        if(_.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_PRODUCTS_BY_ID, [ _.isArray(productIds) ? productIds : [ productIds ] ], function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, cc(result));
+                }
+            });
+        }
+    },
+
+    updateProductPrice: function updateProductPrice (productId, orderTypeId, unitPrice, cb) {
+        if(productId && orderTypeId && unitPrice) {
+            dbc.query(sqlTemplates.UPDATE_PRODUCT_PRICE, [ unitPrice, productId, orderTypeId ], function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, result);
+                }
+            });
+        } else {
+            if(_.isFunction(cb)) {
+                cb('Missing required input.');
+            }
         }
     },
 

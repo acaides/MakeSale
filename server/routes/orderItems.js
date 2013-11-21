@@ -41,7 +41,7 @@ module.exports = {
         }
     },
 
-    list: function listOrders (req, res) {
+    list: function listOrderItems (req, res) {
         var orderId = parseInt(req.param('orderId'), 10);
 
         if(_.isNumber(orderId) && orderId > 0) {

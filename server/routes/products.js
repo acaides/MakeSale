@@ -22,7 +22,6 @@ module.exports = {
                                 name: result.name,
                                 description: 'description' in result ? result.description : undefined,
                                 unitId: result.unitId,
-                                baseUnitPrice: result.baseUnitPrice,
                                 enabled: result.enabled
                             });
                         } else {

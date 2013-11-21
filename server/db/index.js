@@ -148,12 +148,11 @@ module.exports = {
             };
 
         _.forEach(requests, function (newProduct) {
-            if('name' in newProduct && 'unitId' in newProduct && 'baseUnitPrice' in newProduct && 'enabled' in newProduct) {
+            if('name' in newProduct && 'unitId' in newProduct && 'enabled' in newProduct) {
                 dbc.query(sqlTemplates.INSERT_PRODUCT, [
                     newProduct.name,
                     newProduct.description,
                     newProduct.unitId,
-                    newProduct.baseUnitPrice,
                     newProduct.enabled
                 ], function (err, result) {
                     if(err) {
@@ -237,6 +236,24 @@ module.exports = {
                     cb(false, cc(result));
                 }
             });
+        }
+    },
+
+    insertOrderItems: function insertOrderItems (newOrderItems, cb) {},
+
+    selectOrderItemsByOrderId: function selectOrderItemsByOrderId (orderId, cb) {
+        if(_.isFunction(cb)) {
+            if(_.isNumber(orderId)) {
+                dbc.query(sqlTemplates.SELECT_ORDER_ITEMS_BY_ORDER_ID, [ orderId ], function (err, result) {
+                    if(err) {
+                        cb(err);
+                    } else {
+                        cb(false, cc(result));
+                    }
+                });
+            } else {
+                cb('Bad orderId.');
+            }
         }
     }
 };

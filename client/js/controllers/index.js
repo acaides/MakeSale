@@ -1,1 +1,6 @@
-define([ './HomeController' ], function () {});
+define([
+    './HomeController',
+    './ProductsController',
+    './OrdersController',
+    './DocumentsController'
+], function () {});

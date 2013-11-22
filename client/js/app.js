@@ -7,6 +7,7 @@ define([
 
     return ng.module('net.beurrage', [
         'ngRoute',
+        'ngResource',
         'net.beurrage.services',
         'net.beurrage.controllers'
     ]);

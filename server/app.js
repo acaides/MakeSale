@@ -57,6 +57,11 @@ app.get(V1_SERVICES_BASE + 'orders/:orderId', orders.retrieve);
 app.get(V1_SERVICES_BASE + 'orders/:orderId/items', orderItems.list);
 app.post(V1_SERVICES_BASE + 'orders/:orderId/items', orderItems.create);
 
+// Any unhandled routes will return the client app.
+app.use(function(req, res){
+    res.sendfile(path.join(__dirname, '../client/index.html'));
+});
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

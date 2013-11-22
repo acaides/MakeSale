@@ -1,0 +1,10 @@
+<div>
+    <div>
+        Products <a href="/products/add">add</a>
+    </div>
+    <a ng-repeat="product in products" href="/products/{{ product.id }}">
+        <div>
+            {{ product.name }}
+        </div>
+    </a>
+</div>

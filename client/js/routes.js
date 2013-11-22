@@ -5,22 +5,31 @@ define([ './app' ], function (app) {
         $locationProvider.html5Mode(true).hashPrefix('!');
 
         $routeProvider.when('/', {
-            templateUrl: 'html/views/home.html',
+            templateUrl: '/html/views/home.html',
             controller: 'HomeController'
         });
 
         $routeProvider.when('/products', {
-            templateUrl: 'html/views/products.html',
+            templateUrl: '/html/views/products/products.html',
             controller: 'ProductsController'
         });
 
+        $routeProvider.when('/products/add', {
+            templateUrl: '/html/views/products/addProduct.html'
+        });
+
+        $routeProvider.when('/products/:productId', {
+            templateUrl: '/html/views/products/singleProduct.html',
+            controller: 'SingleProductController'
+        });
+
         $routeProvider.when('/orders', {
-            templateUrl: 'html/views/orders.html',
+            templateUrl: '/html/views/orders.html',
             controller: 'OrdersController'
         });
 
         $routeProvider.when('/documents', {
-            templateUrl: 'html/views/documents.html',
+            templateUrl: '/html/views/documents.html',
             controller: 'DocumentsController'
         });
 

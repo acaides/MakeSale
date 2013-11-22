@@ -1,0 +1,8 @@
+<div>
+    <a ng-repeat="order in orders" href="/orders/{{ order.id }}">
+        <div>
+            Customer: {{ order.customerId }}<br>
+            Created: {{ order.createdTimestamp }}
+        </div>
+    </a>
+</div>

@@ -31,6 +31,34 @@ define([ './module' ], function (services) {
                     });
 
                 return product;
+            },
+
+            getOrders: function BNGetOrders () {
+                var orders = [];
+
+                $http({ method: 'GET', url: SB + 'orders' }).
+                    success(function(data, status, headers, config) {
+                        angular.extend(orders, data);
+                    }).
+                    error(function(data, status, headers, config) {
+
+                    });
+
+                return orders;
+            },
+
+            getOrderById: function BNGetOrderById (orderId) {
+                var order = {};
+
+                $http({ method: 'GET', url: SB + 'orders/' + orderId }).
+                    success(function(data, status, headers, config) {
+                        angular.extend(order, data);
+                    }).
+                    error(function(data, status, headers, config) {
+
+                    });
+
+                return order;
             }
         };
     } ]);

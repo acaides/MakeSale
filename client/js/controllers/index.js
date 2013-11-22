@@ -3,5 +3,7 @@ define([
     './ProductsController',
     './SingleProductController',
     './OrdersController',
+    './SingleOrderController',
+    './StartOrderController',
     './DocumentsController'
 ], function () {});

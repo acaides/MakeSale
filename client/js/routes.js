@@ -24,8 +24,18 @@ define([ './app' ], function (app) {
         });
 
         $routeProvider.when('/orders', {
-            templateUrl: '/html/views/orders.html',
+            templateUrl: '/html/views/orders/orders.html',
             controller: 'OrdersController'
+        });
+
+        $routeProvider.when('/orders/:orderId', {
+            templateUrl: '/html/views/orders/singleOrder.html',
+            controller: 'SingleOrderController'
+        });
+
+        $routeProvider.when('/orders/start', {
+            templateUrl: '/html/views/orders/startOrder.html',
+            controller: 'StartOrderController'
         });
 
         $routeProvider.when('/documents', {

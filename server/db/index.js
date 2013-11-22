@@ -6,7 +6,7 @@ var mysql = require('mysql'),
         database: 'beurrage',
         supportBigNumbers: true
     }),
-    sqlTemplates = require('./sqlTemplates.json'),
+    sqlTemplates = require('./sqlTemplates'),
     bcrypt = require('bcrypt'),
     _ = require('lodash');
 
@@ -322,9 +322,9 @@ module.exports = {
         });
     },
 
-    selectOrdersById: function selectOrdersById(orderIds, cb) {
+    selectOrderById: function selectFullOrderById(orderId, cb) {
         if(_.isFunction(cb)) {
-            dbc.query(sqlTemplates.SELECT_ORDERS_BY_ID, [ _.isArray(orderIds) ? orderIds : [ orderIds ] ], function (err, result) {
+            dbc.query(sqlTemplates.SELECT_ORDER_BY_ID, [ orderId ], function (err, result) {
                 if(err) {
                     cb(err);
                 } else {

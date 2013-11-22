@@ -55,13 +55,21 @@ module.exports = {
         var orderId = parseInt(req.param('orderId'), 10);
 
         if(_.isNumber(orderId) && orderId > 0) {
-            db.selectOrdersById(orderId, function (err, orders) {
+            db.selectOrderById(orderId, function (err, orders) {
                 if(err) {
                     res.send(500, { error: err });
                 } else if(orders.length !== 1) {
                     res.send(404, { error: 'No such order.' });
                 } else {
-                    res.send(200, orders[0]);
+                    var order = orders[0];
+                    db.selectOrderItemsByOrderId(order.id, function (err, orderItems) {
+                        if(err) {
+                            res.send(500, { error: err });
+                        } else {
+                            order.items = orderItems;
+                            res.send(200, order);
+                        }
+                    });
                 }
             });
         } else {

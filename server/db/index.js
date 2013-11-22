@@ -336,7 +336,7 @@ module.exports = {
 
     selectOrders: function selectOrders (cb) {
         if(_.isFunction(cb)) {
-            dbc.query(sqlTemplates.SELECT_ORDERS, function (err, result) {
+            dbc.query(sqlTemplates.SELECT_100_MOST_RECENT_ORDERS_LISTING, function (err, result) {
                 if(err) {
                     cb(err);
                 } else {

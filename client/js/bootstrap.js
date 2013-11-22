@@ -1,4 +1,4 @@
-define([ 'require', 'angular', 'angular-route', 'angular-resource', 'app', 'routes' ], function (require, ng) {
+define([ 'require', 'angular', 'angular-route', 'angular-resource', 'angular-animate', 'app', 'routes' ], function (require, ng) {
     'use strict';
 
     require([ 'domReady!' ], function (document) {

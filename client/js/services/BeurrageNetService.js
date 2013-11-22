@@ -39,6 +39,11 @@ define([ './module' ], function (services) {
                 $http({ method: 'GET', url: SB + 'orders' }).
                     success(function(data, status, headers, config) {
                         angular.extend(orders, data);
+
+                        angular.forEach(orders, function (order) {
+                            order.createdTimestamp = new Date(order.createdTimestamp);
+                            order.modifiedTimestamp = new Date(order.modifiedTimestamp);
+                        });
                     }).
                     error(function(data, status, headers, config) {
 

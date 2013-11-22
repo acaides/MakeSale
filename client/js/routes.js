@@ -28,14 +28,14 @@ define([ './app' ], function (app) {
             controller: 'OrdersController'
         });
 
-        $routeProvider.when('/orders/:orderId', {
-            templateUrl: '/html/views/orders/singleOrder.html',
-            controller: 'SingleOrderController'
-        });
-
         $routeProvider.when('/orders/start', {
             templateUrl: '/html/views/orders/startOrder.html',
             controller: 'StartOrderController'
+        });
+
+        $routeProvider.when('/orders/:orderId', {
+            templateUrl: '/html/views/orders/singleOrder.html',
+            controller: 'SingleOrderController'
         });
 
         $routeProvider.when('/documents', {

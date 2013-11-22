@@ -4,7 +4,8 @@ require.config({
         domReady: '../lib/requirejs/domReady',
         angular: '../lib/angularjs/angular',
         'angular-route': '../lib/angularjs/angular-route',
-        'angular-resource': '../lib/angularjs/angular-resource'
+        'angular-resource': '../lib/angularjs/angular-resource',
+        'angular-animate': '../lib/angularjs/angular-animate'
     },
 
     // angular does not support AMD out of the box, put it in a shim
@@ -16,6 +17,9 @@ require.config({
             deps: [ 'angular' ]
         },
         'angular-resource': {
+            deps: [ 'angular' ]
+        },
+        'angular-animate': {
             deps: [ 'angular' ]
         }
     },

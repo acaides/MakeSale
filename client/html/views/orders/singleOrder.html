@@ -9,16 +9,15 @@
     </div>
     <div ng-hide="order.error">
         <div class="header">
+            <a class="backLink" href="/orders"></a>
             <div class="headerText">Order #{{ order.id }}: {{ order.name || order.createdTimestamp.toDateString() }}</div>
-            <!--<div class="headerActions">-->
-            <!--<a href="/orders/start">start</a>-->
-            <!--</div>-->
         </div>
         <div class="singleOrderTop">
             <div style="font-size: 14px">for {{ order.customerName }}</div>
             <div style="font-size: 12px">
                 <div ng-show="order.customerPhone">phone #: {{ order.customerPhone }}</div>
                 <div ng-show="order.customerEmail">email: {{ order.customerEmail }}</div>
+                <div ng-hide="order.customerPhone"><br></div>
                 <div>started on {{ order.createdTimestamp.toLocaleString() }}</div>
                 <div>last updated {{ order.modifiedTimestamp.toLocaleString() }}</div>
             </div>
@@ -34,23 +33,26 @@
                 There are no items in this order.<br><br>
                 <a ng-show="order.statusId == 1" href="/orders/{{ order.id }}/addItem" style="font-weight: bold;">add an item now</a>
             </div>
-            <div class="row" style="padding-top: 18px;" ng-repeat="item in order.items">
-                <div class="column" style="width: 60px;">
-                    <span ng-hide="order.statusId == 1">{{ item.quantity }}</span>
-                    <input style="width: 30px;" ng-show="order.statusId == 1"type="number" ng-model="item.quantity" ng-change="itemQtyChange(item)"/>
-                    <span ng-show="item.unitId == 2">g</span>
-                    <span ng-show="item.unitId == 3">oz</span>
-                    <span ng-show="item.unitId == 4">fz</span>
-                    <span ng-show="item.unitId == 5">lb</span>
-                </div>
-                <div class="column" style="width: 175px;">
-                    {{ item.name }}
+            <div>
+                <div class="row" style="padding-top: 18px;" ng-repeat="item in order.items">
+                    <div class="column" style="width: 60px;">
+                        <span ng-hide="order.statusId == 1">{{ item.quantity }}</span>
+                        <input style="width: 30px;" ng-show="order.statusId == 1"type="number" ng-model="item.quantity" ng-change="itemQtyChange(item)"/>
+                        <span ng-show="item.unitId == 2">g</span>
+                        <span ng-show="item.unitId == 3">oz</span>
+                        <span ng-show="item.unitId == 4">fz</span>
+                        <span ng-show="item.unitId == 5">lb</span>
+                    </div>
+                    <div class="column" style="width: 175px;">
+                        {{ item.name }}
                 <span style="position: absolute; bottom: 14px; left: 80px; font-size: 10px; font-style: italic;">
                     @ {{ item.unitPrice | currency }} {{ item.unitName }}
                 </span>
+                    </div>
+                    <div class="column" style="width: 60px;">{{ item.itemTotal | currency }}</div>
                 </div>
-                <div class="column" style="width: 60px;">{{ item.itemTotal | currency }}</div>
             </div>
+
         </div>
         <div class="footer" ng-show="order.items.length">
             <div class="footerText">{{ itemCountText(order) }}<br></bt>Total: {{ order.total | currency }}</div>

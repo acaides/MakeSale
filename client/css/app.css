@@ -33,6 +33,8 @@ body {
 }
 
 .subHeader {
+    position: relative;
+    top: 3px;
     color: black;
     border-bottom: solid 1px rgba(128, 70, 24, 1);
     background: #E5D9CF;
@@ -41,6 +43,7 @@ body {
 .headerText, .footerText {
     display: inline-block;
     margin: 4px;
+    margin-left: 16px;
     color: white;
     font: 24px;
 }
@@ -133,4 +136,14 @@ a {
     width: 100%;
     background: #E5D9CF;
     padding: 4px;
+}
+
+.backLink {
+    position: absolute;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+    border-right:13px solid rgba(255, 255, 255, 0.5);
 }

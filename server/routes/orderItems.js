@@ -3,18 +3,25 @@ var db = require('../db'),
 
 module.exports = {
     create: function createOrderItems (req, res) {
+        var orderId = parseInt(req.param('orderId'), 10);
+
+        if(!_.isNumber(orderId) || orderId < 1) {
+            res.send(400, { error: 'Invalid order id.' } );
+            return;
+        }
+
         if(_.isPlainObject(req.body) || _.isArray(req.body)) {
             var theResult,
                 response = [],
-                done = function (r) {
-                    response.push(r);
+                done = function (err, result) {
+                    response.push(err || result);
 
                     if(response.length === theResult.length) {
                         res.send(201, response.length === 1 ? response[0] : response);
                     }
                 };
 
-            db.insertOrders(req.body, function (err, result) {
+            db.insertOrderItems(orderId, req.body, function (err, result) {
                 if(err) {
                     res.send(400, {
                         error: err
@@ -27,9 +34,7 @@ module.exports = {
                             error = rA[0];
 
                         if(result) {
-                            db.selectOrdersById(result.insertId, function (err, order) {
-                                done(order);
-                            });
+                            done(false, result);
                         } else {
                             done({
                                 error: error

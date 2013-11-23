@@ -28,6 +28,11 @@ module.exports = {
     UPDATE_PRODUCT_PRICE: 'UPDATE `product_price` SET `unit_price` = ? WHERE `product_id` = ? AND `order_type_id` = ?;',
     SELECT_PRODUCTS_BY_ID: 'SELECT * FROM `product` WHERE id IN(?);',
     SELECT_PRODUCTS: 'SELECT * FROM `product`;',
+    SELECT_PRODUCTS_FOR_ORDER_TYPE: 'SELECT `product`.*, `product_price`.`unit_price`, `unit`.`name` AS `unit_name` ' +
+        'FROM `product` ' +
+        'JOIN `product_price` ON `product_price`.`product_id` = `product`.`id` ' +
+        'AND `product_price`.`order_type_id` = ? ' +
+        'JOIN `unit` ON `unit`.`id` = `product`.`unit_id`;',
     INSERT_ORDER: 'INSERT INTO `order` ' +
         '(`customer_id`, `created_user_id`, `modified_user_id`, `type_id`, `status_id`, `subtotal`, `total`, `tax`, ' +
         '`created_timestamp`, `modified_timestamp`, `filled_timestamp`, `paid_timestamp`) ' +
@@ -37,7 +42,20 @@ module.exports = {
         'LIMIT 100;',
     SELECT_ORDER_BY_ID: sqlStubs.SELECT_ORDER +
         'WHERE `order`.`id` = ?;',
-    SELECT_ORDER_ITEMS_BY_ORDER_ID: 'SELECT `order_item`.`id` as `id`, `product`.`id` as `product_id`, `product`.`name`, `product`.`description`, `product_price`.`unit_price`, `product`.`unit_id`, `unit`.`name` as `unit_name`, `order_item`.`quantity`, `product_price`.`unit_price` * `order_item`.`quantity` as `item_total` FROM `order` JOIN `order_item` on `order_item`.`order_id` = `order`.`id` JOIN `product` on `product`.`id` = `order_item`.`product_id` JOIN `unit` on `unit`.`id` = `product`.`unit_id` JOIN `product_price` on `product_price`.`product_id` = `product`.`id` AND `product_price`.`order_type_id` = `order`.`type_id` WHERE `order`.`id` = ?;',
+    SELECT_ORDER_TYPE_ID_BY_ORDER_ID: 'SELECT `type_id` FROM `order` WHERE `id` = ?;',
+    SELECT_ORDER_ITEMS_BY_ORDER_ID: 'SELECT `order_item`.`id` as `id`, `product`.`id` as `product_id`, ' +
+        '`product`.`name`, `product`.`description`, `product_price`.`unit_price`, `product`.`unit_id`, ' +
+        '`unit`.`name` as `unit_name`, `order_item`.`quantity`, ' +
+        '`product_price`.`unit_price` * `order_item`.`quantity` as `item_total` ' +
+        'FROM `order` ' +
+        'JOIN `order_item` on `order_item`.`order_id` = `order`.`id` ' +
+        'JOIN `product` on `product`.`id` = `order_item`.`product_id` ' +
+        'JOIN `unit` on `unit`.`id` = `product`.`unit_id` ' +
+        'JOIN `product_price` on `product_price`.`product_id` = `product`.`id` ' +
+        'AND `product_price`.`order_type_id` = `order`.`type_id` ' +
+        'WHERE `order`.`id` = ? AND `order_item`.`quantity` > 0;',
+    SELECT_BARE_ORDER_ITEMS_BY_ORDER_ID: 'SELECT * FROM `order_item` WHERE `order_id` = ?;',
+    INSERT_ORDER_ITEM: 'INSERT INTO `order_item` (`order_id`, `product_id`, `quantity`) VALUES (?, ?, ?);',
     UPDATE_ORDER_ITEM: 'UPDATE `order_item` SET `quantity` = ? WHERE `id` = ?;',
     SELECT_ORDER_ITEM_COUNT_AND_SUBTOTAL_BY_ORDER_ID: 'SELECT SUM(`order_item`.`quantity`) AS `count`, ' +
         'SUM(`product_price`.`unit_price` * `order_item`.`quantity`) AS `subtotal` ' +

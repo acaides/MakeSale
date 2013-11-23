@@ -38,7 +38,20 @@ module.exports = {
     },
 
     list: function listProducts (req, res) {
-        db.selectProducts(function (err, products) {
+        var options = {};
+
+        if('orderId' in req.query) {
+            var orderId = parseInt(req.query.orderId, 10);
+
+            if(_.isNumber(orderId) && orderId > 0) {
+                options.orderId = orderId;
+            } else {
+                res.send(400, { error: 'Invalid order id.' });
+                return;
+            }
+        }
+
+        db.selectProducts(options, function (err, products) {
             if(err) {
                 res.send(500, { error: err });
             } else {

@@ -38,6 +38,11 @@ define([ './app' ], function (app) {
             controller: 'SingleOrderController'
         });
 
+        $routeProvider.when('/orders/:orderId/addItem', {
+            templateUrl: '/html/views/orders/addItem.html',
+            controller: 'AddItemController'
+        });
+
         $routeProvider.when('/documents', {
             templateUrl: '/html/views/documents.html',
             controller: 'DocumentsController'

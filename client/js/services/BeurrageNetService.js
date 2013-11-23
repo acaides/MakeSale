@@ -58,6 +58,9 @@ define([ './module' ], function (services) {
                 $http({ method: 'GET', url: SB + 'orders/' + orderId }).
                     success(function(data, status, headers, config) {
                         angular.extend(order, data);
+
+                        order.createdTimestamp = new Date(order.createdTimestamp);
+                        order.modifiedTimestamp = new Date(order.modifiedTimestamp);
                     }).
                     error(function(data, status, headers, config) {
 

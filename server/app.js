@@ -10,7 +10,8 @@ var V1_SERVICES_BASE = '/services/v1/',
     products = require('./routes/products'),
     productPrices = require('./routes/productPrices'),
     orders = require('./routes/orders'),
-    orderItems = require('./routes/orderItems');
+    orderItems = require('./routes/orderItems')
+    orderTypes = require('./routes/orderTypes');
 
 var app = express();
 
@@ -52,6 +53,7 @@ app.patch(V1_SERVICES_BASE + 'products/:productId/prices/:orderTypeId', productP
 
 // Orders routes
 app.get(V1_SERVICES_BASE + 'orders', orders.list);
+app.get(V1_SERVICES_BASE + 'orders/types', orderTypes.list);
 app.post(V1_SERVICES_BASE + 'orders', orders.create);
 app.get(V1_SERVICES_BASE + 'orders/:orderId', orders.retrieve);
 app.get(V1_SERVICES_BASE + 'orders/:orderId/items', orderItems.list);

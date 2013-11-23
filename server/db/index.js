@@ -145,6 +145,18 @@ var db = module.exports = {
         });
     },
 
+    selectCustomers: function selectCustomers (options, cb) {
+        if(_.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_CUSTOMER_LISTING, function (err, customers) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, customers);
+                }
+            });
+        }
+    },
+
     selectCustomersById: function selectCustomersById (customerIds, cb) {},
 
     insertProducts: function insertProducts (newProducts, cb) {
@@ -320,16 +332,24 @@ var db = module.exports = {
             };
 
         _.forEach(requests, function (newOrder) {
-            if('customerId' in newOrder && 'createdUserId' in newOrder && 'typeId' in newOrder) {
+            if('customerId' in newOrder && 'typeId' in newOrder) {
                 dbc.query(sqlTemplates.INSERT_ORDER, [
                     newOrder.customerId,
-                    newOrder.createdUserId,
-                    newOrder.typeId
+                    1,
+                    1,
+                    newOrder.typeId,
+                    newOrder.name
                 ], function (err, result) {
                     if(err) {
                         done([ err ]);
                     } else {
-                        done([ false, _.extend(result, newOrder) ]);
+                        db.updateOrder(result.insertId, function (err) {
+                            if(err) {
+                                done([ err ]);
+                            } else {
+                                done([ false, _.extend(result, newOrder) ]);
+                            }
+                        });
                     }
                 });
             } else {
@@ -373,8 +393,8 @@ var db = module.exports = {
                 results.push(result);
 
                 if(results.length === requests.length) {
-                    // Now, update the order quantities.
-                    db.updateOrderQuantities(orderId, function (err, result) {
+                    // Now, update the order.
+                    db.updateOrder(orderId, function (err, result) {
                         if(_.isFunction(cb)) {
                             if(err) {
                                 cb(err);
@@ -462,7 +482,7 @@ var db = module.exports = {
         }
     },
 
-    updateOrderQuantities: function updateOrderQuantities (orderId, cb) {
+    updateOrder: function updateOrder (orderId, cb) {
         var c = _.isFunction(cb) ? cb : _.noop;
 
         if(!orderId) {
@@ -480,7 +500,7 @@ var db = module.exports = {
             } else {
                 var q = result[0];
                 // Now, update the order entry.
-                dbc.query(sqlTemplates.UPDATE_ORDER_QUANTITIES, [ q.subtotal, q.subtotal, q.count, orderId ], function (err, result) {
+                dbc.query(sqlTemplates.UPDATE_ORDER, [ q.subtotal, q.subtotal, q.count, orderId ], function (err, result) {
                     if(err) {
                         c(err);
                     } else {
@@ -500,8 +520,8 @@ var db = module.exports = {
                 if(err) {
                     cb(err);
                 } else {
-                    // Now, update the order quantities.
-                    db.updateOrderQuantities(orderId, function (err, result) {
+                    // Now, update the order.
+                    db.updateOrder(orderId, function (err, result) {
                         if(err) {
                             cb(err);
                         } else {
@@ -515,6 +535,18 @@ var db = module.exports = {
             if(_.isFunction(cb)) {
                 cb('Missing required input.');
             }
+        }
+    },
+
+    selectOrderTypes: function selectOrderTypes (options, cb) {
+        if(_.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_ORDER_TYPE_LISTING, function (err, orderTypes) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, orderTypes);
+                }
+            });
         }
     }
 };

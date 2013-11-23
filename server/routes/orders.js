@@ -27,7 +27,7 @@ module.exports = {
                             error = rA[0];
 
                         if(result) {
-                            db.selectOrdersById(result.insertId, function (err, order) {
+                            db.selectOrderById(result.insertId, function (err, order) {
                                 done(order);
                             });
                         } else {

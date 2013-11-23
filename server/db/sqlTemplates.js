@@ -19,6 +19,7 @@ module.exports = {
     SELECT_USERS_BY_ID: 'SELECT * FROM `user` WHERE ',
     SELECT_USERS_BY_EMAIL: 'SELECT * FROM `user` WHERE ',
     INSERT_CUSTOMER: 'INSERT INTO `customer` (`name`, `address`, `phone`, `email`) VALUES (?, ?, ?, ?);',
+    SELECT_CUSTOMER_LISTING: 'SELECT * FROM `customer`;',
     SELECT_CUSTOMERS_BY_ID: 'SELECT * FROM `customer` WHERE ',
     SELECT_CUSTOMERS_BY_EMAIL: 'SELECT * FROM `customer` WHERE ',
     INSERT_PRODUCT: 'INSERT INTO `product` (`name`, `description`, `unit_id`, `enabled`) VALUES (?, ?, ?, ?);',
@@ -33,10 +34,7 @@ module.exports = {
         'JOIN `product_price` ON `product_price`.`product_id` = `product`.`id` ' +
         'AND `product_price`.`order_type_id` = ? ' +
         'JOIN `unit` ON `unit`.`id` = `product`.`unit_id`;',
-    INSERT_ORDER: 'INSERT INTO `order` ' +
-        '(`customer_id`, `created_user_id`, `modified_user_id`, `type_id`, `status_id`, `subtotal`, `total`, `tax`, ' +
-        '`created_timestamp`, `modified_timestamp`, `filled_timestamp`, `paid_timestamp`) ' +
-        'VALUES (?, ?, NULL, ?, 1, 0.00, 0.00, 0.00, NOW(), NULL, NULL, NULL);',
+    INSERT_ORDER: 'INSERT INTO `order` (`customer_id`, `created_user_id`, `modified_user_id`, `type_id`, `name`) VALUES (?, ?, ?, ?, ?);',
     SELECT_100_MOST_RECENT_ORDERS_LISTING: sqlStubs.SELECT_ORDER +
         'ORDER BY `modified_timestamp` DESC ' +
         'LIMIT 100;',
@@ -64,5 +62,6 @@ module.exports = {
         'JOIN `product_price` on `product_price`.`product_id` = `order_item`.`product_id` AND ' +
         '`product_price`.`order_type_id` = `order`.`type_id` ' +
         'WHERE `order`.`id` = ?;',
-    UPDATE_ORDER_QUANTITIES: 'UPDATE `order` SET `total` = ?, `subtotal` = ?, `item_count` = ? WHERE `id` = ?;'
+    UPDATE_ORDER: 'UPDATE `order` SET `total` = ?, `subtotal` = ?, `item_count` = ?, `modified_timestamp` = NOW() WHERE `id` = ?;',
+    SELECT_ORDER_TYPE_LISTING: 'SELECT * FROM `order_type`;'
 };

@@ -38,6 +38,12 @@ module.exports = {
     },
 
     list: function listCustomers (req, res) {
-        res.send(501, { error: 'Customer listing is not yet implemented.' });
+        db.selectCustomers({}, function (err, customers) {
+            if(err) {
+                res.send(500, { error: err });
+            } else {
+                res.send(200, customers);
+            }
+        });
     }
 };

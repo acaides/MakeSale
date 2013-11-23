@@ -33,6 +33,49 @@ define([ './module' ], function (services) {
                 return product;
             },
 
+            getCustomers: function BNGetCustomers () {
+                var customers = [];
+
+                $http({ method: 'GET', url: SB + 'customers' }).
+                    success(function(data, status, headers, config) {
+                        angular.extend(customers, data);
+                    }).
+                    error(function(data, status, headers, config) {
+                        angular.extend(customers, data);
+                    });
+
+                return customers;
+            },
+
+            startOrder: function BNStartOrder (customerId, typeId, name, cb) {
+                var order = {
+                    loading: true
+                };
+
+                $http({ method: 'POST', url: SB + 'orders/', data: { customerId: customerId, typeId: typeId, name: name } }).
+                    success(function(data, status, headers, config) {
+                        delete order.loading;
+                        angular.extend(order, data);
+
+                        order.createdTimestamp = new Date(order.createdTimestamp);
+                        order.modifiedTimestamp = new Date(order.modifiedTimestamp);
+
+                        if(angular.isFunction(cb)) {
+                            cb(order);
+                        }
+                    }).
+                    error(function(data, status, headers, config) {
+                        delete order.loading;
+                        angular.extend(order, data);
+
+                        if(angular.isFunction(cb)) {
+                            cb(order);
+                        }
+                    });
+
+                return order;
+            },
+
             getOrders: function BNGetOrders () {
                 var orders = [];
 
@@ -52,18 +95,36 @@ define([ './module' ], function (services) {
                 return orders;
             },
 
+            getOrderTypes: function BNGetOrderTypes () {
+                var orderTypes = [];
+
+                $http({ method: 'GET', url: SB + 'orders/types' }).
+                    success(function(data, status, headers, config) {
+                        angular.extend(orderTypes, data);
+                    }).
+                    error(function(data, status, headers, config) {
+                        angular.extend(orderTypes, data);
+                    });
+
+                return orderTypes;
+            },
+
             getOrderById: function BNGetOrderById (orderId) {
-                var order = {};
+                var order = {
+                    loading: true
+                };
 
                 $http({ method: 'GET', url: SB + 'orders/' + orderId }).
                     success(function(data, status, headers, config) {
+                        delete order.loading;
                         angular.extend(order, data);
 
                         order.createdTimestamp = new Date(order.createdTimestamp);
                         order.modifiedTimestamp = new Date(order.modifiedTimestamp);
                     }).
                     error(function(data, status, headers, config) {
-
+                        delete order.loading;
+                        angular.extend(order, data);
                     });
 
                 return order;

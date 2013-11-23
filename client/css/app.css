@@ -9,6 +9,10 @@ body {
     margin-top: 32px;
 }
 
+.viewMessage {
+    text-align: center;
+}
+
 .header, .footer {
     position: fixed;
     left: 0;
@@ -71,6 +75,10 @@ body {
 
 .notSelectedRow {
     opacity: 0.5;
+}
+
+.hiddenRow {
+    display: none;
 }
 
 .linkedRow:after {

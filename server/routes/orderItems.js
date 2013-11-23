@@ -67,7 +67,7 @@ module.exports = {
             orderItemId = parseInt(req.param('orderItemId'), 10);
 
         if(_.isNumber(orderItemId) && orderItemId > 0 && _.isNumber(orderId) && orderId > 0) {
-            if(_.isNumber(req.body.quantity)) {
+            if(_.isNumber(req.body.quantity) && req.body.quantity >= 0) {
                 db.updateOrderItem(orderId, orderItemId, req.body.quantity, function (err, result) {
                     if(err) {
                         res.send(500, { error: err });

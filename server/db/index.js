@@ -514,6 +514,16 @@ var db = module.exports = {
 
     updateOrderItem: function updateOrderItem (orderId, orderItemId, quantity, cb) {
         if(_.isNumber(orderItemId) && _.isNumber(quantity)) {
+            if(orderItemId < 1) {
+                cb('Invalid order item id.');
+                return;
+            }
+
+            if(quantity < 0) {
+                cb('Invalid quantity.');
+                return;
+            }
+
             // TODO: Make this transactional!
             // First, change the order item quantity.
             dbc.query(sqlTemplates.UPDATE_ORDER_ITEM, [ quantity, orderItemId ], function (err, result) {

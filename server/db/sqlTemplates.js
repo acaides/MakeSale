@@ -37,5 +37,14 @@ module.exports = {
         'LIMIT 100;',
     SELECT_ORDER_BY_ID: sqlStubs.SELECT_ORDER +
         'WHERE `order`.`id` = ?;',
-    SELECT_ORDER_ITEMS_BY_ORDER_ID: 'SELECT `order_item`.`id` as `id`, `product`.`id` as `product_id`, `product`.`name`, `product`.`description`, `product_price`.`unit_price`, `product`.`unit_id`, `unit`.`name` as `unit_name`, `order_item`.`quantity`, `product_price`.`unit_price` * `order_item`.`quantity` as `item_total` FROM `order` JOIN `order_item` on `order_item`.`order_id` = `order`.`id` JOIN `product` on `product`.`id` = `order_item`.`product_id` JOIN `unit` on `unit`.`id` = `product`.`unit_id` JOIN `product_price` on `product_price`.`product_id` = `product`.`id` AND `product_price`.`order_type_id` = `order`.`type_id` WHERE `order`.`id` = ?;'
+    SELECT_ORDER_ITEMS_BY_ORDER_ID: 'SELECT `order_item`.`id` as `id`, `product`.`id` as `product_id`, `product`.`name`, `product`.`description`, `product_price`.`unit_price`, `product`.`unit_id`, `unit`.`name` as `unit_name`, `order_item`.`quantity`, `product_price`.`unit_price` * `order_item`.`quantity` as `item_total` FROM `order` JOIN `order_item` on `order_item`.`order_id` = `order`.`id` JOIN `product` on `product`.`id` = `order_item`.`product_id` JOIN `unit` on `unit`.`id` = `product`.`unit_id` JOIN `product_price` on `product_price`.`product_id` = `product`.`id` AND `product_price`.`order_type_id` = `order`.`type_id` WHERE `order`.`id` = ?;',
+    UPDATE_ORDER_ITEM: 'UPDATE `order_item` SET `quantity` = ? WHERE `id` = ?;',
+    SELECT_ORDER_ITEM_COUNT_AND_SUBTOTAL_BY_ORDER_ID: 'SELECT SUM(`order_item`.`quantity`) AS `count`, ' +
+        'SUM(`product_price`.`unit_price` * `order_item`.`quantity`) AS `subtotal` ' +
+        'FROM `order` ' +
+        'JOIN `order_item` on `order_item`.`order_id` = `order`.`id` ' +
+        'JOIN `product_price` on `product_price`.`product_id` = `order_item`.`product_id` AND ' +
+        '`product_price`.`order_type_id` = `order`.`type_id` ' +
+        'WHERE `order`.`id` = ?;',
+    UPDATE_ORDER_QUANTITIES: 'UPDATE `order` SET `total` = ?, `subtotal` = ?, `item_count` = ? WHERE `id` = ?;'
 };

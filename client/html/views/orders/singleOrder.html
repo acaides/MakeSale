@@ -14,17 +14,21 @@
             <div>last updated {{ order.modifiedTimestamp.toLocaleString() }}</div>
         </div>
 
-        <div style="position: relative; top: 4px;">
+        <div ng-show="order.items.length" style="position: relative; top: 4px;">
             <div class="columnHeader" style="width: 60px;">Qty</div>
             <div class="columnHeader" style="width: 175px;">Name</div>
             <div class="columnHeader" style="width: 40px;">Total</div>
         </div>
     </div>
-    <div style="margin-top: 140px; margin-bottom: 50px;">
+    <div style="margin-top: 145px; margin-bottom: 50px;">
+        <div ng-hide="order.items.length" style="text-align: center; margin-top: 200px;">
+            There are no items in this order.<br><br>
+            <a ng-show="order.statusId == 1" href="/orders/{{ order.id }}/addItem" style="font-weight: bold;">add an item now</a>
+        </div>
         <div class="row" style="padding-top: 18px;" ng-repeat="item in order.items">
             <div class="column" style="width: 60px;">
                 <span ng-hide="order.statusId == 1">{{ item.quantity }}</span>
-                <input style="width: 30px;" ng-show="order.statusId == 1"type="number" ng-model="item.quantity"/>
+                <input style="width: 30px;" ng-show="order.statusId == 1"type="number" ng-model="item.quantity" ng-change="itemQtyChange(item)"/>
                 <span ng-show="item.unitId == 2">g</span>
                 <span ng-show="item.unitId == 3">oz</span>
                 <span ng-show="item.unitId == 4">fz</span>
@@ -34,7 +38,7 @@
             <div class="column" style="width: 60px;">{{ item.itemTotal | currency }}</div>
         </div>
     </div>
-    <div class="footer">
+    <div class="footer" ng-show="order.items.length">
         <div class="footerText">{{ itemCountText(order) }}<br></bt>Total: {{ order.total | currency }}</div>
         <div class="footerActions">
             <a ng-show="order.statusId == 1" href="/orders/{{ order.id }}/addItem">add item</a>&nbsp;

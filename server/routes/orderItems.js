@@ -55,5 +55,43 @@ module.exports = {
         } else {
             res.send(400, { error: 'Invalid order id.' });
         }
+    },
+
+    modify: function modifyOrderItem (req, res) {
+        var orderId = parseInt(req.param('orderId'), 10),
+            orderItemId = parseInt(req.param('orderItemId'), 10);
+
+        if(_.isNumber(orderItemId) && orderItemId > 0 && _.isNumber(orderId) && orderId > 0) {
+            if(_.isNumber(req.body.quantity)) {
+                db.updateOrderItem(orderId, orderItemId, req.body.quantity, function (err, result) {
+                    if(err) {
+                        res.send(500, { error: err });
+                    } else {
+                        db.selectOrderById(orderId, function (err, order) {
+                            if(err) {
+                                res.send(500, { error: err });
+                            } else {
+                                db.selectOrderItemsByOrderId(orderId, function (err, orderItems) {
+                                    if(err) {
+                                        res.send(500, { error: err });
+                                    } else {
+                                        order.items = orderItems;
+                                        res.send(200, order);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
+                res.send(400, {
+                    error: 'Invalid quantity.'
+                });
+            }
+        } else {
+            res.send(400, {
+                error: 'Invalid id.'
+            });
+        }
     }
 };

@@ -55,13 +55,10 @@ module.exports = {
         var orderId = parseInt(req.param('orderId'), 10);
 
         if(_.isNumber(orderId) && orderId > 0) {
-            db.selectOrderById(orderId, function (err, orders) {
+            db.selectOrderById(orderId, function (err, order) {
                 if(err) {
                     res.send(500, { error: err });
-                } else if(orders.length !== 1) {
-                    res.send(404, { error: 'No such order.' });
                 } else {
-                    var order = orders[0];
                     db.selectOrderItemsByOrderId(order.id, function (err, orderItems) {
                         if(err) {
                             res.send(500, { error: err });

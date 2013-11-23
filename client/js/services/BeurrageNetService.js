@@ -67,6 +67,27 @@ define([ './module' ], function (services) {
                     });
 
                 return order;
+            },
+
+            updateOrderItemQuantity: function BNUpdateOrderItemQuantity (orderId, itemId, newQuantity, cb) {
+                var order = {};
+
+                $http({ method: 'PATCH', url: SB + 'orders/' + orderId + '/items/' + itemId, data: { quantity: newQuantity } }).
+                    success(function(data, status, headers, config) {
+                        angular.extend(order, data);
+
+                        order.createdTimestamp = new Date(order.createdTimestamp);
+                        order.modifiedTimestamp = new Date(order.modifiedTimestamp);
+
+                        if(angular.isFunction(cb)) {
+                            cb(order);
+                        }
+                    }).
+                    error(function(data, status, headers, config) {
+
+                    });
+
+                return order;
             }
         };
     } ]);

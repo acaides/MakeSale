@@ -328,7 +328,11 @@ module.exports = {
                 if(err) {
                     cb(err);
                 } else {
-                    cb(false, us2cc(result));
+                    if(result.length === 1) {
+                        cb(false, us2cc(result[0]));
+                    } else {
+                        cb('No such order.');
+                    }
                 }
             });
         }
@@ -360,6 +364,40 @@ module.exports = {
                 });
             } else {
                 cb('Bad orderId.');
+            }
+        }
+    },
+
+    updateOrderItem: function updateOrderItem (orderId, orderItemId, quantity, cb) {
+        if(_.isNumber(orderItemId) && _.isNumber(quantity)) {
+            // TODO: Make this transactional!
+            // First, change the order item quantity.
+            dbc.query(sqlTemplates.UPDATE_ORDER_ITEM, [ quantity, orderItemId ], function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    // Next, recalculate the order subtotal and total.
+                    dbc.query(sqlTemplates.SELECT_ORDER_ITEM_COUNT_AND_SUBTOTAL_BY_ORDER_ID, [ orderId ], function (err, result) {
+                        if(err) {
+                            cb(err);
+                        } else {
+                            var q = result[0];
+                            // Now, update the order entry.
+                            dbc.query(sqlTemplates.UPDATE_ORDER_QUANTITIES, [ q.subtotal, q.subtotal, q.count, orderId ], function (err, result) {
+                                if(err) {
+                                    cb(err);
+                                } else {
+                                    // And we're done!
+                                    cb(false, result);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        } else {
+            if(_.isFunction(cb)) {
+                cb('Missing required input.');
             }
         }
     }

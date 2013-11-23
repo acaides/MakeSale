@@ -56,6 +56,8 @@ app.post(V1_SERVICES_BASE + 'orders', orders.create);
 app.get(V1_SERVICES_BASE + 'orders/:orderId', orders.retrieve);
 app.get(V1_SERVICES_BASE + 'orders/:orderId/items', orderItems.list);
 app.post(V1_SERVICES_BASE + 'orders/:orderId/items', orderItems.create);
+app.put(V1_SERVICES_BASE + 'orders/:orderId/items/:orderItemId', orderItems.modify);
+app.patch(V1_SERVICES_BASE + 'orders/:orderId/items/:orderItemId', orderItems.modify);
 
 // Any unhandled routes will return the client app.
 app.use(function(req, res){

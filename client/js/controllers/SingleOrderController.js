@@ -11,6 +11,12 @@ define([ './module' ], function (controllers) {
             } else {
                 return $.order.itemCount + ' items';
             }
-        }
+        };
+
+        $.itemQtyChange = function (item) {
+            BN.updateOrderItemQuantity($.order.id, item.id, item.quantity, function (order) {
+                $.order = order;
+            });
+        };
     } ]);
 });

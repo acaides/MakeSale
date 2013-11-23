@@ -55,12 +55,22 @@ body {
     width: 100%;
     color: black;
     height: 48px;
+    overflow: hidden;
 }
 
 .row:nth-child(even), .linkedRow:nth-child(even) {
     border-top: solid 1px rgba(128, 70, 24, 0.1);
     border-bottom: solid 1px rgba(128, 70, 24, 0.1);
     background: rgba(128, 70, 24, 0.05);
+}
+
+.selectedRow {
+    background: #ff9a2b !important;
+    font-weight: 300;
+}
+
+.notSelectedRow {
+    opacity: 0.5;
 }
 
 .linkedRow:after {

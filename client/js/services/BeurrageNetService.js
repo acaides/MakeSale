@@ -5,10 +5,10 @@ define([ './module' ], function (services) {
 
     services.service('BeurrageNet', [ '$http', function ($http) {
         return {
-            getProducts: function BNGetProducts () {
+            getProducts: function BNGetProducts (orderId) {
                 var products = [];
 
-                $http({ method: 'GET', url: SB + 'products' }).
+                $http({ method: 'GET', url: SB + 'products' + (orderId ? ('?orderId=' + orderId) : '') }).
                     success(function(data, status, headers, config) {
                         angular.extend(products, data);
                     }).
@@ -61,6 +61,27 @@ define([ './module' ], function (services) {
 
                         order.createdTimestamp = new Date(order.createdTimestamp);
                         order.modifiedTimestamp = new Date(order.modifiedTimestamp);
+                    }).
+                    error(function(data, status, headers, config) {
+
+                    });
+
+                return order;
+            },
+
+            addOrderItem: function BNAddOrderItem (orderId, productId, quantity, cb) {
+                var order = {};
+
+                $http({ method: 'POST', url: SB + 'orders/' + orderId + '/items', data: { productId: productId, quantity: quantity } }).
+                    success(function(data, status, headers, config) {
+                        angular.extend(order, data);
+
+//                        order.createdTimestamp = new Date(order.createdTimestamp);
+//                        order.modifiedTimestamp = new Date(order.modifiedTimestamp);
+
+                        if(angular.isFunction(cb)) {
+                            cb(order);
+                        }
                     }).
                     error(function(data, status, headers, config) {
 

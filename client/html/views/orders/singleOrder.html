@@ -34,7 +34,12 @@
                 <span ng-show="item.unitId == 4">fz</span>
                 <span ng-show="item.unitId == 5">lb</span>
             </div>
-            <div class="column" style="width: 175px;">{{ item.name }}</div>
+            <div class="column" style="width: 175px;">
+                {{ item.name }}
+                <span style="position: absolute; bottom: 14px; left: 80px; font-size: 10px; font-style: italic;">
+                    @ {{ item.unitPrice | currency }} {{ item.unitName }}
+                </span>
+            </div>
             <div class="column" style="width: 60px;">{{ item.itemTotal | currency }}</div>
         </div>
     </div>

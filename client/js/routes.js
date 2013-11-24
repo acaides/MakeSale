@@ -33,6 +33,11 @@ define([ './app' ], function (app) {
             controller: 'StartOrderController'
         });
 
+        $routeProvider.when('/orders/:orderId/edit', {
+            templateUrl: '/html/views/orders/editOrder.html',
+            controller: 'EditOrderController'
+        });
+
         $routeProvider.when('/orders/:orderId', {
             templateUrl: '/html/views/orders/singleOrder.html',
             controller: 'SingleOrderController'

@@ -6,5 +6,6 @@ define([
     './SingleOrderController',
     './StartOrderController',
     './AddItemController',
+    './EditOrderController',
     './DocumentsController'
 ], function () {});

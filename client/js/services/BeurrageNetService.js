@@ -170,6 +170,30 @@ define([ './module' ], function (services) {
                     });
 
                 return order;
+            },
+
+            updateOrder: function BNUpdateOrder (orderId, mods, cb) {
+                var c = angular.isFunction(cb) ? cb : function () {},
+                    order = {
+                        loading: true
+                    };
+
+                $http({ method: 'PATCH', url: SB + 'orders/' + orderId, data: mods }).
+                    success(function(data, status, headers, config) {
+                        delete order.loading;
+                        angular.extend(order, data);
+
+                        order.createdTimestamp = new Date(order.createdTimestamp);
+                        order.modifiedTimestamp = new Date(order.modifiedTimestamp);
+                        c(order);
+                    }).
+                    error(function(data, status, headers, config) {
+                        delete order.loading;
+                        angular.extend(order, data);
+                        c(order);
+                    });
+
+                return order;
             }
         };
     } ]);

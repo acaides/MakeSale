@@ -1,0 +1,27 @@
+<div class="view">
+    <div class="viewMessage" ng-show="order.loading">
+        Loading...
+    </div>
+    <div class="viewMessage" ng-show="order.error">
+        There was an error loading that order.<br>
+        {{ order.error }} <br><br>
+        <a href="/orders" style="font-weight: bold;">list all orders</a>
+    </div>
+    <div ng-hide="order.error">
+        <div class="header">
+            <a class="backLink" href="/orders/{{ order.id }}"></a>
+            <div class="headerText">Edit Order #{{ order.id }}: {{ order.name || order.createdTimestamp.toDateString() }}</div>
+        </div>
+
+        <div>
+
+        </div>
+
+        <div class="footer">
+            <div class="footerText"></div>
+            <div class="footerActions">
+
+            </div>
+        </div>
+    </div>
+</div>

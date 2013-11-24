@@ -11,6 +11,9 @@
         <div class="header">
             <a class="backLink" href="/orders"></a>
             <div class="headerText">Order #{{ order.id }}: {{ order.name || order.createdTimestamp.toDateString() }}</div>
+            <div class="headerActions">
+                <a href="/orders/{{ order.id }}/edit">change details</a>
+            </div>
         </div>
         <div class="singleOrderTop">
             <div style="font-size: 14px">for {{ order.customerName }}</div>
@@ -58,7 +61,7 @@
             <div class="footerText">{{ itemCountText(order) }}<br></bt>Total: {{ order.total | currency }}</div>
             <div class="footerActions">
                 <a ng-show="order.statusId == 1" href="/orders/{{ order.id }}/addItem">add item</a>&nbsp;
-                <a ng-show="order.statusId == 1" ng-click="completeOrder()">complete</a>
+                <a ng-show="order.statusId == 1" ng-click="complete()">complete</a>
                 <span ng-hide="order.statusId == 1">Completed</span>
             </div>
         </div>

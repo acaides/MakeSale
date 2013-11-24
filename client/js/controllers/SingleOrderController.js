@@ -18,5 +18,11 @@ define([ './module' ], function (controllers) {
                 $.order = order;
             });
         };
+
+        $.complete = function () {
+            BN.updateOrder($.order.id, { statusId: 2 }, function (order) {
+                angular.extend($.order, order);
+            });
+        };
     } ]);
 });

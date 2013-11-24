@@ -499,12 +499,17 @@ var db = module.exports = {
             if(err) {
                 c(err);
             } else {
-                db.selectOrderById(orderId, function (err, order) {
+                db.selectOrderById(orderId, function (err, result) {
                     if(err) {
                         c(err);
                     } else {
-                        // And we're done!
-                        c(false, result);
+                        db.selectOrderById(orderId, function (err, order) {
+                            if(err) {
+                                c(err);
+                            } else {
+                                c(false, order);
+                            }
+                        });
                     }
                 });
             }

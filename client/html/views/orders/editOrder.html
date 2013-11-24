@@ -52,6 +52,8 @@
             </div>
         </div>
 
+        <div class="row" ng-show="selectedCustomer && selectedType && (selectedCustomer.id != order.customerId || selectedType.id != order.typeId || name != order.name)"></div>
+
         <div class="footer" ng-show="selectedCustomer && selectedType && (selectedCustomer.id != order.customerId || selectedType.id != order.typeId || name != order.name)">
             <div class="footerText">
                 <span ng-show="order.name == name">

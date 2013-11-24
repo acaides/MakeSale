@@ -1,4 +1,4 @@
-<div class="view">
+<div class="view" ng-click="clearSelectedItem()">
     <div class="viewMessage" ng-show="order.loading">
         Loading...
     </div>
@@ -38,7 +38,7 @@
                 <a ng-show="order.statusId == 1" href="/orders/{{ order.id }}/addItem" style="font-weight: bold;">add an item now</a>
             </div>
             <div>
-                <div class="row" style="padding-top: 18px;" ng-repeat="item in order.items">
+                <div class="row" style="padding-top: 18px;" ng-repeat="item in order.items" ng-click="selectItem(item); $event.stopPropagation()" ng-class="{ selectedRow: selectedItem == item }">
                     <div class="columns">
                         <div class="column" style="width: 20%;">
                             <span ng-hide="order.statusId == 1">{{ item.quantity }}</span>
@@ -52,7 +52,8 @@
                             {{ item.name }}
                         </div>
                         <div class="column" style="width: 25%;">
-                            {{ item.itemTotal | currency }}
+                            <span ng-hide="selectedItem == item">{{ item.itemTotal | currency }}</span>
+                            <span ng-show="selectedItem == item" ng-click="removeItem(item)">remove?</span>
                         </div>
 
                         <span style="position: absolute; bottom: 16px; left: 20%; font-size: 12px; font-style: italic;">

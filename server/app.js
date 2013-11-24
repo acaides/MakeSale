@@ -56,6 +56,8 @@ app.get(V1_SERVICES_BASE + 'orders', orders.list);
 app.get(V1_SERVICES_BASE + 'orders/types', orderTypes.list);
 app.post(V1_SERVICES_BASE + 'orders', orders.create);
 app.get(V1_SERVICES_BASE + 'orders/:orderId', orders.retrieve);
+app.put(V1_SERVICES_BASE + 'orders/:orderId', orders.modify);
+app.patch(V1_SERVICES_BASE + 'orders/:orderId', orders.modify);
 app.get(V1_SERVICES_BASE + 'orders/:orderId/items', orderItems.list);
 app.post(V1_SERVICES_BASE + 'orders/:orderId/items', orderItems.create);
 app.put(V1_SERVICES_BASE + 'orders/:orderId/items/:orderItemId', orderItems.modify);

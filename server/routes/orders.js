@@ -72,5 +72,33 @@ module.exports = {
         } else {
             res.send(400, { error: 'Invalid order id.' });
         }
+    },
+
+    modify: function modifyOrder (req, res) {
+        var orderId = parseInt(req.param('orderId'), 10),
+            acceptedKeys = [ 'customerId', 'typeId', 'statusId', 'name' ],
+            mods = {};
+
+        _.forEach(req.body, function (value, key) {
+            if(acceptedKeys.indexOf(key) !== -1) {
+                mods[key] = value;
+            }
+        });
+
+        if(_.isNumber(orderId) && orderId > 0) {
+            if(_.size(mods) > 0) {
+                db.updateOrder(orderId, mods, function (err, order) {
+                    if(err) {
+                        res.send(500, err);
+                    } else {
+                        res.send(200, order);
+                    }
+                });
+            } else {
+                res.send(400, { error: 'No valid modifications specified.' });
+            }
+        } else {
+            res.send(400, { error: 'Invalid order id.' });
+        }
     }
 };

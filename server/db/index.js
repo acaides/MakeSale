@@ -343,7 +343,7 @@ var db = module.exports = {
                     if(err) {
                         done([ err ]);
                     } else {
-                        db.updateOrder(result.insertId, function (err) {
+                        db.syncOrder(result.insertId, function (err) {
                             if(err) {
                                 done([ err ]);
                             } else {
@@ -394,7 +394,7 @@ var db = module.exports = {
 
                 if(results.length === requests.length) {
                     // Now, update the order.
-                    db.updateOrder(orderId, function (err, result) {
+                    db.syncOrder(orderId, function (err, result) {
                         if(_.isFunction(cb)) {
                             if(err) {
                                 cb(err);
@@ -482,7 +482,36 @@ var db = module.exports = {
         }
     },
 
-    updateOrder: function updateOrder (orderId, cb) {
+    updateOrder: function updateOrder (orderId, mods, cb) {
+        var usMods = cc2us(mods),
+            c = _.isFunction(cb) ? cb : _.noop;
+
+        if(!orderId) {
+            c('Missing required order id.');
+            return;
+        } else if(!_.isNumber(orderId) || orderId < 1) {
+            c('Invalid order id.');
+            return;
+        }
+
+        // Recalculate the order subtotal and total.
+        dbc.query(sqlTemplates.UPDATE_ORDER(usMods), [ orderId ], function (err, result) {
+            if(err) {
+                c(err);
+            } else {
+                db.selectOrderById(orderId, function (err, order) {
+                    if(err) {
+                        c(err);
+                    } else {
+                        // And we're done!
+                        c(false, result);
+                    }
+                });
+            }
+        });
+    },
+
+    syncOrder: function syncOrder (orderId, cb) {
         var c = _.isFunction(cb) ? cb : _.noop;
 
         if(!orderId) {
@@ -500,7 +529,7 @@ var db = module.exports = {
             } else {
                 var q = result[0];
                 // Now, update the order entry.
-                dbc.query(sqlTemplates.UPDATE_ORDER, [ q.subtotal, q.subtotal, q.count, orderId ], function (err, result) {
+                dbc.query(sqlTemplates.SYNC_ORDER, [ q.subtotal, q.subtotal, q.count, orderId ], function (err, result) {
                     if(err) {
                         c(err);
                     } else {
@@ -531,7 +560,7 @@ var db = module.exports = {
                     cb(err);
                 } else {
                     // Now, update the order.
-                    db.updateOrder(orderId, function (err, result) {
+                    db.syncOrder(orderId, function (err, result) {
                         if(err) {
                             cb(err);
                         } else {

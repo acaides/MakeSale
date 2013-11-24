@@ -1,4 +1,5 @@
-var sqlStubs = {
+var _ = require('lodash'),
+    sqlStubs = {
     SELECT_ORDER: 'SELECT `order`.`id`, `order`.`name`, `order`.`subtotal`, ' +
         '`order`.`total`, `order`.`item_count`, `order`.`created_timestamp`, ' +
         '`order`.`modified_timestamp`, `customer`.`id` AS `customer_id`, `customer`.`name` AS `customer_name`, ' +
@@ -62,6 +63,14 @@ module.exports = {
         'JOIN `product_price` on `product_price`.`product_id` = `order_item`.`product_id` AND ' +
         '`product_price`.`order_type_id` = `order`.`type_id` ' +
         'WHERE `order`.`id` = ?;',
-    UPDATE_ORDER: 'UPDATE `order` SET `total` = ?, `subtotal` = ?, `item_count` = ?, `modified_timestamp` = NOW() WHERE `id` = ?;',
+    SYNC_ORDER: 'UPDATE `order` SET `total` = ?, `subtotal` = ?, `item_count` = ?, `modified_timestamp` = NOW() WHERE `id` = ?;',
+    UPDATE_ORDER: function (values) {
+        var vs = _.map(values, function (value, key) {
+            return '`' + key + '` = \'' + value + '\'';
+        });
+
+        //return 'UPDATE `order` SET `customer_id` = ?, `type_id` = ?, `status_id` = ?, `name` = ?, `modified_timestamp` = NOW() WHERE `id` = ?;'
+        return 'UPDATE `order` SET ' + vs.join(', ') + ', `modified_timestamp` = NOW() WHERE `id` = ?;'
+    },
     SELECT_ORDER_TYPE_LISTING: 'SELECT * FROM `order_type`;'
 };

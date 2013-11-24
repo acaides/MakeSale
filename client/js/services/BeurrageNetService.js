@@ -33,15 +33,18 @@ define([ './module' ], function (services) {
                 return product;
             },
 
-            getCustomers: function BNGetCustomers () {
-                var customers = [];
+            getCustomers: function BNGetCustomers (cb) {
+                var c = angular.isFunction(cb) ? cb : function () {},
+                    customers = [];
 
                 $http({ method: 'GET', url: SB + 'customers' }).
                     success(function(data, status, headers, config) {
                         angular.extend(customers, data);
+                        c(customers);
                     }).
                     error(function(data, status, headers, config) {
                         angular.extend(customers, data);
+                        c(customers);
                     });
 
                 return customers;
@@ -95,24 +98,28 @@ define([ './module' ], function (services) {
                 return orders;
             },
 
-            getOrderTypes: function BNGetOrderTypes () {
-                var orderTypes = [];
+            getOrderTypes: function BNGetOrderTypes (cb) {
+                var c = angular.isFunction(cb) ? cb : function () {},
+                    orderTypes = [];
 
                 $http({ method: 'GET', url: SB + 'orders/types' }).
                     success(function(data, status, headers, config) {
                         angular.extend(orderTypes, data);
+                        c(orderTypes);
                     }).
                     error(function(data, status, headers, config) {
                         angular.extend(orderTypes, data);
+                        c(orderTypes);
                     });
 
                 return orderTypes;
             },
 
-            getOrderById: function BNGetOrderById (orderId) {
-                var order = {
-                    loading: true
-                };
+            getOrderById: function BNGetOrderById (orderId, cb) {
+                var c = angular.isFunction(cb) ? cb : function () {},
+                    order = {
+                        loading: true
+                    };
 
                 $http({ method: 'GET', url: SB + 'orders/' + orderId }).
                     success(function(data, status, headers, config) {
@@ -121,10 +128,12 @@ define([ './module' ], function (services) {
 
                         order.createdTimestamp = new Date(order.createdTimestamp);
                         order.modifiedTimestamp = new Date(order.modifiedTimestamp);
+                        c(order);
                     }).
                     error(function(data, status, headers, config) {
                         delete order.loading;
                         angular.extend(order, data);
+                        c(order);
                     });
 
                 return order;

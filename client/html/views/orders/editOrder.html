@@ -14,13 +14,60 @@
         </div>
 
         <div>
+            <div>
+                <div class="sectionHeaderRow">
+                    This is a
+                </div>
+                <div>
+                    <div class="row"
+                         ng-repeat="type in types"
+                         ng-click="selectType(type)"
+                         ng-class="{ selectedRow: selectedType == type, hiddenRow: selectedType && selectedType != type }">
+                        <div style="margin-top: 12px; margin-left: 4px;">
+                            {{ type.name }} <span style="float: right; margin-right: 8px; font-style: italic; font-size: 14px;" ng-show="selectedType == type">change?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="sectionHeaderRow">
+                order for
+            </div>
+            <div>
+                <div class="row"
+                     ng-repeat="customer in customers"
+                     ng-click="selectCustomer(customer)"
+                     ng-class="{ selectedRow: selectedCustomer == customer, hiddenRow: selectedCustomer && selectedCustomer != customer }">
+                    <div style="margin-top: 12px; margin-left: 4px;">
+                        {{ customer.name }} <span style="float: right; margin-right: 8px; font-style: italic; font-size: 14px;" ng-show="selectedCustomer == customer">change?</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="sectionHeaderRow">
+                    called
+                </div>
+                <input style="width: 100%; height: 32px;" type="text" ng-model="name">
+            </div>
         </div>
 
-        <div class="footer">
-            <div class="footerText"></div>
+        <div class="footer" ng-show="selectedCustomer && selectedType && (selectedCustomer.id != order.customerId || selectedType.id != order.typeId || name != order.name)">
+            <div class="footerText">
+                <span ng-show="order.name == name">
+                    <span ng-show="(selectedCustomer.id != order.customerId && selectedType.id == order.typeId)">Changing customer</span>
+                    <span ng-show="(selectedCustomer.id == order.customerId && selectedType.id != order.typeId)">Changing type</span>
+                    <span ng-show="(selectedCustomer.id != order.customerId && selectedType.id != order.typeId)">Changing customer and type</span>
+                </span>
+                <span ng-hide="order.name == name">
+                    <span ng-show="(selectedCustomer.id == order.customerId && selectedType.id == order.typeId)">Changing name</span>
+                    <span ng-show="(selectedCustomer.id != order.customerId && selectedType.id == order.typeId)">Changing customer and name</span>
+                    <span ng-show="(selectedCustomer.id == order.customerId && selectedType.id != order.typeId)">Changing type and name</span>
+                    <span ng-show="(selectedCustomer.id != order.customerId && selectedType.id != order.typeId)">Changing customer, type and name</span>
+                </span>
+            </div>
             <div class="footerActions">
-
+                <a ng-click="save()">save</a>
             </div>
         </div>
     </div>

@@ -76,6 +76,14 @@ body {
     background: rgba(128, 70, 24, 0.05);
 }
 
+.row:first-child, .linkedRow:first-child {
+    border-top: solid 1px rgba(128, 70, 24, 0.1);
+}
+
+.row:last-child, .linkedRow:last-child {
+    border-bottom: solid 1px rgba(128, 70, 24, 0.1);
+}
+
 .selectedRow {
     background: #ff9a2b !important;
     font-weight: 300;
@@ -93,7 +101,7 @@ body {
     position: absolute;
     content: "\25B7";
     right: 12px;
-    top: 16px;
+    top: 12px;
     color: rgba(128, 70, 24, 0.3);
 }
 
@@ -151,4 +159,8 @@ a {
     border-top: 16px solid transparent;
     border-bottom: 16px solid transparent;
     border-right:13px solid rgba(255, 255, 255, 0.5);
+}
+
+.homeLogo {
+    width: 100%;
 }

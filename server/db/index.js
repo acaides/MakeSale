@@ -494,23 +494,24 @@ var db = module.exports = {
             return;
         }
 
-        // Recalculate the order subtotal and total.
         dbc.query(sqlTemplates.UPDATE_ORDER(usMods), [ orderId ], function (err, result) {
             if(err) {
                 c(err);
             } else {
-                db.selectOrderById(orderId, function (err, result) {
-                    if(err) {
-                        c(err);
-                    } else {
-                        db.selectOrderById(orderId, function (err, order) {
-                            if(err) {
-                                c(err);
-                            } else {
-                                c(false, order);
-                            }
-                        });
-                    }
+                db.syncOrder(orderId, function (err, result) {
+                    db.selectOrderById(orderId, function (err, result) {
+                        if(err) {
+                            c(err);
+                        } else {
+                            db.selectOrderById(orderId, function (err, order) {
+                                if(err) {
+                                    c(err);
+                                } else {
+                                    c(false, order);
+                                }
+                            });
+                        }
+                    });
                 });
             }
         });

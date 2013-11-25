@@ -7,5 +7,6 @@ define([
     './StartOrderController',
     './AddItemController',
     './EditOrderController',
-    './DocumentsController'
+    './DocumentsController',
+    './InvoicesController'
 ], function () {});

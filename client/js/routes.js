@@ -53,6 +53,11 @@ define([ './app' ], function (app) {
             controller: 'DocumentsController'
         });
 
+        $routeProvider.when('/documents/invoices', {
+            templateUrl: '/html/views/documents/invoices/invoices.html',
+            controller: 'InvoicesController'
+        });
+
         $routeProvider.otherwise({
             redirectTo: '/'
         });

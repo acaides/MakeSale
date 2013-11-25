@@ -49,7 +49,7 @@ define([ './app' ], function (app) {
         });
 
         $routeProvider.when('/documents', {
-            templateUrl: '/html/views/documents.html',
+            templateUrl: '/html/views/documents/documents.html',
             controller: 'DocumentsController'
         });
 

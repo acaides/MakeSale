@@ -11,7 +11,8 @@ var V1_SERVICES_BASE = '/services/v1/',
     productPrices = require('./routes/productPrices'),
     orders = require('./routes/orders'),
     orderItems = require('./routes/orderItems')
-    orderTypes = require('./routes/orderTypes');
+    orderTypes = require('./routes/orderTypes'),
+    invoices = require('./routes/invoices');
 
 var app = express();
 
@@ -62,6 +63,13 @@ app.get(V1_SERVICES_BASE + 'orders/:orderId/items', orderItems.list);
 app.post(V1_SERVICES_BASE + 'orders/:orderId/items', orderItems.create);
 app.put(V1_SERVICES_BASE + 'orders/:orderId/items/:orderItemId', orderItems.modify);
 app.patch(V1_SERVICES_BASE + 'orders/:orderId/items/:orderItemId', orderItems.modify);
+
+// Invoice documents (service) routes
+app.get(V1_SERVICES_BASE + 'documents/invoices', invoices.list);
+app.post(V1_SERVICES_BASE + 'documents/invoices', invoices.create);
+app.get(V1_SERVICES_BASE + 'documents/invoices/:invoiceId', invoices.retrieve);
+app.put(V1_SERVICES_BASE + 'documents/invoices/:invoiceId', invoices.modify);
+app.patch(V1_SERVICES_BASE + 'documents/invoices/:invoiceId', invoices.modify);
 
 // Any unhandled routes will return the client app.
 app.use(function(req, res){

@@ -593,5 +593,51 @@ var db = module.exports = {
                 }
             });
         }
+    },
+
+    insertInvoices: function insertInvoices (invoices, cb) {
+        var c = _.isFunction(cb) ? cb : _.noop,
+            is = _.isArray(invoices) ? invoices : [ invoices ],
+            results = [],
+            done = function (err, result) {
+                results.push([ err, result ]);
+
+                if(results.length == is.length) {
+                    if(results.length === 1) {
+                        c(results[0][0], results[0][1]);
+                    } else {
+                        c(results);
+                    }
+                }
+            };
+
+        _.forEach(is, function (invoice) {
+            if(_.isPlainObject(invoice)) {
+                if(!_.isNumber(invoice.createdUserId) || invoice.createdUserId < 1) {
+                    done('Invalid created user id.');
+                    return;
+                }
+
+                if(!_.isNumber(invoice.modifiedUserId || invoice.modifiedUserId < 1)) {
+                    done('Invalid modified user id.');
+                    return;
+                }
+
+                if(!_.isString(invoice.accessCode) || invoice.accessCode.length < 8) {
+                    done('Invalid access code.');
+                    return;
+                }
+
+                dbc.query(sqlTemplates.INSERT_INVOICE, [ invoice.createdUserId, invoice.modifiedUserId, invoice.accessCode ], function (err, result) {
+                    if(err) {
+                        done(err);
+                    } else {
+                        done(false, result);
+                    }
+                });
+            } else {
+                done('Invalid invoice specification.');
+            }
+        });
     }
 };

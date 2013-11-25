@@ -72,5 +72,9 @@ module.exports = {
         //return 'UPDATE `order` SET `customer_id` = ?, `type_id` = ?, `status_id` = ?, `name` = ?, `modified_timestamp` = NOW() WHERE `id` = ?;'
         return 'UPDATE `order` SET ' + vs.join(', ') + ', `modified_timestamp` = NOW() WHERE `id` = ?;'
     },
-    SELECT_ORDER_TYPE_LISTING: 'SELECT * FROM `order_type`;'
+    SELECT_ORDER_TYPE_LISTING: 'SELECT * FROM `order_type`;',
+
+    INSERT_INVOICE: 'INSERT INTO `invoice` ' +
+        '(`created_user_id`, `modified_user_id`, `modified_timestamp`, `access_code`) ' +
+        'VALUES (?, ?, NOW(), ?);'
 };

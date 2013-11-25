@@ -338,7 +338,8 @@ var db = module.exports = {
                     1,
                     1,
                     newOrder.typeId,
-                    newOrder.name
+                    newOrder.name,
+                    '00000000'
                 ], function (err, result) {
                     if(err) {
                         done([ err ]);
@@ -595,6 +596,36 @@ var db = module.exports = {
         }
     },
 
+    syncInvoice: function syncInvoice (invoiceId, cb) {
+        var c = _.isFunction(cb) ? cb : _.noop;
+
+        if(!invoiceId) {
+            c('Missing required invoice id.');
+            return;
+        } else if(!_.isNumber(invoiceId) || invoiceId < 1) {
+            c('Invalid invoice id.');
+            return;
+        }
+
+        // Recalculate the invoice subtotal and total.
+        dbc.query(sqlTemplates.SELECT_INVOICE_ITEM_COUNT_AND_SUBTOTAL_BY_INVOICE_ID, [ invoiceId ], function (err, result) {
+            if(err) {
+                c(err);
+            } else {
+                var q = result[0];
+                // Now, update the order entry.
+                dbc.query(sqlTemplates.SYNC_INVOICE, [ q.subtotal, q.subtotal, q.count, invoiceId ], function (err, result) {
+                    if(err) {
+                        c(err);
+                    } else {
+                        // And we're done!
+                        c(false, result);
+                    }
+                });
+            }
+        });
+    },
+
     insertInvoices: function insertInvoices (invoices, cb) {
         var c = _.isFunction(cb) ? cb : _.noop,
             is = _.isArray(invoices) ? invoices : [ invoices ],
@@ -639,5 +670,134 @@ var db = module.exports = {
                 done('Invalid invoice specification.');
             }
         });
+    },
+
+    insertInvoiceItems: function insertInvoiceItems (invoiceId, newInvoiceItems, cb) {
+        var results = [],
+            requests = _.isArray(newInvoiceItems) ? newInvoiceItems : [ newInvoiceItems ],
+            done = function (result) {
+                results.push(result);
+
+                if(results.length === requests.length) {
+                    // Now, update the invoice.
+                    db.syncInvoice(invoiceId, function (err, result) {
+                        if(_.isFunction(cb)) {
+                            if(err) {
+                                cb(err);
+                            } else {
+                                if(results.length === 1) {
+                                    cb.apply(results[0], results[0]);
+                                } else {
+                                    cb(false, results);
+                                }
+                            }
+                        }
+                    });
+                }
+            };
+
+        // Make sure we have a valid invoice id.
+        if(!_.isNumber(invoiceId) || invoiceId < 1) {
+            if(_.isFunction(cb)) {
+                cb('Invalid invoice id.');
+            }
+
+            return;
+        }
+
+        // Process each of the add item requests.
+        _.forEach(requests, function (invoiceItem) {
+            // Make sure we have valid order ids.
+            if(_.isNumber(invoiceItem.orderId) && invoiceItem.orderId > 0) {
+                // Pull a list of existing order ids for the invoice, to detect duplication.
+                dbc.query(sqlTemplates.SELECT_BARE_INVOICE_ITEMS_BY_INVOICE_ID, [ invoiceId ], function (err, result) {
+                    var invoiceItems = us2cc(result),
+                        orderIds = _.map(invoiceItems, function (invoiceItem) { return invoiceItem.orderId; }),
+                        matchingItemIndex = orderIds.indexOf(invoiceItem.orderId),
+                        matchingItem = matchingItemIndex === -1 ? null : invoiceItems[matchingItemIndex];
+
+                    if(!matchingItem) {
+                        // If there's not already an order in this invoice with the specified id, insert a new item.
+                        dbc.query(
+                            sqlTemplates.INSERT_INVOICE_ITEM,
+                            [
+                                invoiceId,
+                                invoiceItem.orderId
+                            ],
+                            function (err, result) {
+                                if(err) {
+                                    done([ err ]);
+                                } else {
+                                    done([ false, _.extend(result, invoiceItem) ]);
+                                }
+                            }
+                        );
+                    } else {
+                        // If the specified order is already in the invoice, return an error.
+                        done([ 'Order already on invoice.' ]);
+                    }
+                });
+            } else {
+                done([ 'Required information is missing or invalid.' ]);
+            }
+        });
+    },
+
+    selectInvoiceItemsByInvoiceId: function selectInvoiceItemsByInvoiceId (invoiceId, cb) {
+        if(_.isFunction(cb)) {
+            if(_.isNumber(invoiceId) && invoiceId > 0) {
+                dbc.query(sqlTemplates.SELECT_INVOICE_ITEMS_BY_INVOICE_ID, [ invoiceId ], function (err, result) {
+                    if(err) {
+                        cb(err);
+                    } else {
+                        cb(false, us2cc(result));
+                    }
+                });
+            } else {
+                cb('Invalid invoice id.');
+            }
+        }
+    },
+
+    deleteInvoiceItem: function deleteInvoiceItem (invoiceId, invoiceItemId, cb) {
+        if(_.isNumber(invoiceItemId) && invoiceItemId < 1) {
+            // TODO: Make this transactional!
+            // First, change the order item quantity.
+            dbc.query(sqlTemplates.DELETE_INVOICE_ITEM, [ invoiceItemId ], function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    // Now, update the invoice.
+                    db.syncInvoice(invoiceId, function (err, result) {
+                        if(err) {
+                            cb(err);
+                        } else {
+                            // And we're done!
+                            cb(false, result);
+                        }
+                    });
+                }
+            });
+        } else {
+            if(_.isFunction(cb)) {
+                cb('Invalid invoice item id.');
+            }
+        }
+    },
+
+    selectInvoiceById: function selectInvoiceById (invoiceId, cb) {
+        if(_.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_INVOICE_BY_ID, [ invoiceId ], function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    if(result.length === 1) {
+                        cb(false, us2cc(result[0]));
+                    } else {
+                        cb('No such invoice.');
+                    }
+                }
+            });
+        }
     }
 };

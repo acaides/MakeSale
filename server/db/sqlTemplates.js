@@ -35,7 +35,7 @@ module.exports = {
         'JOIN `product_price` ON `product_price`.`product_id` = `product`.`id` ' +
         'AND `product_price`.`order_type_id` = ? ' +
         'JOIN `unit` ON `unit`.`id` = `product`.`unit_id`;',
-    INSERT_ORDER: 'INSERT INTO `order` (`customer_id`, `created_user_id`, `modified_user_id`, `type_id`, `name`) VALUES (?, ?, ?, ?, ?);',
+    INSERT_ORDER: 'INSERT INTO `order` (`customer_id`, `created_user_id`, `modified_user_id`, `type_id`, `name`, `access_code`) VALUES (?, ?, ?, ?, ?, ?);',
     SELECT_100_MOST_RECENT_ORDERS_LISTING: sqlStubs.SELECT_ORDER +
         'ORDER BY `modified_timestamp` DESC ' +
         'LIMIT 100;',

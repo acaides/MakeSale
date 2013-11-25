@@ -79,8 +79,9 @@ define([ './module' ], function (services) {
                 return order;
             },
 
-            getOrders: function BNGetOrders () {
-                var orders = [];
+            getOrders: function BNGetOrders (cb) {
+                var c = angular.isFunction(cb) ? cb : function () {},
+                    orders = [];
 
                 $http({ method: 'GET', url: SB + 'orders' }).
                     success(function(data, status, headers, config) {
@@ -90,9 +91,12 @@ define([ './module' ], function (services) {
                             order.createdTimestamp = new Date(order.createdTimestamp);
                             order.modifiedTimestamp = new Date(order.modifiedTimestamp);
                         });
+
+                        c(orders);
                     }).
                     error(function(data, status, headers, config) {
-
+                        angular.extend(orders, data);
+                        c(orders);
                     });
 
                 return orders;

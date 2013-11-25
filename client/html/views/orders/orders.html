@@ -1,7 +1,11 @@
 <div class="view" style="margin-top: 52px;">
     <div class="header">
         <a class="backLink" href="/"></a>
-        <div class="headerText">Orders</div>
+        <div class="headerText">
+            Orders
+            <a ng-hide="showingCompleted" ng-click="toggleShowingCompleted()">show completed</a>
+            <a ng-show="showingCompleted" ng-click="toggleShowingCompleted()">hide completed</a>
+        </div>
         <div class="headerActions">
             <a href="/orders/start">start</a>
         </div>
@@ -21,7 +25,17 @@
                 <div class="column" style="width: 16%;">{{ order.total | currency }}</div>
             </div>
 
-            <div class="ordersRowFootnote">#{{ order.id }}, {{ itemCountText(order) }}, modified {{ order.modifiedTimestamp.toLocaleString() }} </div>
+            <div ng-show="order.statusId == 1" class="ordersRowFootnote">
+                #{{ order.id }}, {{ itemCountText(order) }}, modified {{ order.modifiedTimestamp.toLocaleString() }}
+            </div>
+            <div ng-hide="order.statusId == 1" class="ordersRowFootnote">
+                #{{ order.id }}, {{ itemCountText(order) }}, {{ order.status.toUpperCase() }}
+            </div>
         </a>
+    </div>
+    <div class="viewMessage" ng-hide="orders.length" style="margin-top: 100px;">
+        No incomplete orders.<br><br><br><br>
+        <a href="/orders/start">start a new order</a><br><br><br>
+        <a ng-click="toggleShowingCompleted()">view completed orders</a>
     </div>
 </div>

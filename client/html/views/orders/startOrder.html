@@ -38,6 +38,16 @@
             Give the order a name, if you want.
         </div>
         <input class="textInputRow" type="text" ng-model="name">
+        <div style="background: #E5D9CF;">
+            Here are some suggestions:
+        </div>
+        <div>
+            <div class="row" ng-repeat="suggestedName in suggestedNames" ng-click="setName(suggestedName)">
+                <div style="margin-top: 12px; margin-left: 4px;">
+                    {{ suggestedName }}
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="footer" ng-show="selectedCustomer && selectedType">

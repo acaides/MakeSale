@@ -42,11 +42,18 @@
                     <div class="columns">
                         <div class="column" style="width: 20%;">
                             <span ng-hide="order.statusId == 1">{{ item.quantity }}</span>
-                            <input style="width: 30px;" ng-show="order.statusId == 1"type="number" ng-model="item.quantity" ng-change="itemQtyChange(item)"/>
-                            <span ng-show="item.unitId == 2">g</span>
-                            <span ng-show="item.unitId == 3">oz</span>
-                            <span ng-show="item.unitId == 4">fz</span>
-                            <span ng-show="item.unitId == 5">lb</span>
+                            <form ng-submit="itemQtyChange(item, true)">
+                                <input style="width: 30px;"
+                                       ng-show="order.statusId == 1"
+                                       type="number"
+                                       ng-model="item.quantity"
+                                       ng-change="itemQtyChange(item)"
+                                       ng-blur="itemQtyChange(item, true)"/>
+                                <span ng-show="item.unitId == 2">g</span>
+                                <span ng-show="item.unitId == 3">oz</span>
+                                <span ng-show="item.unitId == 4">fz</span>
+                                <span ng-show="item.unitId == 5">lb</span>
+                            </form>
                         </div>
                         <div class="column" style="width: 55%; position: relative; top: -8px;">
                             {{ item.name }}
@@ -69,7 +76,7 @@
             <div class="footerActions">
                 <a ng-show="order.statusId == 1" href="/orders/{{ order.id }}/addItem">add item</a>&nbsp;
                 <a ng-show="order.statusId == 1" ng-click="complete()">complete</a>
-                <span ng-hide="order.statusId == 1">Completed</span>
+                <span ng-hide="order.statusId == 1">Completed, <a ng-click="reopen()">reopen?</a></span>
             </div>
         </div>
     </div>

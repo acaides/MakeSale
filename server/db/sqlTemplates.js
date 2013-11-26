@@ -1,16 +1,22 @@
 var _ = require('lodash'),
     sqlStubs = {
-    SELECT_ORDER: 'SELECT `order`.`id`, `order`.`name`, `order`.`subtotal`, ' +
-        '`order`.`total`, `order`.`item_count`, `order`.`created_timestamp`, ' +
-        '`order`.`modified_timestamp`, `customer`.`id` AS `customer_id`, `customer`.`name` AS `customer_name`, ' +
-        '`customer`.`email` AS `customer_email`, `customer`.`phone` AS `customer_phone`, ' +
-        '`order_type`.`id` AS `type_id`, `order_type`.`name` AS `type`, `order_status`.`id` AS `status_id`, ' +
-        '`order_status`.`name` AS `status` ' +
-        'FROM `order` ' +
-        'JOIN `customer` ON `customer`.`id` = `order`.`customer_id` ' +
-        'JOIN `order_type` ON `order_type`.`id` = `order`.`type_id` ' +
-        'JOIN `order_status` ON `order_status`.`id` = `order`.`status_id` '
-};
+        SELECT_ORDER: 'SELECT `order`.`id`, `order`.`name`, `order`.`subtotal`, ' +
+            '`order`.`total`, `order`.`item_count`, `order`.`created_timestamp`, ' +
+            '`order`.`modified_timestamp`, `customer`.`id` AS `customer_id`, `customer`.`name` AS `customer_name`, ' +
+            '`customer`.`email` AS `customer_email`, `customer`.`phone` AS `customer_phone`, ' +
+            '`order_type`.`id` AS `type_id`, `order_type`.`name` AS `type`, `order_status`.`id` AS `status_id`, ' +
+            '`order_status`.`name` AS `status` ' +
+            'FROM `order` ' +
+            'JOIN `customer` ON `customer`.`id` = `order`.`customer_id` ' +
+            'JOIN `order_type` ON `order_type`.`id` = `order`.`type_id` ' +
+            'JOIN `order_status` ON `order_status`.`id` = `order`.`status_id` ',
+        SELECT_INVOICE: 'SELECT `invoice`.`id`, `invoice`.`status_id`, `invoice_status`.`name` AS `status_name`, ' +
+            '`invoice`.`modified_timestamp`, `invoice`.`created_timestamp`, `invoice`.`subtotal`, `invoice`.`total`, ' +
+            '`invoice`.`item_count`, `invoice`.`access_code`, `invoice`.`name`, `invoice`.`billed_to_name`, ' +
+            '`invoice`.`billed_to_address`, `invoice`.`billed_to_phone`, `invoice`.`billed_to_email` ' +
+            'FROM `invoice`' +
+            'JOIN `invoice_status` ON `invoice_status`.`id` = `invoice`.`status_id` '
+    };
 
 module.exports = {
     INSERT_USER: 'INSERT INTO `user` ' +
@@ -69,12 +75,40 @@ module.exports = {
             return '`' + key + '` = \'' + value + '\'';
         });
 
-        //return 'UPDATE `order` SET `customer_id` = ?, `type_id` = ?, `status_id` = ?, `name` = ?, `modified_timestamp` = NOW() WHERE `id` = ?;'
         return 'UPDATE `order` SET ' + vs.join(', ') + ', `modified_timestamp` = NOW() WHERE `id` = ?;'
     },
     SELECT_ORDER_TYPE_LISTING: 'SELECT * FROM `order_type`;',
 
     INSERT_INVOICE: 'INSERT INTO `invoice` ' +
-        '(`created_user_id`, `modified_user_id`, `modified_timestamp`, `access_code`) ' +
-        'VALUES (?, ?, NOW(), ?);'
+        '(`created_user_id`, `modified_user_id`, `modified_timestamp`, `access_code`, `name`, ' +
+        '`billed_to_name`, `billed_to_address`, `billed_to_phone`, `billed_to_email`) ' +
+        'VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?);',
+    SELECT_INVOICE_BY_ID: sqlStubs.SELECT_INVOICE + ' WHERE `invoice`.`id` = ?;',
+    DELETE_INVOICE_ITEM_BY_ID: 'DELETE FROM `invoice_item` WHERE `id` = ?;',
+    SELECT_INVOICE_ITEMS_BY_INVOICE_ID: 'SELECT `invoice_item`.`id`, `invoice_item`.`order_id`, ' +
+        '`order`.`type_id` AS `order_type_id`, `order_type`.`name` AS `order_type_name`, ' +
+        '`order`.`status_id` AS `order_status_id`, `order_status`.`name` AS `order_status_name`, ' +
+        '`order`.`created_timestamp` AS `order_created_timestamp`, ' +
+        '`order`.`modified_timestamp` AS `order_modified_timestamp`, `order`.`name` AS `order_name`, ' +
+        '`order`.`item_count` AS `order_item_count`, `order`.`customer_id` AS `order_customer_id`, ' +
+        '`customer`.`name` AS `order_customer_name`, `customer`.`address` AS `order_customer_address`, ' +
+        '`customer`.`phone` AS `order_customer_phone`, `customer`.`email` AS `order_customer_email` ' +
+        'FROM `invoice_item` ' +
+        'JOIN `order` ON `order`.`id` = `invoice_item`.`order_id` ' +
+        'JOIN `order_type` ON `order_type`.`id` = `order`.`type_id` ' +
+        'JOIN `order_status` ON `order_status`.`id` = `order`.`status_id` ' +
+        'JOIN `customer` ON `customer`.`id` = `order`.`customer_id` ' +
+        'WHERE `invoice_id` = ?;',
+    INSERT_INVOICE_ITEM: 'INSERT INTO `invoice_item` (`invoice_id`, `order_id`) VALUES (?, ?);',
+    SELECT_BARE_INVOICE_ITEMS_BY_INVOICE_ID: 'SELECT * FROM `invoice_item` WHERE `invoice_id` = ?;',
+    SYNC_INVOICE: 'UPDATE `invoice` SET `total` = ?, `subtotal` = ?, `item_count` = ?, `modified_timestamp` = NOW() WHERE `id` = ?;',
+    SELECT_INVOICE_ITEM_COUNT_AND_SUBTOTAL_BY_INVOICE_ID: 'SELECT COUNT(`invoice_item`.`order_id`) AS `count`, ' +
+        'SUM(`order`.`total`) AS `subtotal` ' +
+        'FROM `invoice` ' +
+        'JOIN `invoice_item` on `invoice_item`.`invoice_id` = `invoice`.`id` ' +
+        'JOIN `order` on `order`.`id` = `invoice_item`.`order_id` ' +
+        'WHERE `invoice`.`id` = ?;',
+    SELECT_100_MOST_RECENT_INVOICES_LISTING: sqlStubs.SELECT_INVOICE +
+        'ORDER BY `modified_timestamp` DESC ' +
+        'LIMIT 100;'
 };

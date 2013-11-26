@@ -1,7 +1,9 @@
 // External dependencies.
 var express = require('express'),
     http = require('http'),
-    path = require('path');
+    https = require('https'),
+    path = require('path'),
+    fs = require('fs');
 
 // Routes
 var V1_SERVICES_BASE = '/services/v1/',
@@ -17,8 +19,6 @@ var V1_SERVICES_BASE = '/services/v1/',
 
 var app = express();
 
-// all environments
-app.set('port', process.env.PORT || 3000);
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -26,11 +26,6 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, '../client')));
-
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
 
 // Service Routes //
 
@@ -65,21 +60,41 @@ app.post(V1_SERVICES_BASE + 'orders/:orderId/items', orderItems.create);
 app.put(V1_SERVICES_BASE + 'orders/:orderId/items/:orderItemId', orderItems.modify);
 app.patch(V1_SERVICES_BASE + 'orders/:orderId/items/:orderItemId', orderItems.modify);
 
-// Invoice documents (service) routes
-app.get(V1_SERVICES_BASE + 'documents/invoices', invoices.list);
-app.post(V1_SERVICES_BASE + 'documents/invoices', invoices.create);
-app.get(V1_SERVICES_BASE + 'documents/invoices/:invoiceId', invoices.retrieve);
-app.put(V1_SERVICES_BASE + 'documents/invoices/:invoiceId', invoices.modify);
-app.patch(V1_SERVICES_BASE + 'documents/invoices/:invoiceId', invoices.modify);
-app.get(V1_SERVICES_BASE + 'documents/invoices/:invoiceId/items', invoiceItems.list);
-app.post(V1_SERVICES_BASE + 'documents/invoices/:invoiceId/items', invoiceItems.create);
-app.delete(V1_SERVICES_BASE + 'documents/invoices/:invoiceId/items/:invoiceItemId', invoiceItems.destroy);
+// Invoice routes
+app.get(V1_SERVICES_BASE + 'invoices', invoices.list);
+app.post(V1_SERVICES_BASE + 'invoices', invoices.create);
+app.get(V1_SERVICES_BASE + 'invoices/:invoiceId', invoices.retrieve);
+app.put(V1_SERVICES_BASE + 'invoices/:invoiceId', invoices.modify);
+app.patch(V1_SERVICES_BASE + 'invoices/:invoiceId', invoices.modify);
+app.get(V1_SERVICES_BASE + 'invoices/:invoiceId/items', invoiceItems.list);
+app.post(V1_SERVICES_BASE + 'invoices/:invoiceId/items', invoiceItems.create);
+app.delete(V1_SERVICES_BASE + 'invoices/:invoiceId/items/:invoiceItemId', invoiceItems.destroy);
 
 // Any unhandled routes will return the client app.
 app.use(function(req, res){
     res.sendfile(path.join(__dirname, '../client/index.html'));
 });
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+var hostname, httpPort, httpsPort;
+
+var config = require('./config.json');
+
+// Security
+var privateKey  = fs.readFileSync(path.join(__dirname, 'ia.key'), 'utf8'),
+    certificate = fs.readFileSync(path.join(__dirname, 'ia.crt'), 'utf8'),
+    credentials = {key: privateKey, cert: certificate};
+
+https.createServer(credentials, app).listen(config.httpsPort, function (){
+  console.log('HTTPS server listening on port ' +  config.httpsPort);
+});
+
+// Redirect ALL http traffic to https
+var redirectApp = express();
+
+redirectApp.get('*', function(req, res) {
+    res.redirect('https://' + config.hostname + ((config.httpsPort === 443) ? '' : ((':' + config.httpsPort) + req.url)));
+})
+
+http.createServer(redirectApp).listen(config.httpPort, function () {
+    console.log('HTTP->HTTPS redirecting server listening on port ' +  config.httpPort);
 });

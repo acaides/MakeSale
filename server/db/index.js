@@ -645,27 +645,42 @@ var db = module.exports = {
         _.forEach(is, function (invoice) {
             if(_.isPlainObject(invoice)) {
                 if(!_.isNumber(invoice.createdUserId) || invoice.createdUserId < 1) {
-                    done('Invalid created user id.');
+                    done({ inputError: 'Invalid created user id.' });
                     return;
                 }
 
                 if(!_.isNumber(invoice.modifiedUserId || invoice.modifiedUserId < 1)) {
-                    done('Invalid modified user id.');
+                    done({ inputError: 'Invalid modified user id.' });
                     return;
                 }
 
                 if(!_.isString(invoice.accessCode) || invoice.accessCode.length < 8) {
-                    done('Invalid access code.');
+                    done({ inputError: 'Invalid access code.' });
                     return;
                 }
 
-                dbc.query(sqlTemplates.INSERT_INVOICE, [ invoice.createdUserId, invoice.modifiedUserId, invoice.accessCode ], function (err, result) {
-                    if(err) {
-                        done(err);
-                    } else {
-                        done(false, result);
-                    }
-                });
+                if(!_.isString(invoice.billedToName) || invoice.billedToName.length < 4) {
+                    done({ inputError: 'Invalid billed to name.' });
+                    return;
+                }
+
+                dbc.query(sqlTemplates.INSERT_INVOICE, [
+                        invoice.createdUserId,
+                        invoice.modifiedUserId,
+                        invoice.accessCode,
+                        invoice.name,
+                        invoice.billedToName,
+                        invoice.billedToAddress,
+                        invoice.billedToPhone,
+                        invoice.billedToEmail
+                    ],
+                    function (err, result) {
+                        if(err) {
+                            done(err);
+                        } else {
+                            done(false, result);
+                        }
+                    });
             } else {
                 done('Invalid invoice specification.');
             }
@@ -763,7 +778,7 @@ var db = module.exports = {
         if(_.isNumber(invoiceItemId) && invoiceItemId < 1) {
             // TODO: Make this transactional!
             // First, change the order item quantity.
-            dbc.query(sqlTemplates.DELETE_INVOICE_ITEM, [ invoiceItemId ], function (err, result) {
+            dbc.query(sqlTemplates.DELETE_INVOICE_ITEM_BY_ID, [ invoiceItemId ], function (err, result) {
                 if(err) {
                     cb(err);
                 } else {
@@ -796,6 +811,18 @@ var db = module.exports = {
                     } else {
                         cb('No such invoice.');
                     }
+                }
+            });
+        }
+    },
+
+    selectInvoices: function selectInvoices (cb) {
+        if(_.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_100_MOST_RECENT_INVOICES_LISTING, function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, us2cc(result));
                 }
             });
         }

@@ -9,8 +9,9 @@
     </div>
     <div ng-hide="order.error">
         <div class="header">
-            <a class="backLink" href="/orders/{{ order.id }}"></a>
-            <div class="headerText">Edit Order #{{ order.id }}: {{ order.name || order.createdTimestamp.toDateString() }}</div>
+            <a class="headerTitle" href="/orders/{{ order.id }}">
+                Edit Order #{{ order.id }}
+            </a>
         </div>
 
         <div>
@@ -69,7 +70,7 @@
                 </span>
             </div>
             <div class="footerActions">
-                <a ng-click="save()">save</a>
+                <a class="footerAction" ng-click="save()">save</a>
             </div>
         </div>
     </div>

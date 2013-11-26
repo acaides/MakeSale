@@ -1,13 +1,18 @@
-<div class="view" style="margin-top: 52px;">
+<div class="view" style="margin-top: 68px;">
     <div class="header">
-        <a class="backLink" href="/"></a>
-        <div class="headerText">
+        <a href="/" class="headerTitle">
             Orders
-            <a ng-hide="showingCompleted" ng-click="toggleShowingCompleted()">show completed</a>
-            <a ng-show="showingCompleted" ng-click="toggleShowingCompleted()">hide completed</a>
-        </div>
+        </a>
         <div class="headerActions">
-            <a href="/orders/start">start</a>
+            <a class="headerAction" ng-hide="showingCompleted" ng-click="toggleShowingCompleted()">
+                show completed
+            </a>
+            <a class="headerAction" ng-show="showingCompleted" ng-click="toggleShowingCompleted()">
+                hide completed
+            </a>
+            <a class="headerAction" href="/orders/start">
+                start
+            </a>
         </div>
         <div class="subHeader">
             <div class="columnHeaders">

@@ -1,13 +1,12 @@
-<div class="view" style="margin-top: 52px;">
+<div class="view" style="margin-top: 68px;">
     <div class="header">
-        <a class="backLink" href="/"></a>
-        <div class="headerText">
+        <a class="headerTitle" href="/">
             Invoices
-            <a ng-hide="showingPaid" ng-click="toggleShowingPaid()">show paid</a>
-            <a ng-show="showingPaid" ng-click="toggleShowingPaid()">hide paid</a>
-        </div>
+        </a>
         <div class="headerActions">
-            <a href="/invoices/start">start</a>
+            <a class="headerAction" ng-hide="showingPaid" ng-click="toggleShowingPaid()">show paid</a>
+            <a class="headerAction" ng-show="showingPaid" ng-click="toggleShowingPaid()">hide paid</a>
+            <a class="headerAction" href="/invoices/start">start</a>
         </div>
         <div class="subHeader">
             <div class="columnHeaders">

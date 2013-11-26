@@ -1,4 +1,4 @@
-<div class="view" ng-click="clearSelectedOrder()">
+<div class="view" style="margin-top: 150px;" ng-click="clearSelectedOrder()">
     <div class="viewMessage" ng-show="invoice.loading">
         Loading...
     </div>
@@ -9,20 +9,21 @@
     </div>
     <div ng-hide="invoice.error" style="position: relative;">
         <div class="header">
-            <a class="backLink" href="/invoices"></a>
-            <div class="headerText">Invoice #{{ invoice.id }}: {{ invoice.name || invoice.createdTimestamp.toDateString() }}</div>
+            <a class="headerTitle" href="/invoices">
+                Invoice #{{ invoice.id }}
+            </a>
             <div class="headerActions">
-                <a href="/invoice/{{ invoice.id }}/edit">edit</a>
+                <a class="headerAction" href="/invoice/{{ invoice.id }}/edit">edit</a>
             </div>
             <div class="subHeader">
-                <div style="font-size: 14px">billed to {{ invoice.billedToName }}</div>
+                <div style="font-size: 14px">{{ invoice.name || invoice.createdTimestamp.toDateString() }} billed to {{ invoice.billedToName }}</div>
                 <div style="font-size: 12px">
                     <div ng-show="invoice.billedToPhone">phone #: {{ invoice.billedToPhone }}</div>
                     <div ng-show="invoice.billedToEmail">email: {{ invoice.billedToEmail }}</div>
-                    <div ng-hide="invoice.billedToPhone"><br></div>
-                    <div ng-hide="invoice.billedToEmail"><br></div>
                     <div>started on {{ invoice.createdTimestamp.toLocaleString() }}</div>
                     <div>last updated {{ invoice.modifiedTimestamp.toLocaleString() }}</div>
+                    <div ng-hide="invoice.billedToPhone"><br></div>
+                    <div ng-hide="invoice.billedToEmail"><br></div>
                 </div>
 
                 <div class="columnHeaders" ng-show="invoice.orders.length">
@@ -33,7 +34,7 @@
             </div>
         </div>
 
-        <div style="margin-top: 134px; margin-bottom: 50px;">
+        <div style="margin-bottom: 50px;">
             <div ng-hide="invoice.orders.length" style="text-align: center; margin-top: 200px;">
                 There are no orders in this invoice.<br><br>
                 <a ng-show="invoice.statusId == 1" href="/invoice/{{ invoice.id }}/addOrder" style="font-weight: bold;">add an order now</a>
@@ -56,11 +57,11 @@
 
         </div>
         <div class="footer" ng-show="invoice.orders.length">
-            <div class="footerText">{{ orderCountText(invoice) }}<br></bt>Total: {{ invoice.total | currency }}</div>
+            <div class="footerText">{{ orderCountText(invoice) }}, {{ invoice.total | currency }}</div>
             <div class="footerActions">
-                <a ng-show="invoice.statusId == 1" href="/invoices/{{ invoice.id }}/addOrder">add order</a>&nbsp;
-                <a ng-show="invoice.statusId == 1" ng-click="complete()">complete</a>
-                <span ng-hide="invoice.statusId == 1">Completed, <a ng-click="reopen()">reopen?</a></span>
+                <a class="footerAction" ng-show="invoice.statusId == 1" href="/invoices/{{ invoice.id }}/addOrder">add order</a>
+                <a class="footerAction" ng-show="invoice.statusId == 1" ng-click="complete()">complete</a>
+                <a class="footerAction" ng-hide="invoice.statusId == 1" ng-click="reopen()">reopen?</a><
             </div>
         </div>
     </div>

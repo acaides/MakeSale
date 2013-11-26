@@ -1,7 +1,8 @@
-<div class="view" style="margin-top: 54px;">
+<div class="view" style="margin-top: 70px;">
     <div class="header">
-        <a class="backLink" href="/orders/{{ order.id }}"></a>
-        <div class="headerText">Add Item To Order #{{ order.id }}</div>
+        <a class="headerTitle" href="/orders/{{ order.id }}">
+            Add Item To Order #{{ order.id }}
+        </a>
         <div class="subHeader" style="font-size: 12px;">
             <div style="display: inline-block; margin: 3px;">select a product for {{ order.customerName }}'s order</div>
         </div>
@@ -23,10 +24,11 @@
     </div>
     <div class="footer" ng-show="selectedProduct">
         <div class="footerText">
-            Quantity: <input type="number" ng-model="quantity" />
+            Quantity:
         </div>
         <div class="footerActions">
-            <a ng-click="add()">add item</a>
+            <input class="footerInput" type="number" ng-model="quantity" />
+            <a class="footerAction" ng-click="add()">add item</a>
         </div>
     </div>
 </div>

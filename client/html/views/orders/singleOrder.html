@@ -30,8 +30,8 @@
                         <div>last updated {{ order.modifiedTimestamp.toLocaleString() }}</div>
                     </div>
                     <div class="columnHeaders" ng-show="order.items.length">
-                        <div class="columnHeader" style="width: 20%;">Qty</div>
-                        <div class="columnHeader" style="width: 55%">Name</div>
+                        <div class="columnHeader" style="width: 25%;">Qty</div>
+                        <div class="columnHeader" style="width: 50%">Name</div>
                         <div class="columnHeader" style="width: 25%;">Total</div>
                     </div>
                 </div>
@@ -45,11 +45,11 @@
             </div>
             <div>
                 <div class="row" ng-repeat="item in order.items" ng-click="selectItem(item); $event.stopPropagation()" ng-class="{ selectedRow: selectedItem == item }">
-                    <div class="columns" style="top: 12px;">
-                        <div class="column" style="width: 20%;">
+                    <div class="columns" style="height: 100%;">
+                        <div class="column" style="width: 25%; white-space: nowrap; height: 100%;">
                             <span ng-hide="order.statusId == 1">{{ item.quantity }}</span>
-                            <form ng-submit="itemQtyChange(item, true)">
-                                <input style="width: 30px;"
+                            <form ng-submit="itemQtyChange(item, true)" style="display: inline-block; height: 100%;">
+                                <input class="rowInput" style="width: 30px; color: black;"
                                        ng-show="order.statusId == 1"
                                        type="number"
                                        ng-click="$event.stopPropagation()"
@@ -62,15 +62,15 @@
                                 <span ng-show="item.unitId == 5">lb</span>
                             </form>
                         </div>
-                        <div class="column" style="width: 55%; position: relative; top: -8px;">
+                        <div class="column" style="width: 50%; position: relative; top: -24px;">
                             {{ item.name }}
                         </div>
-                        <div class="column" style="width: 25%;">
+                        <div class="column" style="width: 25%; position: relative; top: -14px;">
                             <span ng-hide="selectedItem == item">{{ item.itemTotal | currency }}</span>
                             <span ng-show="selectedItem == item" ng-click="removeItem(item)">remove?</span>
                         </div>
 
-                        <span style="position: absolute; bottom: -8px; left: 20%; font-size: 12px; font-style: italic;">
+                        <span style="position: absolute; bottom: 8px; left: 25%; font-size: 12px; font-style: italic;">
                             @ {{ item.unitPrice | currency }} {{ item.unitName }}
                         </span>
                     </div>

@@ -260,7 +260,52 @@ define([ './module' ], function (services) {
                     });
 
                 return invoice;
-            }
+            },
+
+            startInvoice: function BNStartOrder (billToInfo, cb) {
+                var c = angular.isFunction(cb) ? cb : function () {},
+                    invoice = {
+                        loading: true
+                    };
+
+                $http({ method: 'POST', url: SB + 'invoices', data: billToInfo }).
+                    success(function(data, status, headers, config) {
+                        delete invoice.loading;
+                        angular.extend(invoice, data);
+                        invoice.createdTimestamp = new Date(invoice.createdTimestamp);
+                        invoice.modifiedTimestamp = new Date(invoice.modifiedTimestamp);
+                        c(invoice);
+                    }).
+                    error(function(data, status, headers, config) {
+                        delete invoice.loading;
+                        angular.extend(invoice, data);
+                        c(invoice);
+                    });
+
+                return invoice;
+            },
+
+            addInvoiceOrders: function BNAddInvoiceOrders (invoiceId, orders, cb) {
+                var c = angular.isFunction(cb) ? cb : function () {},
+                    orders = {};
+
+                $http({ method: 'POST', url: SB + 'invoices/' + invoiceId + '/orders/byMonth', data: { productId: productId, quantity: quantity } }).
+                    success(function(data, status, headers, config) {
+                        angular.extend(orders, data);
+
+//                        orders.createdTimestamp = new Date(orders.createdTimestamp);
+//                        orders.modifiedTimestamp = new Date(orders.modifiedTimestamp);
+
+                        if(angular.isFunction(cb)) {
+                            cb(orders);
+                        }
+                    }).
+                    error(function(data, status, headers, config) {
+
+                    });
+
+                return orders;
+            },
         };
     } ]);
 });

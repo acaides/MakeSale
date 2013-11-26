@@ -1,8 +1,9 @@
 define([ './module' ], function (controllers) {
     'use strict';
     controllers.controller('SingleOrderController', [
-        '$scope', 'BeurrageNet', '$routeParams', '$location', '$timeout',
-        function ($, BN, $routeParams, $location, $timeout) {
+        '$scope', 'BeurrageNet', '$routeParams', '$location', '$timeout', '$window',
+        function ($, BN, $routeParams, $location, $timeout, $window) {
+            $.from = $routeParams.from;
             $.order = BN.getOrderById($routeParams.orderId);
 
             $.itemCountText = function () {
@@ -36,13 +37,7 @@ define([ './module' ], function (controllers) {
             $.complete = function () {
                 BN.updateOrder($.order.id, { statusId: 2 }, function (order) {
                     angular.extend($.order, order);
-                    $location.path('/orders');
-                });
-            };
-
-            $.reopen = function () {
-                BN.updateOrder($.order.id, { statusId: 1 }, function (order) {
-                    angular.extend($.order, order);
+                    $.confirmComplete = false;
                 });
             };
 

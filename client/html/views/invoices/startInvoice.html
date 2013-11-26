@@ -1,0 +1,51 @@
+<div class="view">
+    <div class="header">
+        <a class="headerTitle" href="/invoices">
+            Start A New Invoice
+        </a>
+    </div>
+    <div style="text-indent: 2px; background: #E5D9CF;">
+        Who is being billed?
+    </div>
+    <div>
+        <div class="row"
+             ng-repeat="customer in customers"
+             ng-click="selectCustomer(customer)"
+             ng-class="{ selectedRow: selectedCustomer == customer, hiddenRow: selectedCustomer && selectedCustomer != customer }">
+            <div style="margin-top: 12px; margin-left: 4px;">
+                {{ customer.name }} <span style="float: right; margin-right: 8px; font-style: italic; font-size: 14px;" ng-show="selectedCustomer == customer">change?</span>
+            </div>
+        </div>
+        <div class="row"
+             ng-click="selectCustomer('other')"
+             ng-class="{ selectedRow: selectedCustomer == 'other', hiddenRow: selectedCustomer && selectedCustomer != 'other' }">
+            <div style="margin-top: 12px; margin-left: 4px;">
+                Other <span style="float: right; margin-right: 8px; font-style: italic; font-size: 14px;" ng-show="selectedCustomer == 'other'">change?</span>
+            </div>
+        </div>
+    </div>
+    <div ng-show="selectedCustomer">
+        <div style="text-indent: 2px; background: #E5D9CF;">
+            Which orders should be included?
+        </div>
+        <div>
+            <div class="row"
+                 ng-repeat="orderSuggestion in orderSuggestions"
+                 ng-click="selectOrderSuggestion(orderSuggestion)"
+                 ng-class="{ selectedRow: selectedOrderSuggestion == orderSuggestion, hiddenRow: selectedOrderSuggestion && selectedOrderSuggestion != orderSuggestion }">
+                <div style="margin-top: 12px; margin-left: 4px;">
+                    {{ orderSuggestion.name }} <span style="float: right; margin-right: 8px; font-style: italic; font-size: 14px;" ng-show="selectedOrderSuggestion == orderSuggestion">change?</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer" ng-show="selectedCustomer && selectedOrderSuggestion">
+        <div class="footerText">
+            Ready To Go!
+        </div>
+        <div class="footerActions">
+            <a class="footerAction" ng-click="start()">start the invoice</a>
+        </div>
+    </div>
+</div>

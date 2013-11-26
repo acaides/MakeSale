@@ -9,5 +9,7 @@ define([
     './EditOrderController',
     './DocumentsController',
     './InvoicesController',
-    './SingleInvoiceController'
+    './SingleInvoiceController',
+    './AddOrderController',
+    './StartInvoiceController'
 ], function () {});

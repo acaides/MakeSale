@@ -29,7 +29,7 @@
                 </div>
                 <div class="columnHeaders" ng-show="invoice.orders.length">
                     <div class="columnHeader" style="width: 20%;">Items</div>
-                    <div class="columnHeader" style="width: 55%">Name</div>
+                    <div class="columnHeader" style="width: 55%">Order Name</div>
                     <div class="columnHeader" style="width: 25%;">Total</div>
                 </div>
             </div>
@@ -41,9 +41,14 @@
                 <a ng-show="invoice.statusId == 1" href="/invoice/{{ invoice.id }}/addOrder" style="font-weight: bold;">add an order now</a>
             </div>
             <div>
-                <div class="row" ng-repeat="order in invoice.orders" ng-click="selectOrder(order); $event.stopPropagation()" ng-class="{ selectedRow: selectedOrder == order }">
+                <a class="linkedRow"
+                   ng-repeat="order in invoice.orders"
+                   ng-class="{ selectedRow: selectedOrder == order }"
+                   href="/orders/{{ order.id }}?from=/invoices/{{ invoice.id }}">
                     <div class="columns" style="top: 12px;">
-                        <div class="column" style="width: 20%; font-size: 16px; text-align: center;">
+                        <div class="column"
+                             style="width: 20%; font-size: 16px; text-align: center;"
+                             ng-click="selectOrder(order); $event.stopPropagation();">
                             {{ order.itemCount }}
                         </div>
                         <div class="column" style="width: 55%; font-size: 16px;">
@@ -53,7 +58,7 @@
                             {{ order.total | currency }}
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
 
         </div>

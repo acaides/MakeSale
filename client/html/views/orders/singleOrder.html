@@ -9,11 +9,11 @@
     </div>
     <div ng-hide="order.error" style="position: relative;">
         <div class="header">
-            <a class="headerTitle" href="/orders">
-                Order #{{ order.id }}
+            <a class="headerTitle" href="{{ from || '/orders' }}">
+                Order #{{ order.id }} <span ng-hide="order.statusId == 1">{{ order.status.toUpperCase() }}</span>
             </a>
             <div class="headerActions">
-                <a class="headerAction" href="/orders/{{ order.id }}/edit">
+                <a class="headerAction" href="/orders/{{ order.id }}/edit" ng-show="order.statusId == 1">
                     edit
                 </a>
             </div>
@@ -47,10 +47,11 @@
                 <div class="row" ng-repeat="item in order.items" ng-click="selectItem(item); $event.stopPropagation()" ng-class="{ selectedRow: selectedItem == item }">
                     <div class="columns" style="height: 100%;">
                         <div class="column" style="width: 25%; white-space: nowrap; height: 100%;">
-                            <span ng-hide="order.statusId == 1">{{ item.quantity }}</span>
-                            <form ng-submit="itemQtyChange(item, true)" style="display: inline-block; height: 100%;">
+                            <div ng-hide="order.statusId == 1" style="width: 100%; display: inline-block; padding-top: 12px; text-indent: 8px; height: 100%;">
+                                {{ item.quantity }}
+                            </div>
+                            <form ng-show="order.statusId == 1" ng-submit="itemQtyChange(item, true)" style="display: inline-block; height: 100%;">
                                 <input class="rowInput" style="width: 30px; color: black;"
-                                       ng-show="order.statusId == 1"
                                        type="number"
                                        ng-click="$event.stopPropagation()"
                                        ng-model="item.quantity"
@@ -79,11 +80,14 @@
 
         </div>
         <div class="footer" ng-show="order.items.length">
-            <div class="footerText">{{ itemCountText(order) }}, {{ order.total | currency }}</div>
+            <div class="footerText">
+                {{ itemCountText(order) }}, {{ order.total | currency }}
+            </div>
             <div class="footerActions">
-                <a class="footerAction" ng-show="order.statusId == 1" href="/orders/{{ order.id }}/addItem">add item</a>
-                <a class="footerAction" ng-show="order.statusId == 1" ng-click="complete()">complete</a>
-                <a class="footerAction" ng-hide="order.statusId == 1" ng-click="reopen()">reopen</a>
+                <a class="footerAction" ng-show="order.statusId == 1 && !confirmComplete" href="/orders/{{ order.id }}/addItem">add item</a>
+                <a class="footerAction" ng-show="order.statusId == 1 && !confirmComplete" ng-click="confirmComplete = true">complete</a>
+                <a class="footerAction" ng-show="order.statusId == 1 && confirmComplete" ng-click="complete()">lock the order?</a>
+                <a class="footerAction" ng-show="order.statusId == 2 && !confirmComplete" ng-click="addToInvoice()">add to invoice</a>
             </div>
         </div>
     </div>

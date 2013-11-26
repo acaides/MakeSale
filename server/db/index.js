@@ -420,49 +420,61 @@ var db = module.exports = {
             return;
         }
 
-        // Process each of the add item requests.
-        _.forEach(requests, function (orderItem) {
-            // Make sure we have valid product ids and quantities.
-            if('productId' in orderItem && _.isNumber(orderItem.productId) && orderItem.productId > 0 &&
-                'quantity' in orderItem && _.isNumber(orderItem.quantity) && orderItem.quantity > 0) {
-                // Pull a list of existing product ids for the order, to detect duplication.
-                dbc.query(sqlTemplates.SELECT_BARE_ORDER_ITEMS_BY_ORDER_ID, [ orderId ], function (err, result) {
-                    var orderItems = us2cc(result),
-                        productIds = _.map(orderItems, function (orderItem) { return orderItem.productId; }),
-                        matchingItemIndex = productIds.indexOf(orderItem.productId),
-                        matchingItem = matchingItemIndex === -1 ? null : orderItems[matchingItemIndex];
+        db.isOrderLocked(orderId, function (err, locked) {
+            if(err) {
+                if(_.isFunction(cb)) {
+                    cb(err);
+                };
+            } else if (locked) {
+                if(_.isFunction(cb)) {
+                    cb({ forbidden: 'Order is locked.' });
+                }
+            } else {
+                // Process each of the add item requests.
+                _.forEach(requests, function (orderItem) {
+                    // Make sure we have valid product ids and quantities.
+                    if('productId' in orderItem && _.isNumber(orderItem.productId) && orderItem.productId > 0 &&
+                        'quantity' in orderItem && _.isNumber(orderItem.quantity) && orderItem.quantity > 0) {
+                        // Pull a list of existing product ids for the order, to detect duplication.
+                        dbc.query(sqlTemplates.SELECT_BARE_ORDER_ITEMS_BY_ORDER_ID, [ orderId ], function (err, result) {
+                            var orderItems = us2cc(result),
+                                productIds = _.map(orderItems, function (orderItem) { return orderItem.productId; }),
+                                matchingItemIndex = productIds.indexOf(orderItem.productId),
+                                matchingItem = matchingItemIndex === -1 ? null : orderItems[matchingItemIndex];
 
-                    if(!matchingItem) {
-                        // If there's not already a product in this order with the specified id, insert a new item.
-                        dbc.query(
-                            sqlTemplates.INSERT_ORDER_ITEM,
-                            [
-                                orderId,
-                                orderItem.productId,
-                                orderItem.quantity
-                            ],
-                            function (err, result) {
-                                if(err) {
-                                    done([ err ]);
-                                } else {
-                                    done([ false, _.extend(result, orderItem) ]);
-                                }
-                            }
-                        );
-                    } else {
-                        // If there's already an item in the order of the specified product,
-                        // just add the quantity to that item.
-                        db.updateOrderItem(orderId, matchingItem.id, matchingItem.quantity + orderItem.quantity, function (err, result) {
-                            if(err) {
-                                done([ err ]);
+                            if(!matchingItem) {
+                                // If there's not already a product in this order with the specified id, insert a new item.
+                                dbc.query(
+                                    sqlTemplates.INSERT_ORDER_ITEM,
+                                    [
+                                        orderId,
+                                        orderItem.productId,
+                                        orderItem.quantity
+                                    ],
+                                    function (err, result) {
+                                        if(err) {
+                                            done([ err ]);
+                                        } else {
+                                            done([ false, _.extend(result, orderItem) ]);
+                                        }
+                                    }
+                                );
                             } else {
-                                done([ false, _.extend(result, orderItem) ]);
+                                // If there's already an item in the order of the specified product,
+                                // just add the quantity to that item.
+                                db.updateOrderItem(orderId, matchingItem.id, matchingItem.quantity + orderItem.quantity, function (err, result) {
+                                    if(err) {
+                                        done([ err ]);
+                                    } else {
+                                        done([ false, _.extend(result, orderItem) ]);
+                                    }
+                                });
                             }
                         });
+                    } else {
+                        done([ 'Required information is missing or invalid.' ]);
                     }
                 });
-            } else {
-                done([ 'Required information is missing or invalid.' ]);
             }
         });
     },
@@ -483,6 +495,24 @@ var db = module.exports = {
         }
     },
 
+    isOrderLocked: function isOrderCompleted (orderId, cb) {
+        if(_.isFunction(cb)) {
+            if(_.isNumber(orderId) && orderId > 0) {
+                dbc.query(sqlTemplates.SELECT_ORDER_STATUS_ID_BY_ORDER_ID, [ orderId ], function (err, orderStatusId) {
+                    if(err) {
+                        cb(err);
+                    } else if(orderStatusId.length === 1) {
+                        cb(false, orderStatusId[0].status_id !== 1);
+                    } else {
+                        cb('No such order.');
+                    }
+                });
+            } else {
+                cb('Invalid order id.');
+            }
+        }
+    },
+
     updateOrder: function updateOrder (orderId, mods, cb) {
         var usMods = cc2us(mods),
             c = _.isFunction(cb) ? cb : _.noop;
@@ -495,24 +525,32 @@ var db = module.exports = {
             return;
         }
 
-        dbc.query(sqlTemplates.UPDATE_ORDER(usMods), [ orderId ], function (err, result) {
+        db.isOrderLocked(orderId, function (err, locked) {
             if(err) {
                 c(err);
+            } else if(locked) {
+                c({ forbidden: 'Order is locked.' });
             } else {
-                db.syncOrder(orderId, function (err, result) {
-                    db.selectOrderById(orderId, function (err, result) {
-                        if(err) {
-                            c(err);
-                        } else {
-                            db.selectOrderById(orderId, function (err, order) {
+                dbc.query(sqlTemplates.UPDATE_ORDER(usMods), [ orderId ], function (err, result) {
+                    if(err) {
+                        c(err);
+                    } else {
+                        db.syncOrder(orderId, function (err, result) {
+                            db.selectOrderById(orderId, function (err, result) {
                                 if(err) {
                                     c(err);
                                 } else {
-                                    c(false, order);
+                                    db.selectOrderById(orderId, function (err, order) {
+                                        if(err) {
+                                            c(err);
+                                        } else {
+                                            c(false, order);
+                                        }
+                                    });
                                 }
                             });
-                        }
-                    });
+                        });
+                    }
                 });
             }
         });
@@ -529,19 +567,49 @@ var db = module.exports = {
             return;
         }
 
-        // Recalculate the order subtotal and total.
-        dbc.query(sqlTemplates.SELECT_ORDER_ITEM_COUNT_AND_SUBTOTAL_BY_ORDER_ID, [ orderId ], function (err, result) {
+        db.isOrderLocked(orderId, function (err, locked) {
             if(err) {
                 c(err);
+            } else if(locked) {
+                c({ forbidden: 'Order is locked.' });
             } else {
-                var q = result[0];
-                // Now, update the order entry.
-                dbc.query(sqlTemplates.SYNC_ORDER, [ q.subtotal, q.subtotal, q.count, orderId ], function (err, result) {
+                // Recalculate the order subtotal and total.
+                dbc.query(sqlTemplates.SELECT_ORDER_ITEM_COUNT_AND_SUBTOTAL_BY_ORDER_ID, [ orderId ], function (err, result) {
                     if(err) {
                         c(err);
                     } else {
-                        // And we're done!
-                        c(false, result);
+                        var q = result[0];
+                        // Now, update the order entry.
+                        dbc.query(sqlTemplates.SYNC_ORDER, [ q.subtotal, q.subtotal, q.count, orderId ], function (err, result) {
+                            if(err) {
+                                c(err);
+                            } else {
+                                // Identify any invoices this order appears on, and sync those.
+                                dbc.query(sqlTemplates.SELECT_INVOICE_IDS_BY_ORDER_ID, [ orderId ], function (err, invoiceIds) {
+                                    if(!err) {
+                                        var ds = 0,
+                                            d = function () {
+                                                ds++;
+
+                                                if(ds >= invoiceIds.length) {
+                                                    // And we're done!
+                                                    c(false, result);
+                                                }
+                                            };
+
+                                        if(invoiceIds.length > 0) {
+                                            _.forEach(invoiceIds, function (invoiceId) {
+                                                db.syncInvoice(invoiceId.id, d);
+                                            });
+                                        } else {
+                                            d();
+                                        }
+                                    } else {
+                                        c(err);
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
             }
@@ -549,37 +617,52 @@ var db = module.exports = {
     },
 
     updateOrderItem: function updateOrderItem (orderId, orderItemId, quantity, cb) {
+        var c = _.isFunction(cb) ? cb : _.noop;
+
         if(_.isNumber(orderItemId) && _.isNumber(quantity)) {
+            if(orderId < 1) {
+                c('Invalid order item id.');
+                return;
+            }
+
             if(orderItemId < 1) {
-                cb('Invalid order item id.');
+                c('Invalid order item id.');
                 return;
             }
 
             if(quantity < 0) {
-                cb('Invalid quantity.');
+                c('Invalid quantity.');
                 return;
             }
 
-            // TODO: Make this transactional!
-            // First, change the order item quantity.
-            dbc.query(sqlTemplates.UPDATE_ORDER_ITEM, [ quantity, orderItemId ], function (err, result) {
+            db.isOrderLocked(orderId, function (err, locked) {
                 if(err) {
-                    cb(err);
+                    c(err);
+                } else if(locked) {
+                    c({ forbidden: 'Order is locked.' });
                 } else {
-                    // Now, update the order.
-                    db.syncOrder(orderId, function (err, result) {
+                    // TODO: Make this transactional!
+                    // First, change the order item quantity.
+                    dbc.query(sqlTemplates.UPDATE_ORDER_ITEM, [ quantity, orderItemId ], function (err, result) {
                         if(err) {
-                            cb(err);
+                            c(err);
                         } else {
-                            // And we're done!
-                            cb(false, result);
+                            // Now, update the order.
+                            db.syncOrder(orderId, function (err, result) {
+                                if(err) {
+                                    c(err);
+                                } else {
+                                    // And we're done!
+                                    c(false, result);
+                                }
+                            });
                         }
                     });
                 }
             });
         } else {
             if(_.isFunction(cb)) {
-                cb('Missing required input.');
+                c('Missing required input.');
             }
         }
     },
@@ -608,7 +691,7 @@ var db = module.exports = {
         }
 
         // Recalculate the invoice subtotal and total.
-        dbc.query(sqlTemplates.SELECT_INVOICE_ITEM_COUNT_AND_SUBTOTAL_BY_INVOICE_ID, [ invoiceId ], function (err, result) {
+        dbc.query(sqlTemplates.SELECT_INVOICE_ORDER_COUNT_AND_SUBTOTAL_BY_INVOICE_ID, [ invoiceId ], function (err, result) {
             if(err) {
                 c(err);
             } else {

@@ -85,7 +85,7 @@ module.exports = {
         'VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?);',
     SELECT_INVOICE_BY_ID: sqlStubs.SELECT_INVOICE + ' WHERE `invoice`.`id` = ?;',
     DELETE_INVOICE_ORDER_BY_ORDER_ID: 'DELETE FROM `invoice_order` WHERE `id` = ? AND `order_id` = ?;',
-    SELECT_INVOICE_ORDERS_BY_INVOICE_ID: 'SELECT ' +
+    SELECT_INVOICE_ORDERS_BY_INVOICE_ID: 'SELECT `order`.`id`, ' +
         '`order`.`type_id`, `order_type`.`name` AS `type_name`, ' +
         '`order`.`status_id`, `order_status`.`name` AS `status_name`, ' +
         '`order`.`created_timestamp`, `order`.`modified_timestamp`, `order`.`name`, ' +
@@ -110,5 +110,7 @@ module.exports = {
         'WHERE `invoice`.`id` = ?;',
     SELECT_100_MOST_RECENT_INVOICES_LISTING: sqlStubs.SELECT_INVOICE +
         'ORDER BY `modified_timestamp` DESC ' +
-        'LIMIT 100;'
+        'LIMIT 100;',
+    SELECT_INVOICE_IDS_BY_ORDER_ID: 'SELECT `invoice_id` AS `id` FROM `invoice_order` WHERE `order_id` = ?;',
+    SELECT_ORDER_STATUS_ID_BY_ORDER_ID: 'SELECT `status_id` FROM `order` WHERE `id` = ?;'
 };

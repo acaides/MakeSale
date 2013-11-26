@@ -89,7 +89,7 @@ module.exports = {
             if(_.size(mods) > 0) {
                 db.updateOrder(orderId, mods, function (err, order) {
                     if(err) {
-                        res.send(500, err);
+                        res.send(err.forbidden ? 403 : 500, err);
                     } else {
                         res.send(200, order);
                     }

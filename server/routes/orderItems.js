@@ -23,9 +23,7 @@ module.exports = {
 
             db.insertOrderItems(orderId, req.body, function (err, result) {
                 if(err) {
-                    res.send(400, {
-                        error: err
-                    });
+                    res.send(err.forbidden ? 403 : 500, err.forbidden ? err : { error: err });
                 } else {
                     theResult = _.isArray(result) ? result : [ [ err, result ] ];
 
@@ -70,7 +68,7 @@ module.exports = {
             if(_.isNumber(req.body.quantity) && req.body.quantity >= 0) {
                 db.updateOrderItem(orderId, orderItemId, req.body.quantity, function (err, result) {
                     if(err) {
-                        res.send(500, { error: err });
+                        res.send(err.forbidden ? 403 : 500, err.forbidden ? err : { error: err });
                     } else {
                         db.selectOrderById(orderId, function (err, order) {
                             if(err) {

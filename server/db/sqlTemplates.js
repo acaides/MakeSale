@@ -45,6 +45,20 @@ module.exports = {
     SELECT_100_MOST_RECENT_ORDERS_LISTING: sqlStubs.SELECT_ORDER +
         'ORDER BY `modified_timestamp` DESC ' +
         'LIMIT 100;',
+    SELECT_100_MOST_RECENT_ORDERS_LIMITED_LISTING: function (limits) {
+        var where = [];
+
+        _.forEach(limits, function (limit) {
+            where.push('`' + limit.name + '` ' + limit.test + ' ' + limit.value);
+        });
+
+        where = ' WHERE ' + where.join(' AND ') + ' ';
+
+        return sqlStubs.SELECT_ORDER +
+            where +
+            'ORDER BY `modified_timestamp` DESC ' +
+            'LIMIT 100';
+    },
     SELECT_ORDER_BY_ID: sqlStubs.SELECT_ORDER +
         'WHERE `order`.`id` = ?;',
     SELECT_ORDER_TYPE_ID_BY_ORDER_ID: 'SELECT `type_id` FROM `order` WHERE `id` = ?;',

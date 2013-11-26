@@ -4,7 +4,8 @@ var mysql = require('mysql'),
         user: 'beurrageDotNet',
         password: 'V8e80ih&}8C472w02/gPlR73',
         database: 'beurrage',
-        supportBigNumbers: true
+        supportBigNumbers: true,
+        debug: true
     }),
     sqlTemplates = require('./sqlTemplates'),
     bcrypt = require('bcrypt'),
@@ -375,13 +376,180 @@ var db = module.exports = {
         }
     },
 
-    selectOrders: function selectOrders (cb) {
-        if(_.isFunction(cb)) {
-            dbc.query(sqlTemplates.SELECT_100_MOST_RECENT_ORDERS_LISTING, function (err, result) {
+    selectOrders: function selectOrders (pLims, cb) {
+        var l = [],
+            c = _.isFunction(pLims) ? pLims : cb,
+            limits;
+
+        if(_.isPlainObject(pLims)) {
+            limits = _.extend({}, pLims);
+
+            _.forEach(limits, function (value, key) {
+                switch(key) {
+                    case 'customerId':
+                        limits.customerId = parseInt(limits.customerId, 10);
+                        if(_.isNumber(limits.customerId) && limits.customerId > 0) {
+                            l.push({
+                                name: 'customer_id',
+                                test: '=',
+                                value: limits.customerId
+                            });
+                        } else {
+                            c('Invalid customer id limit.');
+                        }
+
+                        break;
+                    case 'statusId':
+                        limits.statusId = parseInt(limits.statusId, 10);
+                        if(_.isNumber(limits.statusId) && limits.statusId > 0) {
+                            l.push({
+                                name: 'status_id',
+                                test: '=',
+                                value: limits.statusId
+                            });
+                        } else {
+                            c('Invalid status id limit.');
+                        }
+
+                        break;
+                    case 'typeId':
+                        limits.typeId = parseInt(limits.typeId, 10);
+                        if(_.isNumber(limits.typeId) && limits.typeId > 0) {
+                            l.push({
+                                name: 'type_id',
+                                test: '=',
+                                value: limits.typeId
+                            });
+                        } else {
+                            c('Invalid type id limit.');
+                        }
+
+                        break;
+                    case 'createdOn':
+                        limits.createdOn = new Date(limits.createdOn);
+                        if(_.isNumber(limits.createdOn.getTime())) {
+                            l.push({
+                                name: 'created_timestamp',
+                                test: '=',
+                                value: '\'' + limits.createdOn.toISOString() + '\''
+                            });
+                        } else {
+                            c('Invalid created on limit.');
+                        }
+                        break;
+                    case 'createdBefore':
+                        limits.createdBefore = new Date(limits.createdBefore);
+                        if(_.isNumber(limits.createdBefore.getTime())) {
+                            l.push({
+                                name: 'created_timestamp',
+                                test: '<',
+                                value: '\'' + limits.createdBefore.toISOString() + '\''
+                            });
+                        } else {
+                            c('Invalid created before limit.');
+                        }
+                        break;
+                    case 'createdAfter':
+                        limits.createdAfter = new Date(limits.createdAfter);
+                        if(_.isNumber(limits.createdAfter.getTime())) {
+                            l.push({
+                                name: 'created_timestamp',
+                                test: '>',
+                                value: '\'' + limits.createdAfter.toISOString() + '\''
+                            });
+                        } else {
+                            c('Invalid created after limit.');
+                        }
+                        break;
+                    case 'createdOnOrBefore':
+                        limits.createdOnOrBefore = new Date(limits.createdOnOrBefore);
+                        if(_.isNumber(limits.createdOnOrBefore.getTime())) {
+                            l.push({
+                                name: 'created_timestamp',
+                                test: '<=',
+                                value: '\'' + limits.createdOnOrBefore.toISOString() + '\''
+                            });
+                        } else {
+                            c('Invalid created on or before limit.');
+                        }
+                        break;
+                    case 'createdOnOrAfter':
+                        limits.createdOnOrAfter = new Date(limits.createdOnOrAfter);
+                        if(_.isNumber(limits.createdOnOrAfter.getTime())) {
+                            l.push({
+                                name: 'created_timestamp',
+                                test: '>=',
+                                value: '\'' + limits.createdOnOrAfter.toISOString() + '\''
+                            });
+                        } else {
+                            c('Invalid created on or after limit.');
+                        }
+                        break;
+                    case 'modifiedOn':
+                        if(_.isNumber((new Date(limits.modifiedOn)).getTime())) {
+                            l.push({
+                                name: 'modified_timestamp',
+                                test: '=',
+                                value: (new Date(limits.modifiedOn)).toISOString()
+                            });
+                        } else {
+                            c('Invalid modified on limit.');
+                        }
+                        break;
+                    case 'modifiedBefore':
+                        if(_.isNumber((new Date(limits.modifiedBefore)).getTime())) {
+                            l.push({
+                                name: 'modified_timestamp',
+                                test: '<',
+                                value: (new Date(limits.modifiedBefore)).toISOString()
+                            });
+                        } else {
+                            c('Invalid modified before limit.');
+                        }
+                        break;
+                    case 'modifiedAfter':
+                        if(_.isNumber((new Date(limits.modifiedAfter)).getTime())) {
+                            l.push({
+                                name: 'modified_timestamp',
+                                test: '>',
+                                value: (new Date(limits.modifiedAfter)).toISOString()
+                            });
+                        } else {
+                            c('Invalid modified after limit.');
+                        }
+                        break;
+                    case 'modifiedOnOrBefore':
+                        if(_.isNumber((new Date(limits.modifiedOnOrBefore)).getTime())) {
+                            l.push({
+                                name: 'modified_timestamp',
+                                test: '<=',
+                                value: (new Date(limits.modifiedOnOrBefore)).toISOString()
+                            });
+                        } else {
+                            c('Invalid modified on or before limit.');
+                        }
+                        break;
+                    case 'modifiedOnOrAfter':
+                        if(_.isNumber((new Date(limits.modifiedOnOrAfter)).getTime())) {
+                            l.push({
+                                name: 'modified_timestamp',
+                                test: '>=',
+                                value: (new Date(limits.modifiedOnOrAfter)).toISOString()
+                            });
+                        } else {
+                            c('Invalid modified on or after limit.');
+                        }
+                        break;
+                }
+            });
+        }
+
+        if(_.isFunction(c)) {
+            dbc.query(_.size(l) > 0 ? sqlTemplates.SELECT_100_MOST_RECENT_ORDERS_LIMITED_LISTING(l) : sqlTemplates.SELECT_100_MOST_RECENT_ORDERS_LISTING, function (err, result) {
                 if(err) {
-                    cb(err);
+                    c(err);
                 } else {
-                    cb(false, us2cc(result));
+                    c(false, us2cc(result));
                 }
             });
         }
@@ -503,6 +671,24 @@ var db = module.exports = {
                         cb(err);
                     } else if(orderStatusId.length === 1) {
                         cb(false, orderStatusId[0].status_id !== 1);
+                    } else {
+                        cb('No such order.');
+                    }
+                });
+            } else {
+                cb('Invalid order id.');
+            }
+        }
+    },
+
+    isOrderCompleted: function isOrderCompleted (orderId, cb) {
+        if(_.isFunction(cb)) {
+            if(_.isNumber(orderId) && orderId > 0) {
+                dbc.query(sqlTemplates.SELECT_ORDER_STATUS_ID_BY_ORDER_ID, [ orderId ], function (err, orderStatusId) {
+                    if(err) {
+                        cb(err);
+                    } else if(orderStatusId.length === 1) {
+                        cb(false, orderStatusId[0].status_id === 2);
                     } else {
                         cb('No such order.');
                     }
@@ -771,7 +957,8 @@ var db = module.exports = {
     },
 
     insertInvoiceOrders: function insertInvoiceOrders (invoiceId, newInvoiceOrders, cb) {
-        var results = [],
+        var c = _.isFunction(cb) ? cb : _.noop,
+            results = [],
             requests = _.isArray(newInvoiceOrders) ? newInvoiceOrders : [ newInvoiceOrders ],
             done = function (result) {
                 results.push(result);
@@ -779,15 +966,13 @@ var db = module.exports = {
                 if(results.length === requests.length) {
                     // Now, update the invoice.
                     db.syncInvoice(invoiceId, function (err, result) {
-                        if(_.isFunction(cb)) {
-                            if(err) {
-                                cb(err);
+                        if(err) {
+                            c(err);
+                        } else {
+                            if(results.length === 1) {
+                                c.apply(results[0], results[0]);
                             } else {
-                                if(results.length === 1) {
-                                    cb.apply(results[0], results[0]);
-                                } else {
-                                    cb(false, results);
-                                }
+                                c(false, results);
                             }
                         }
                     });
@@ -796,40 +981,56 @@ var db = module.exports = {
 
         // Make sure we have a valid invoice id.
         if(!_.isNumber(invoiceId) || invoiceId < 1) {
-            if(_.isFunction(cb)) {
-                cb('Invalid invoice id.');
-            }
+            c('Invalid invoice id.');
+            return;
+        }
 
+        if(requests.length === 0) {
+            c('Nothing to do.');
+            return;
+        }
+
+        if(requests.length > 100) {
+            c('Too many orders.');
             return;
         }
 
         // Process each of the add order requests.
         _.forEach(requests, function (invoiceOrder) {
             // Make sure we have valid order ids.
-            if(_.isNumber(invoiceOrder.orderId) && invoiceOrder.orderId > 0) {
+            if(_.isNumber(invoiceOrder.id) && invoiceOrder.id > 0) {
                 // Pull a list of existing order ids for the invoice, to detect duplication.
                 dbc.query(sqlTemplates.SELECT_BARE_INVOICE_ORDERS_BY_INVOICE_ID, [ invoiceId ], function (err, result) {
                     var invoiceOrders = us2cc(result),
                         orderIds = _.map(invoiceOrders, function (invoiceOrder) { return invoiceOrder.orderId; }),
-                        matchingItemIndex = orderIds.indexOf(invoiceOrder.orderId),
+                        matchingItemIndex = orderIds.indexOf(invoiceOrder.id),
                         matchingItem = matchingItemIndex === -1 ? null : invoiceOrders[matchingItemIndex];
 
                     if(!matchingItem) {
-                        // If there's not already an order in this invoice with the specified id, insert a new item.
-                        dbc.query(
-                            sqlTemplates.INSERT_INVOICE_ORDER,
-                            [
-                                invoiceId,
-                                invoiceOrder.orderId
-                            ],
-                            function (err, result) {
-                                if(err) {
-                                    done([ err ]);
-                                } else {
-                                    done([ false, _.extend(result, invoiceOrder) ]);
-                                }
+                        // If there's not already an order in this invoice with the specified id, make sure the
+                        // specified order exists and is completed.
+                        db.isOrderCompleted(invoiceOrder.id, function (err, completed) {
+                            if(err) {
+                                done([ 'No such order.' ]);
+                            } else if(completed) {
+                                dbc.query(
+                                    sqlTemplates.INSERT_INVOICE_ORDER,
+                                    [
+                                        invoiceId,
+                                        invoiceOrder.id
+                                    ],
+                                    function (err, result) {
+                                        if(err) {
+                                            done([ err ]);
+                                        } else {
+                                            done([ false, _.extend(result, invoiceOrder) ]);
+                                        }
+                                    }
+                                );
+                            } else {
+                                done([ { forbidden: 'Order is not completed.' } ]);
                             }
-                        );
+                        });
                     } else {
                         // If the specified order is already in the invoice, return an error.
                         done([ 'Order already on invoice.' ]);

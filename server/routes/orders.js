@@ -42,7 +42,7 @@ module.exports = {
     },
 
     list: function listOrders (req, res) {
-        db.selectOrders(function (err, orders) {
+        db.selectOrders(req.query, function (err, orders) {
             if(err) {
                 res.send(500, { error: err });
             } else {

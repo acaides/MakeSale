@@ -19,11 +19,11 @@ module.exports = {
                 if(err) {
                     res.send(500, { error: err });
                 } else {
-                    db.selectInvoiceItemsByInvoiceId(invoice.id, function (err, invoiceItems) {
+                    db.selectInvoiceOrdersByInvoiceId(invoice.id, function (err, invoiceOrders) {
                         if(err) {
                             res.send(500, { error: err });
                         } else {
-                            invoice.items = invoiceItems;
+                            invoice.orders = invoiceOrders;
                             res.send(200, invoice);
                         }
                     });

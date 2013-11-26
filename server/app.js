@@ -15,7 +15,7 @@ var V1_SERVICES_BASE = '/services/v1/',
     orderItems = require('./routes/orderItems'),
     orderTypes = require('./routes/orderTypes'),
     invoices = require('./routes/invoices'),
-    invoiceItems = require('./routes/invoiceItems');
+    invoiceOrders = require('./routes/invoiceOrders');
 
 var app = express();
 
@@ -66,9 +66,9 @@ app.post(V1_SERVICES_BASE + 'invoices', invoices.create);
 app.get(V1_SERVICES_BASE + 'invoices/:invoiceId', invoices.retrieve);
 app.put(V1_SERVICES_BASE + 'invoices/:invoiceId', invoices.modify);
 app.patch(V1_SERVICES_BASE + 'invoices/:invoiceId', invoices.modify);
-app.get(V1_SERVICES_BASE + 'invoices/:invoiceId/items', invoiceItems.list);
-app.post(V1_SERVICES_BASE + 'invoices/:invoiceId/items', invoiceItems.create);
-app.delete(V1_SERVICES_BASE + 'invoices/:invoiceId/items/:invoiceItemId', invoiceItems.destroy);
+app.get(V1_SERVICES_BASE + 'invoices/:invoiceId/orders', invoiceOrders.list);
+app.post(V1_SERVICES_BASE + 'invoices/:invoiceId/orders', invoiceOrders.create);
+app.delete(V1_SERVICES_BASE + 'invoices/:invoiceId/orders/:invoiceItemId', invoiceOrders.destroy);
 
 // Any unhandled routes will return the client app.
 app.use(function(req, res){

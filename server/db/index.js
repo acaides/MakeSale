@@ -687,9 +687,9 @@ var db = module.exports = {
         });
     },
 
-    insertInvoiceItems: function insertInvoiceItems (invoiceId, newInvoiceItems, cb) {
+    insertInvoiceOrders: function insertInvoiceOrders (invoiceId, newInvoiceOrders, cb) {
         var results = [],
-            requests = _.isArray(newInvoiceItems) ? newInvoiceItems : [ newInvoiceItems ],
+            requests = _.isArray(newInvoiceOrders) ? newInvoiceOrders : [ newInvoiceOrders ],
             done = function (result) {
                 results.push(result);
 
@@ -720,30 +720,30 @@ var db = module.exports = {
             return;
         }
 
-        // Process each of the add item requests.
-        _.forEach(requests, function (invoiceItem) {
+        // Process each of the add order requests.
+        _.forEach(requests, function (invoiceOrder) {
             // Make sure we have valid order ids.
-            if(_.isNumber(invoiceItem.orderId) && invoiceItem.orderId > 0) {
+            if(_.isNumber(invoiceOrder.orderId) && invoiceOrder.orderId > 0) {
                 // Pull a list of existing order ids for the invoice, to detect duplication.
-                dbc.query(sqlTemplates.SELECT_BARE_INVOICE_ITEMS_BY_INVOICE_ID, [ invoiceId ], function (err, result) {
-                    var invoiceItems = us2cc(result),
-                        orderIds = _.map(invoiceItems, function (invoiceItem) { return invoiceItem.orderId; }),
-                        matchingItemIndex = orderIds.indexOf(invoiceItem.orderId),
-                        matchingItem = matchingItemIndex === -1 ? null : invoiceItems[matchingItemIndex];
+                dbc.query(sqlTemplates.SELECT_BARE_INVOICE_ORDERS_BY_INVOICE_ID, [ invoiceId ], function (err, result) {
+                    var invoiceOrders = us2cc(result),
+                        orderIds = _.map(invoiceOrders, function (invoiceOrder) { return invoiceOrder.orderId; }),
+                        matchingItemIndex = orderIds.indexOf(invoiceOrder.orderId),
+                        matchingItem = matchingItemIndex === -1 ? null : invoiceOrders[matchingItemIndex];
 
                     if(!matchingItem) {
                         // If there's not already an order in this invoice with the specified id, insert a new item.
                         dbc.query(
-                            sqlTemplates.INSERT_INVOICE_ITEM,
+                            sqlTemplates.INSERT_INVOICE_ORDER,
                             [
                                 invoiceId,
-                                invoiceItem.orderId
+                                invoiceOrder.orderId
                             ],
                             function (err, result) {
                                 if(err) {
                                     done([ err ]);
                                 } else {
-                                    done([ false, _.extend(result, invoiceItem) ]);
+                                    done([ false, _.extend(result, invoiceOrder) ]);
                                 }
                             }
                         );
@@ -758,10 +758,10 @@ var db = module.exports = {
         });
     },
 
-    selectInvoiceItemsByInvoiceId: function selectInvoiceItemsByInvoiceId (invoiceId, cb) {
+    selectInvoiceOrdersByInvoiceId: function selectInvoiceOrdersByInvoiceId (invoiceId, cb) {
         if(_.isFunction(cb)) {
             if(_.isNumber(invoiceId) && invoiceId > 0) {
-                dbc.query(sqlTemplates.SELECT_INVOICE_ITEMS_BY_INVOICE_ID, [ invoiceId ], function (err, result) {
+                dbc.query(sqlTemplates.SELECT_INVOICE_ORDERS_BY_INVOICE_ID, [ invoiceId ], function (err, result) {
                     if(err) {
                         cb(err);
                     } else {
@@ -774,11 +774,11 @@ var db = module.exports = {
         }
     },
 
-    deleteInvoiceItem: function deleteInvoiceItem (invoiceId, invoiceItemId, cb) {
-        if(_.isNumber(invoiceItemId) && invoiceItemId < 1) {
+    deleteInvoiceOrder: function deleteInvoiceOrder (invoiceId, orderId, cb) {
+        if(_.isNumber(orderId) && orderId < 1) {
             // TODO: Make this transactional!
             // First, change the order item quantity.
-            dbc.query(sqlTemplates.DELETE_INVOICE_ITEM_BY_ID, [ invoiceItemId ], function (err, result) {
+            dbc.query(sqlTemplates.DELETE_INVOICE_ORDER_BY_ORDER_ID, [ orderId ], function (err, result) {
                 if(err) {
                     cb(err);
                 } else {
@@ -795,7 +795,7 @@ var db = module.exports = {
             });
         } else {
             if(_.isFunction(cb)) {
-                cb('Invalid invoice item id.');
+                cb('Invalid order id.');
             }
         }
     },

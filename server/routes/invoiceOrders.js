@@ -2,7 +2,7 @@ var db = require('../db'),
     _ = require('lodash');
 
 module.exports = {
-    create: function createInvoiceItems (req, res) {
+    create: function createInvoiceOrders (req, res) {
         var invoiceId = parseInt(req.param('invoiceId'), 10);
 
         if(!_.isNumber(invoiceId) || invoiceId < 1) {
@@ -21,7 +21,7 @@ module.exports = {
                     }
                 };
 
-            db.insertInvoiceItems(invoiceId, req.body, function (err, result) {
+            db.insertInvoiceOrders(invoiceId, req.body, function (err, result) {
                 if(err) {
                     res.send(400, {
                         error: err
@@ -46,15 +46,15 @@ module.exports = {
         }
     },
 
-    list: function listInvoiceItems (req, res) {
+    list: function listInvoiceOrders (req, res) {
         var invoiceId = parseInt(req.param('invoiceId'), 10);
 
         if(_.isNumber(invoiceId) && invoiceId > 0) {
-            db.selectInvoiceItemsByInvoiceId(invoiceId, function (err, invoiceItems) {
+            db.selectInvoiceOrdersByInvoiceId(invoiceId, function (err, invoiceOrders) {
                 if(err) {
                     res.send(500, { error: err });
                 } else {
-                    res.send(200, invoiceItems);
+                    res.send(200, invoiceOrders);
                 }
             });
         } else {
@@ -62,12 +62,12 @@ module.exports = {
         }
     },
 
-    destroy: function destroyInvoiceItem (req, res) {
+    destroy: function destroyInvoiceOrder (req, res) {
         var invoiceId = parseInt(req.param('invoiceId'), 10),
-            invoiceItemId = parseInt(req.param('invoiceItemId'), 10);
+            orderId = parseInt(req.param('orderId'), 10);
 
-        if(_.isNumber(invoiceItemId) && invoiceItemId > 0 && _.isNumber(invoiceId) && invoiceId > 0) {
-            db.deleteInvoiceItem(invoiceId, invoiceItemId, function (err, result) {
+        if(_.isNumber(orderId) && orderId > 0 && _.isNumber(invoiceId) && invoiceId > 0) {
+            db.deleteInvoiceOrder(invoiceId, orderId, function (err, result) {
                 if(err) {
                     res.send(500, { error: err });
                 } else {
@@ -75,11 +75,11 @@ module.exports = {
                         if(err) {
                             res.send(500, { error: err });
                         } else {
-                            db.selectInvoiceItemsByInvoiceId(invoiceId, function (err, invoiceItems) {
+                            db.selectInvoiceOrdersByInvoiceId(invoiceId, function (err, invoiceOrders) {
                                 if(err) {
                                     res.send(500, { error: err });
                                 } else {
-                                    invoice.items = invoiceItems;
+                                    invoice.orders = invoiceOrders;
                                     res.send(200, invoice);
                                 }
                             });

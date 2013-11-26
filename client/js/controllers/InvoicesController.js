@@ -26,13 +26,13 @@ define([ './module' ], function (controllers) {
             }
         };
 
-        $.itemCountText = function (invoice) {
-            if(invoice.itemCount === 0) {
-                return 'no items';
-            } else if(invoice.itemCount === 1) {
-                return '1 item';
+        $.orderCountText = function (invoice) {
+            if(invoice.orderCount === 0) {
+                return 'no orders';
+            } else if(invoice.orderCount === 1) {
+                return '1 order';
             } else {
-                return invoice.itemCount + ' items';
+                return invoice.orderCount + ' orders';
             }
         };
     } ]);

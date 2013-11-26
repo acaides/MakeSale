@@ -231,6 +231,36 @@ define([ './module' ], function (services) {
 
                 return invoices;
             },
+
+            getInvoiceById: function BNGetInvoiceById (invoiceId, cb) {
+                var c = angular.isFunction(cb) ? cb : function () {},
+                    invoice = {
+                        loading: true
+                    };
+
+                $http({ method: 'GET', url: SB + 'invoices/' + invoiceId }).
+                    success(function(data, status, headers, config) {
+                        delete invoice.loading;
+                        angular.extend(invoice, data);
+
+                        invoice.createdTimestamp = new Date(invoice.createdTimestamp);
+                        invoice.modifiedTimestamp = new Date(invoice.modifiedTimestamp);
+
+                        angular.forEach(invoice.orders, function (order) {
+                            order.createdTimestamp = new Date(order.createdTimestamp);
+                            order.modifiedTimestamp = new Date(order.modifiedTimestamp);
+                        });
+
+                        c(invoice);
+                    }).
+                    error(function(data, status, headers, config) {
+                        delete invoice.loading;
+                        angular.extend(invoice, data);
+                        c(invoice);
+                    });
+
+                return invoice;
+            }
         };
     } ]);
 });

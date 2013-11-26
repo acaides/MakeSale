@@ -1,7 +1,67 @@
-<div class="view">
-    <div class="header">
-        <div class="headerText">
-            Invoice
+<div class="view" ng-click="clearSelectedOrder()">
+    <div class="viewMessage" ng-show="invoice.loading">
+        Loading...
+    </div>
+    <div class="viewMessage" ng-show="invoice.error">
+        There was an error loading that invoice.<br>
+        {{ invoice.error }} <br><br>
+        <a href="/invoices" style="font-weight: bold;">list all invoices</a>
+    </div>
+    <div ng-hide="invoice.error" style="position: relative;">
+        <div class="header">
+            <a class="backLink" href="/invoices"></a>
+            <div class="headerText">Invoice #{{ invoice.id }}: {{ invoice.name || invoice.createdTimestamp.toDateString() }}</div>
+            <div class="headerActions">
+                <a href="/invoice/{{ invoice.id }}/edit">edit</a>
+            </div>
+            <div class="subHeader">
+                <div style="font-size: 14px">billed to {{ invoice.billedToName }}</div>
+                <div style="font-size: 12px">
+                    <div ng-show="invoice.billedToPhone">phone #: {{ invoice.billedToPhone }}</div>
+                    <div ng-show="invoice.billedToEmail">email: {{ invoice.billedToEmail }}</div>
+                    <div ng-hide="invoice.billedToPhone"><br></div>
+                    <div ng-hide="invoice.billedToEmail"><br></div>
+                    <div>started on {{ invoice.createdTimestamp.toLocaleString() }}</div>
+                    <div>last updated {{ invoice.modifiedTimestamp.toLocaleString() }}</div>
+                </div>
+
+                <div class="columnHeaders" ng-show="invoice.orders.length">
+                    <div class="columnHeader" style="width: 20%;">Item Count</div>
+                    <div class="columnHeader" style="width: 55%">Name</div>
+                    <div class="columnHeader" style="width: 25%;">Total</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 134px; margin-bottom: 50px;">
+            <div ng-hide="invoice.orders.length" style="text-align: center; margin-top: 200px;">
+                There are no orders in this invoice.<br><br>
+                <a ng-show="invoice.statusId == 1" href="/invoice/{{ invoice.id }}/addOrder" style="font-weight: bold;">add an order now</a>
+            </div>
+            <div>
+                <div class="row" ng-repeat="order in invoice.orders" ng-click="selectOrder(order); $event.stopPropagation()" ng-class="{ selectedRow: selectedOrder == order }">
+                    <div class="columns" style="top: 12px;">
+                        <div class="column" style="width: 20%; font-size: 16px;">
+                            {{ order.itemCount }}
+                        </div>
+                        <div class="column" style="width: 55%; font-size: 16px;">
+                            {{ order.name || order.createdTimestamp.toDateString() }}
+                        </div>
+                        <div class="column" style="width: 25%; font-size: 16px;">
+                            {{ order.total | currency }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="footer" ng-show="invoice.orders.length">
+            <div class="footerText">{{ orderCountText(invoice) }}<br></bt>Total: {{ invoice.total | currency }}</div>
+            <div class="footerActions">
+                <a ng-show="invoice.statusId == 1" href="/invoices/{{ invoice.id }}/addOrder">add order</a>&nbsp;
+                <a ng-show="invoice.statusId == 1" ng-click="complete()">complete</a>
+                <span ng-hide="invoice.statusId == 1">Completed, <a ng-click="reopen()">reopen?</a></span>
+            </div>
         </div>
     </div>
 </div>

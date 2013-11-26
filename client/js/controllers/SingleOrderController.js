@@ -29,7 +29,7 @@ define([ './module' ], function (controllers) {
                 if(immediate) {
                     f();
                 } else {
-                    p = $timeout(f, 1500);
+                    p = $timeout(f, 2500);
                 }
             };
 

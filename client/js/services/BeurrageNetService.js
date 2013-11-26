@@ -207,7 +207,30 @@ define([ './module' ], function (services) {
                     });
 
                 return order;
-            }
+            },
+
+            getInvoices: function BNGetInvoices (cb) {
+                var c = angular.isFunction(cb) ? cb : function () {},
+                    invoices = [];
+
+                $http({ method: 'GET', url: SB + 'invoices' }).
+                    success(function(data, status, headers, config) {
+                        angular.extend(invoices, data);
+
+                        angular.forEach(invoices, function (invoice) {
+                            invoice.createdTimestamp = new Date(invoice.createdTimestamp);
+                            invoice.modifiedTimestamp = new Date(invoice.modifiedTimestamp);
+                        });
+
+                        c(invoices);
+                    }).
+                    error(function(data, status, headers, config) {
+                        angular.extend(invoices, data);
+                        c(invoices);
+                    });
+
+                return invoices;
+            },
         };
     } ]);
 });

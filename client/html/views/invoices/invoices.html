@@ -1,0 +1,41 @@
+<div class="view" style="margin-top: 52px;">
+    <div class="header">
+        <a class="backLink" href="/"></a>
+        <div class="headerText">
+            Invoices
+            <a ng-hide="showingPaid" ng-click="toggleShowingPaid()">show paid</a>
+            <a ng-show="showingPaid" ng-click="toggleShowingPaid()">hide paid</a>
+        </div>
+        <div class="headerActions">
+            <a href="/invoices/start">start</a>
+        </div>
+        <div class="subHeader">
+            <div class="columnHeaders">
+                <div class="columnHeader" style="width: 36%;">Billed To</div>
+                <div class="columnHeader" style="width: 38%;">Name</div>
+                <div class="columnHeader" style="width: 16%;">Total</div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <a class="linkedRow" ng-repeat="invoice in invoices" href="/invoices/{{ invoice.id }}">
+            <div class="columns" style="position: relative; top: 6px;">
+                <div class="column" style="width: 36%;">{{ invoice.billedToName }}</div>
+                <div class="column" style="width: 38%;">{{ invoice.name || invoice.createdTimestamp.toDateString() }}</div>
+                <div class="column" style="width: 16%;">{{ invoice.total | currency }}</div>
+            </div>
+
+            <div ng-hide="invoice.statusId == 4" class="rowFootnote">
+                #{{ invoice.id }}, {{ itemCountText(invoice) }}, modified {{ invoice.modifiedTimestamp.toLocaleString() }}
+            </div>
+            <div ng-show="invoice.statusId == 4" class="rowFootnote">
+                #{{ invoice.id }}, {{ itemCountText(invoice) }}, {{ invoice.status.toUpperCase() }}
+            </div>
+        </a>
+    </div>
+    <div class="viewMessage" ng-hide="invoices.length" style="margin-top: 100px;">
+        No unpaid invoices.<br><br><br><br>
+        <a href="/invoices/start">start a new invoice</a><br><br><br>
+        <a ng-click="toggleShowingPaid()">view paid invoices</a>
+    </div>
+</div>

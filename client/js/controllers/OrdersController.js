@@ -34,6 +34,6 @@ define([ './module' ], function (controllers) {
             } else {
                 return order.itemCount + ' items';
             }
-        }
+        };
     } ]);
 });

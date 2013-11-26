@@ -53,9 +53,14 @@ define([ './app' ], function (app) {
             controller: 'DocumentsController'
         });
 
-        $routeProvider.when('/documents/invoices', {
-            templateUrl: '/html/views/documents/invoices/invoices.html',
+        $routeProvider.when('/invoices', {
+            templateUrl: '/html/views/invoices/invoices.html',
             controller: 'InvoicesController'
+        });
+
+        $routeProvider.when('/invoices/:invoiceId', {
+            templateUrl: '/html/views/invoices/singleInvoice.html',
+            controller: 'SingleInvoiceController'
         });
 
         $routeProvider.otherwise({

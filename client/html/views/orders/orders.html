@@ -25,10 +25,10 @@
                 <div class="column" style="width: 16%;">{{ order.total | currency }}</div>
             </div>
 
-            <div ng-show="order.statusId == 1" class="ordersRowFootnote">
+            <div ng-show="order.statusId == 1" class="rowFootnote">
                 #{{ order.id }}, {{ itemCountText(order) }}, modified {{ order.modifiedTimestamp.toLocaleString() }}
             </div>
-            <div ng-hide="order.statusId == 1" class="ordersRowFootnote">
+            <div ng-hide="order.statusId == 1" class="rowFootnote">
                 #{{ order.id }}, {{ itemCountText(order) }}, {{ order.status.toUpperCase() }}
             </div>
         </a>

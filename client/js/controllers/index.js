@@ -8,5 +8,6 @@ define([
     './AddItemController',
     './EditOrderController',
     './DocumentsController',
-    './InvoicesController'
+    './InvoicesController',
+    './SingleInvoiceController'
 ], function () {});

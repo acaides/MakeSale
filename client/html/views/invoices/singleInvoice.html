@@ -38,7 +38,7 @@
         <div style="margin-bottom: 50px;">
             <div ng-hide="invoice.orders.length" style="text-align: center; margin-top: 200px;">
                 There are no orders in this invoice.<br><br>
-                <a ng-show="invoice.statusId == 1" href="/invoice/{{ invoice.id }}/addOrder" style="font-weight: bold;">add an order now</a>
+                <a ng-show="invoice.statusId == 1" href="/invoices/{{ invoice.id }}/addOrder" style="font-weight: bold;">add an order now</a>
             </div>
             <div>
                 <a class="linkedRow"

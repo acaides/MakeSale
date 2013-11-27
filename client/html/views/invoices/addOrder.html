@@ -1,7 +1,32 @@
 <div class="view">
     <div class="header">
         <a class="headerTitle" href="/invoices/{{ invoice.id }}">
-            Add Order To Invoice #{{ invoice.id }}
+            Add Orders To Invoice #{{ invoice.id }}
         </a>
+    </div>
+    <div>
+        <div style="padding-left: 2px; background: #E5D9CF;">
+            Select from these recent<span ng-show="similarOrders">, similar</span> orders.
+        </div>
+        <div>
+            <div class="row"
+                 ng-repeat="order in orders"
+                 ng-click="selectOrder(order)"
+                 ng-class="{ selectedRow: selectedOrders.indexOf(order) != -1 }">
+                <div style="margin-top: 12px; margin-left: 4px;">
+                    {{ order.name || order.createdTimestamp.toDateString() }}
+                </div>
+            </div>
+            <div class="row" ng-show="selectedOrders.length"></div>
+        </div>
+    </div>
+
+    <div class="footer" ng-show="selectedOrders.length">
+        <div class="footerText">
+            Ready To Add {{ selectedOrders.length }} Order<span ng-show="selectedOrders.length > 1">s</span>
+        </div>
+        <div class="footerActions">
+            <a class="footerAction" ng-click="add()">add</a>
+        </div>
     </div>
 </div>

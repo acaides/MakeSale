@@ -11,21 +11,29 @@ define([ './module' ], function (controllers) {
         };
 
         var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December' ],
-            now = new Date(),
-            m0 = monthNames[now.getMonth()],
-            m1 = monthNames[now.getMonth() - 1],
-            m2 = monthNames[now.getMonth() - 2];
+                'July', 'August', 'September', 'October', 'November', 'December' ],
+            d0s = moment().startOf('month').toDate(),
+            d0e = moment().endOf('month').toDate(),
+            d1s = moment().subtract('month', 1).startOf('month').toDate(),
+            d1e = moment().subtract('month', 1).endOf('month').toDate(),
+            d2s = moment().subtract('month', 2).startOf('month').toDate(),
+            d2e = moment().subtract('month', 2).endOf('month').toDate();
 
         $.orderSuggestions = [
             {
-                name: 'All Orders Completed In ' + m0
+                name: 'All Orders Completed In ' + monthNames[d0s.getMonth()],
+                start: d0s.toString(),
+                end: d0e.toString()
             },
             {
-                name: 'All Orders Completed In ' + m1
+                name: 'All Orders Completed In ' + monthNames[d1s.getMonth()],
+                start: d1s.toString(),
+                end: d1e.toString()
             },
             {
-                name: 'All Orders Completed In ' + m2
+                name: 'All Orders Completed In ' + monthNames[d2s.getMonth()],
+                start: d2s.toString(),
+                end: d2e.toString()
             }
         ];
         $.selectOrderSuggestion = function (orderSuggestion) {
@@ -38,13 +46,25 @@ define([ './module' ], function (controllers) {
 
         $.start = function () {
             BN.startInvoice({
+                billedToCustomerId: $.selectedCustomer.id,
                 billedToName: $.selectedCustomer.name,
                 billedToAddress: $.selectedCustomer.address,
                 billedToPhone: $.selectedCustomer.phone,
                 billedToEmail: $.selectedCustomer.email
             }, function (invoice) {
-                BN.addInvoiceOrders([], function (orders) {
-                    if(!invoice.error) {
+                BN.getOrders({
+                    customerId: $.selectedCustomer.id,
+                    statusId: 2,
+                    modifiedOnOrAfter: $.selectedOrderSuggestion.start,
+                    modifiedOnOrBefore: $.selectedOrderSuggestion.end
+                }, function (orders) {
+                    if(orders.length) {
+                        BN.addInvoiceOrders(invoice.id, orders, function (orders) {
+                            if(!invoice.error) {
+                                $location.path('/invoices/' + invoice.id);
+                            }
+                        });
+                    } else {
                         $location.path('/invoices/' + invoice.id);
                     }
                 });

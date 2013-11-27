@@ -10,7 +10,7 @@ define([ './module' ], function (services) {
 
                 $http({ method: 'GET', url: SB + 'products' + (orderId ? ('?orderId=' + orderId) : '') }).
                     success(function(data, status, headers, config) {
-                        angular.extend(products, data);
+                        _.extend(products, data);
                     }).
                     error(function(data, status, headers, config) {
 
@@ -24,7 +24,7 @@ define([ './module' ], function (services) {
 
                 $http({ method: 'GET', url: SB + 'products/' + productId }).
                     success(function(data, status, headers, config) {
-                        angular.extend(product, data);
+                        _.extend(product, data);
                     }).
                     error(function(data, status, headers, config) {
 
@@ -34,16 +34,16 @@ define([ './module' ], function (services) {
             },
 
             getCustomers: function BNGetCustomers (cb) {
-                var c = angular.isFunction(cb) ? cb : function () {},
+                var c = _.isFunction(cb) ? cb : function () {},
                     customers = [];
 
                 $http({ method: 'GET', url: SB + 'customers' }).
                     success(function(data, status, headers, config) {
-                        angular.extend(customers, data);
+                        _.extend(customers, data);
                         c(customers);
                     }).
                     error(function(data, status, headers, config) {
-                        angular.extend(customers, data);
+                        _.extend(customers, data);
                         c(customers);
                     });
 
@@ -58,20 +58,20 @@ define([ './module' ], function (services) {
                 $http({ method: 'POST', url: SB + 'orders/', data: { customerId: customerId, typeId: typeId, name: name } }).
                     success(function(data, status, headers, config) {
                         delete order.loading;
-                        angular.extend(order, data);
+                        _.extend(order, data);
 
                         order.createdTimestamp = new Date(order.createdTimestamp);
                         order.modifiedTimestamp = new Date(order.modifiedTimestamp);
 
-                        if(angular.isFunction(cb)) {
+                        if(_.isFunction(cb)) {
                             cb(order);
                         }
                     }).
                     error(function(data, status, headers, config) {
                         delete order.loading;
-                        angular.extend(order, data);
+                        _.extend(order, data);
 
-                        if(angular.isFunction(cb)) {
+                        if(_.isFunction(cb)) {
                             cb(order);
                         }
                     });
@@ -79,15 +79,16 @@ define([ './module' ], function (services) {
                 return order;
             },
 
-            getOrders: function BNGetOrders (cb) {
-                var c = angular.isFunction(cb) ? cb : function () {},
+            getOrders: function BNGetOrders (p0, p1) {
+                var c = _.isFunction(p0) ? p0 : (_.isFunction(p1) ? p1 : function () {}),
+                    limits = _.isPlainObject(p0) ? p0 : {},
                     orders = [];
 
-                $http({ method: 'GET', url: SB + 'orders' }).
+                $http({ method: 'GET', url: SB + 'orders', params: limits }).
                     success(function(data, status, headers, config) {
-                        angular.extend(orders, data);
+                        _.extend(orders, data);
 
-                        angular.forEach(orders, function (order) {
+                        _.forEach(orders, function (order) {
                             order.createdTimestamp = new Date(order.createdTimestamp);
                             order.modifiedTimestamp = new Date(order.modifiedTimestamp);
                         });
@@ -95,7 +96,7 @@ define([ './module' ], function (services) {
                         c(orders);
                     }).
                     error(function(data, status, headers, config) {
-                        angular.extend(orders, data);
+                        _.extend(orders, data);
                         c(orders);
                     });
 
@@ -103,16 +104,16 @@ define([ './module' ], function (services) {
             },
 
             getOrderTypes: function BNGetOrderTypes (cb) {
-                var c = angular.isFunction(cb) ? cb : function () {},
+                var c = _.isFunction(cb) ? cb : function () {},
                     orderTypes = [];
 
                 $http({ method: 'GET', url: SB + 'orders/types' }).
                     success(function(data, status, headers, config) {
-                        angular.extend(orderTypes, data);
+                        _.extend(orderTypes, data);
                         c(orderTypes);
                     }).
                     error(function(data, status, headers, config) {
-                        angular.extend(orderTypes, data);
+                        _.extend(orderTypes, data);
                         c(orderTypes);
                     });
 
@@ -120,7 +121,7 @@ define([ './module' ], function (services) {
             },
 
             getOrderById: function BNGetOrderById (orderId, cb) {
-                var c = angular.isFunction(cb) ? cb : function () {},
+                var c = _.isFunction(cb) ? cb : function () {},
                     order = {
                         loading: true
                     };
@@ -128,7 +129,7 @@ define([ './module' ], function (services) {
                 $http({ method: 'GET', url: SB + 'orders/' + orderId }).
                     success(function(data, status, headers, config) {
                         delete order.loading;
-                        angular.extend(order, data);
+                        _.extend(order, data);
 
                         order.createdTimestamp = new Date(order.createdTimestamp);
                         order.modifiedTimestamp = new Date(order.modifiedTimestamp);
@@ -136,7 +137,7 @@ define([ './module' ], function (services) {
                     }).
                     error(function(data, status, headers, config) {
                         delete order.loading;
-                        angular.extend(order, data);
+                        _.extend(order, data);
                         c(order);
                     });
 
@@ -148,12 +149,12 @@ define([ './module' ], function (services) {
 
                 $http({ method: 'POST', url: SB + 'orders/' + orderId + '/items', data: { productId: productId, quantity: quantity } }).
                     success(function(data, status, headers, config) {
-                        angular.extend(order, data);
+                        _.extend(order, data);
 
 //                        order.createdTimestamp = new Date(order.createdTimestamp);
 //                        order.modifiedTimestamp = new Date(order.modifiedTimestamp);
 
-                        if(angular.isFunction(cb)) {
+                        if(_.isFunction(cb)) {
                             cb(order);
                         }
                     }).
@@ -169,12 +170,12 @@ define([ './module' ], function (services) {
 
                 $http({ method: 'PATCH', url: SB + 'orders/' + orderId + '/items/' + itemId, data: { quantity: newQuantity } }).
                     success(function(data, status, headers, config) {
-                        angular.extend(order, data);
+                        _.extend(order, data);
 
                         order.createdTimestamp = new Date(order.createdTimestamp);
                         order.modifiedTimestamp = new Date(order.modifiedTimestamp);
 
-                        if(angular.isFunction(cb)) {
+                        if(_.isFunction(cb)) {
                             cb(order);
                         }
                     }).
@@ -186,7 +187,7 @@ define([ './module' ], function (services) {
             },
 
             updateOrder: function BNUpdateOrder (orderId, mods, cb) {
-                var c = angular.isFunction(cb) ? cb : function () {},
+                var c = _.isFunction(cb) ? cb : function () {},
                     order = {
                         loading: true
                     };
@@ -194,7 +195,7 @@ define([ './module' ], function (services) {
                 $http({ method: 'PATCH', url: SB + 'orders/' + orderId, data: mods }).
                     success(function(data, status, headers, config) {
                         delete order.loading;
-                        angular.extend(order, data);
+                        _.extend(order, data);
 
                         order.createdTimestamp = new Date(order.createdTimestamp);
                         order.modifiedTimestamp = new Date(order.modifiedTimestamp);
@@ -202,7 +203,7 @@ define([ './module' ], function (services) {
                     }).
                     error(function(data, status, headers, config) {
                         delete order.loading;
-                        angular.extend(order, data);
+                        _.extend(order, data);
                         c(order);
                     });
 
@@ -210,14 +211,14 @@ define([ './module' ], function (services) {
             },
 
             getInvoices: function BNGetInvoices (cb) {
-                var c = angular.isFunction(cb) ? cb : function () {},
+                var c = _.isFunction(cb) ? cb : function () {},
                     invoices = [];
 
                 $http({ method: 'GET', url: SB + 'invoices' }).
                     success(function(data, status, headers, config) {
-                        angular.extend(invoices, data);
+                        _.extend(invoices, data);
 
-                        angular.forEach(invoices, function (invoice) {
+                        _.forEach(invoices, function (invoice) {
                             invoice.createdTimestamp = new Date(invoice.createdTimestamp);
                             invoice.modifiedTimestamp = new Date(invoice.modifiedTimestamp);
                         });
@@ -225,7 +226,7 @@ define([ './module' ], function (services) {
                         c(invoices);
                     }).
                     error(function(data, status, headers, config) {
-                        angular.extend(invoices, data);
+                        _.extend(invoices, data);
                         c(invoices);
                     });
 
@@ -233,7 +234,7 @@ define([ './module' ], function (services) {
             },
 
             getInvoiceById: function BNGetInvoiceById (invoiceId, cb) {
-                var c = angular.isFunction(cb) ? cb : function () {},
+                var c = _.isFunction(cb) ? cb : function () {},
                     invoice = {
                         loading: true
                     };
@@ -241,12 +242,12 @@ define([ './module' ], function (services) {
                 $http({ method: 'GET', url: SB + 'invoices/' + invoiceId }).
                     success(function(data, status, headers, config) {
                         delete invoice.loading;
-                        angular.extend(invoice, data);
+                        _.extend(invoice, data);
 
                         invoice.createdTimestamp = new Date(invoice.createdTimestamp);
                         invoice.modifiedTimestamp = new Date(invoice.modifiedTimestamp);
 
-                        angular.forEach(invoice.orders, function (order) {
+                        _.forEach(invoice.orders, function (order) {
                             order.createdTimestamp = new Date(order.createdTimestamp);
                             order.modifiedTimestamp = new Date(order.modifiedTimestamp);
                         });
@@ -255,7 +256,7 @@ define([ './module' ], function (services) {
                     }).
                     error(function(data, status, headers, config) {
                         delete invoice.loading;
-                        angular.extend(invoice, data);
+                        _.extend(invoice, data);
                         c(invoice);
                     });
 
@@ -263,7 +264,7 @@ define([ './module' ], function (services) {
             },
 
             startInvoice: function BNStartOrder (billToInfo, cb) {
-                var c = angular.isFunction(cb) ? cb : function () {},
+                var c = _.isFunction(cb) ? cb : function () {},
                     invoice = {
                         loading: true
                     };
@@ -271,14 +272,14 @@ define([ './module' ], function (services) {
                 $http({ method: 'POST', url: SB + 'invoices', data: billToInfo }).
                     success(function(data, status, headers, config) {
                         delete invoice.loading;
-                        angular.extend(invoice, data);
+                        _.extend(invoice, data);
                         invoice.createdTimestamp = new Date(invoice.createdTimestamp);
                         invoice.modifiedTimestamp = new Date(invoice.modifiedTimestamp);
                         c(invoice);
                     }).
                     error(function(data, status, headers, config) {
                         delete invoice.loading;
-                        angular.extend(invoice, data);
+                        _.extend(invoice, data);
                         c(invoice);
                     });
 
@@ -286,26 +287,21 @@ define([ './module' ], function (services) {
             },
 
             addInvoiceOrders: function BNAddInvoiceOrders (invoiceId, orders, cb) {
-                var c = angular.isFunction(cb) ? cb : function () {},
-                    orders = {};
+                var c = _.isFunction(cb) ? cb : function () {},
+                    res = {};
 
-                $http({ method: 'POST', url: SB + 'invoices/' + invoiceId + '/orders/byMonth', data: { productId: productId, quantity: quantity } }).
+                $http({ method: 'POST', url: SB + 'invoices/' + invoiceId + '/orders', data: orders }).
                     success(function(data, status, headers, config) {
-                        angular.extend(orders, data);
-
-//                        orders.createdTimestamp = new Date(orders.createdTimestamp);
-//                        orders.modifiedTimestamp = new Date(orders.modifiedTimestamp);
-
-                        if(angular.isFunction(cb)) {
-                            cb(orders);
-                        }
+                        _.extend(res, data);
+                        c(res);
                     }).
                     error(function(data, status, headers, config) {
-
+                        _.extend(orders, data);
+                        c(res);
                     });
 
-                return orders;
-            },
+                return res;
+            }
         };
     } ]);
 });

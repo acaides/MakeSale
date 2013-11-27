@@ -486,55 +486,60 @@ var db = module.exports = {
                         }
                         break;
                     case 'modifiedOn':
-                        if(_.isNumber((new Date(limits.modifiedOn)).getTime())) {
+                        limits.modifiedOn = new Date(limits.modifiedOn);
+                        if(_.isNumber(limits.modifiedOn.getTime())) {
                             l.push({
                                 name: 'modified_timestamp',
                                 test: '=',
-                                value: (new Date(limits.modifiedOn)).toISOString()
+                                value: '\'' + limits.modifiedOn.toISOString() + '\''
                             });
                         } else {
                             c('Invalid modified on limit.');
                         }
                         break;
                     case 'modifiedBefore':
-                        if(_.isNumber((new Date(limits.modifiedBefore)).getTime())) {
+                        limits.modifiedBefore = new Date(limits.modifiedBefore);
+                        if(_.isNumber(limits.modifiedBefore.getTime())) {
                             l.push({
                                 name: 'modified_timestamp',
                                 test: '<',
-                                value: (new Date(limits.modifiedBefore)).toISOString()
+                                value: '\'' + limits.modifiedBefore.toISOString() + '\''
                             });
                         } else {
                             c('Invalid modified before limit.');
                         }
                         break;
                     case 'modifiedAfter':
-                        if(_.isNumber((new Date(limits.modifiedAfter)).getTime())) {
+                        limits.modifiedAfter = new Date(limits.modifiedAfter);
+                        if(_.isNumber(limits.modifiedAfter.getTime())) {
                             l.push({
                                 name: 'modified_timestamp',
                                 test: '>',
-                                value: (new Date(limits.modifiedAfter)).toISOString()
+                                value: '\'' + limits.modifiedAfter.toISOString() + '\''
                             });
                         } else {
                             c('Invalid modified after limit.');
                         }
                         break;
                     case 'modifiedOnOrBefore':
-                        if(_.isNumber((new Date(limits.modifiedOnOrBefore)).getTime())) {
+                        limits.modifiedOnOrBefore = new Date(limits.modifiedOnOrBefore);
+                        if(_.isNumber(limits.modifiedOnOrBefore.getTime())) {
                             l.push({
                                 name: 'modified_timestamp',
                                 test: '<=',
-                                value: (new Date(limits.modifiedOnOrBefore)).toISOString()
+                                value: '\'' + limits.modifiedOnOrBefore.toISOString() + '\''
                             });
                         } else {
                             c('Invalid modified on or before limit.');
                         }
                         break;
                     case 'modifiedOnOrAfter':
-                        if(_.isNumber((new Date(limits.modifiedOnOrAfter)).getTime())) {
+                        limits.modifiedOnOrAfter = new Date(limits.modifiedOnOrAfter);
+                        if(_.isNumber(limits.modifiedOnOrAfter.getTime())) {
                             l.push({
                                 name: 'modified_timestamp',
                                 test: '>=',
-                                value: (new Date(limits.modifiedOnOrAfter)).toISOString()
+                                value: '\'' + limits.modifiedOnOrAfter.toISOString() + '\''
                             });
                         } else {
                             c('Invalid modified on or after limit.');

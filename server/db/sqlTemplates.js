@@ -13,7 +13,8 @@ var _ = require('lodash'),
         SELECT_INVOICE: 'SELECT `invoice`.`id`, `invoice`.`status_id`, `invoice_status`.`name` AS `status_name`, ' +
             '`invoice`.`modified_timestamp`, `invoice`.`created_timestamp`, `invoice`.`subtotal`, `invoice`.`total`, ' +
             '`invoice`.`order_count`, `invoice`.`access_code`, `invoice`.`name`, `invoice`.`billed_to_name`, ' +
-            '`invoice`.`billed_to_address`, `invoice`.`billed_to_phone`, `invoice`.`billed_to_email` ' +
+            '`invoice`.`billed_to_address`, `invoice`.`billed_to_phone`, `invoice`.`billed_to_email`, ' +
+            '`invoice`.`billed_to_customer_id` ' +
             'FROM `invoice`' +
             'JOIN `invoice_status` ON `invoice_status`.`id` = `invoice`.`status_id` '
     };
@@ -95,8 +96,8 @@ module.exports = {
 
     INSERT_INVOICE: 'INSERT INTO `invoice` ' +
         '(`created_user_id`, `modified_user_id`, `modified_timestamp`, `access_code`, `name`, ' +
-        '`billed_to_name`, `billed_to_address`, `billed_to_phone`, `billed_to_email`) ' +
-        'VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?);',
+        '`billed_to_name`, `billed_to_address`, `billed_to_phone`, `billed_to_email`, `billed_to_customer_id`) ' +
+        'VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?);',
     SELECT_INVOICE_BY_ID: sqlStubs.SELECT_INVOICE + ' WHERE `invoice`.`id` = ?;',
     DELETE_INVOICE_ORDER_BY_ORDER_ID: 'DELETE FROM `invoice_order` WHERE `id` = ? AND `order_id` = ?;',
     SELECT_INVOICE_ORDERS_BY_INVOICE_ID: 'SELECT `order`.`id`, ' +

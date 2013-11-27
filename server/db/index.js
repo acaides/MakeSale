@@ -933,7 +933,7 @@ var db = module.exports = {
                     return;
                 }
 
-                if(!_.isString(invoice.billedToName) || invoice.billedToName.length < 4) {
+                if(!_.isString(invoice.billedToName) || invoice.billedToName.length < 1) {
                     done({ inputError: 'Invalid billed to name.' });
                     return;
                 }
@@ -946,7 +946,8 @@ var db = module.exports = {
                         invoice.billedToName,
                         invoice.billedToAddress,
                         invoice.billedToPhone,
-                        invoice.billedToEmail
+                        invoice.billedToEmail,
+                        invoice.billedToCustomerId
                     ],
                     function (err, result) {
                         if(err) {

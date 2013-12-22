@@ -301,6 +301,52 @@ define([ './module' ], function (services) {
                     });
 
                 return res;
+            },
+
+            updateInvoice: function BNUpdateInvoice (invoiceId, mods, cb) {
+                var c = _.isFunction(cb) ? cb : function () {},
+                    invoice = {
+                        loading: true
+                    };
+
+                $http({ method: 'PATCH', url: SB + 'invoices/' + invoiceId, data: mods })
+                    .success(function(data, status, headers, config) {
+                        delete invoice.loading;
+                        _.extend(invoice, data);
+
+                        invoice.createdTimestamp = new Date(invoice.createdTimestamp);
+                        invoice.modifiedTimestamp = new Date(invoice.modifiedTimestamp);
+                        c(invoice);
+                    })
+                    .error(function(data, status, headers, config) {
+                        delete invoice.loading;
+                        _.extend(invoice, data);
+                        c(invoice);
+                    });
+
+                return invoice;
+            },
+
+            sendInvoice: function BNUpdateInvoice (invoiceId, cb) {
+                var c = _.isFunction(cb) ? cb : function () {},
+                    sendAck = {
+                        loading: true
+                    };
+
+                $http({ method: 'GET', url: SB + 'sendInvoice?invoiceId=' + invoiceId })
+                    .success(function(data, status, headers, config) {
+                        delete sendAck.loading;
+                        _.extend(sendAck, data);
+
+                        c(sendAck);
+                    })
+                    .error(function(data, status, headers, config) {
+                        delete sendAck.loading;
+                        _.extend(sendAck, data);
+                        c(sendAck);
+                    });
+
+                return sendAck;
             }
         };
     } ]);

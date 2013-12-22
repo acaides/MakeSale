@@ -14,7 +14,7 @@ module.exports = {
     retrieve: function retrieveInvoice (req, res) {
         var invoiceId = parseInt(req.param('invoiceId'), 10);
 
-        if(_.isNumber(invoiceId) && invoiceId > 0) {
+        if(!_.isNaN(invoiceId) && invoiceId > 0) {
             db.selectInvoiceById(invoiceId, function (err, invoice) {
                 if(err) {
                     res.send(500, { error: err });
@@ -60,5 +60,38 @@ module.exports = {
             }
         });
     },
-    modify: function modifyInvoice (req, res) {}
+    modify: function modifyInvoice (req, res) {
+        var invoiceId = parseInt(req.param('invoiceId'), 10),
+            acceptedKeys = [ 'statusId' ],
+            mods = {};
+
+        _.forEach(req.body, function (value, key) {
+            if(acceptedKeys.indexOf(key) !== -1) {
+                mods[key] = value;
+            }
+        });
+
+        if(!_.isNaN(invoiceId) && invoiceId > 0) {
+            if(_.size(mods) > 0) {
+                db.updateInvoice(invoiceId, mods, function (err, order) {
+                    if(err) {
+                        res.send(err.forbidden ? 403 : 500, err);
+                    } else {
+                        res.send(200, order);
+                    }
+                });
+            } else {
+                res.send(400, { error: 'No valid modifications specified.' });
+            }
+        } else {
+            res.send(400, { error: 'Invalid invoice id.' });
+        }
+    },
+    send: function sendInvoice (req, res) {
+        var invoiceId = parseInt(req.param('invoiceId'), 10);
+
+        console.log('SEND INVOICE ' + invoiceId);
+
+        res.send(200, { ack: 'Invoice sent.' });
+    }
 };

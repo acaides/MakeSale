@@ -127,5 +127,12 @@ module.exports = {
         'ORDER BY `modified_timestamp` DESC ' +
         'LIMIT 100;',
     SELECT_INVOICE_IDS_BY_ORDER_ID: 'SELECT `invoice_id` AS `id` FROM `invoice_order` WHERE `order_id` = ?;',
+    UPDATE_INVOICE: function (values) {
+        var vs = _.map(values, function (value, key) {
+            return '`' + key + '` = \'' + value + '\'';
+        });
+
+        return 'UPDATE `invoice` SET ' + vs.join(', ') + ', `modified_timestamp` = NOW() WHERE `id` = ?;'
+    },
     SELECT_ORDER_STATUS_ID_BY_ORDER_ID: 'SELECT `status_id` FROM `order` WHERE `id` = ?;'
 };

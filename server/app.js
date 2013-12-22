@@ -61,6 +61,7 @@ app.put(V1_SERVICES_BASE + 'orders/:orderId/items/:orderItemId', orderItems.modi
 app.patch(V1_SERVICES_BASE + 'orders/:orderId/items/:orderItemId', orderItems.modify);
 
 // Invoice routes
+app.get(V1_SERVICES_BASE + 'sendInvoice', invoices.send); // Action route.
 app.get(V1_SERVICES_BASE + 'invoices', invoices.list);
 app.post(V1_SERVICES_BASE + 'invoices', invoices.create);
 app.get(V1_SERVICES_BASE + 'invoices/:invoiceId', invoices.retrieve);

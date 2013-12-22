@@ -1116,5 +1116,32 @@ var db = module.exports = {
                 }
             });
         }
+    },
+
+    updateInvoice: function updateInvoice (invoiceId, mods, cb) {
+        var usMods = cc2us(mods),
+            c = _.isFunction(cb) ? cb : _.noop;
+
+        if(!invoiceId) {
+            c('Missing required invoice id.');
+            return;
+        } else if(!_.isNumber(invoiceId) || invoiceId < 1) {
+            c('Invalid invoice id.');
+            return;
+        }
+
+        dbc.query(sqlTemplates.UPDATE_INVOICE(usMods), [ invoiceId ], function (err, result) {
+            if(err) {
+                c(err);
+            } else {
+                db.selectInvoiceById(invoiceId, function (err, invoice) {
+                    if(err) {
+                        c(err);
+                    } else {
+                        c(false, invoice);
+                    }
+                });
+            }
+        });
     }
 };

@@ -1,0 +1,11 @@
+body {
+    margin: 20px;
+    padding: 20px;
+    border: solid 3px #804618;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+}
+
+.logo {
+    width: 256px;
+}

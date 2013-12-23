@@ -7,18 +7,23 @@ var express = require('express'),
 
 // Routes
 var V1_SERVICES_BASE = '/services/v1/',
-    users = require('./routes/users'),
-    customers = require('./routes/customers'),
-    products = require('./routes/products'),
-    productPrices = require('./routes/productPrices'),
-    orders = require('./routes/orders'),
-    orderItems = require('./routes/orderItems'),
-    orderTypes = require('./routes/orderTypes'),
-    invoices = require('./routes/invoices'),
-    invoiceOrders = require('./routes/invoiceOrders');
+    users = require('./routes/services/v1/users'),
+    customers = require('./routes/services/v1/customers'),
+    products = require('./routes/services/v1/products'),
+    productPrices = require('./routes/services/v1/productPrices'),
+    orders = require('./routes/services/v1/orders'),
+    orderItems = require('./routes/services/v1/orderItems'),
+    orderTypes = require('./routes/services/v1/orderTypes'),
+    invoices = require('./routes/services/v1/invoices'),
+    invoiceOrders = require('./routes/services/v1/invoiceOrders'),
+    DOCUMENTS_BASE = '/documents/',
+    invoiceDocuments = require('./routes/documents/invoices');
 
 var app = express();
 
+
+app.engine('jade', require('jade').__express);
+app.set('views', __dirname + '/templates');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -70,6 +75,10 @@ app.patch(V1_SERVICES_BASE + 'invoices/:invoiceId', invoices.modify);
 app.get(V1_SERVICES_BASE + 'invoices/:invoiceId/orders', invoiceOrders.list);
 app.post(V1_SERVICES_BASE + 'invoices/:invoiceId/orders', invoiceOrders.create);
 app.delete(V1_SERVICES_BASE + 'invoices/:invoiceId/orders/:invoiceItemId', invoiceOrders.destroy);
+
+// Document Routes //
+
+app.get(DOCUMENTS_BASE + 'invoices/:invoiceId', invoiceDocuments);
 
 // Any unhandled routes will return the client app.
 app.use(function(req, res){

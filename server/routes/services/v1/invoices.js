@@ -1,4 +1,5 @@
-var db = require('../db'),
+var db = require('../../../db'),
+    docs = require('../../../docs'),
     _ = require('lodash');
 
 module.exports = {
@@ -92,6 +93,6 @@ module.exports = {
 
         console.log('SEND INVOICE ' + invoiceId);
 
-        res.send(200, { ack: 'Invoice sent.' });
+
     }
 };

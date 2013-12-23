@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+    head
+        title Invoice from Beurrage
+        link(href='//fonts.googleapis.com/css?family=Roboto:400,300,100,700', rel='stylesheet', type='text/css')
+        link(href='/css/invoice.css', rel='stylesheet', type='text/css')
+    body
+        img.logo(src='/img/simpleLogo.png')
+        h1
+            | Invoice #
+            = invoice.id
+        h4
+            | Billed to:&nbsp;
+            = invoice.billedToName
+            br
+            = invoice.billedToEmail
+        ol
+            - invoice.orders.forEach(function (order) {
+            li #{order.modifiedTimestamp}, #{order.itemCount}, #{order.total}
+            - })

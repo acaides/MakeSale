@@ -5,6 +5,32 @@ var express = require('express'),
     path = require('path'),
     fs = require('fs');
 
+var app = express(),
+    forRoutes = {},
+    config = forRoutes.config = require('./config.json');
+
+var hostname, httpPort, httpsPort;
+
+// Security
+var privateKey  = fs.readFileSync(path.join(__dirname, 'ia.key'), 'utf8'),
+    certificate = fs.readFileSync(path.join(__dirname, 'ia.crt'), 'utf8'),
+    credentials = {key: privateKey, cert: certificate};
+
+forRoutes.httpsServer = https.createServer(credentials, app).listen(config.httpsPort, function () {
+    console.log('HTTPS server listening on port ' +  config.httpsPort);
+});
+
+// Redirect ALL http traffic to https
+var redirectApp = express();
+
+redirectApp.get('*', function(req, res) {
+    res.redirect('https://' + config.hostname + ((config.httpsPort === 443) ? '' : ((':' + config.httpsPort) + req.url)));
+})
+
+forRoutes.httpServer = http.createServer(redirectApp).listen(config.httpPort, function () {
+    console.log('HTTP->HTTPS redirecting server listening on port ' +  config.httpPort);
+});
+
 // Routes
 var V1_SERVICES_BASE = '/services/v1/',
     users = require('./routes/services/v1/users'),
@@ -17,10 +43,7 @@ var V1_SERVICES_BASE = '/services/v1/',
     invoices = require('./routes/services/v1/invoices'),
     invoiceOrders = require('./routes/services/v1/invoiceOrders'),
     DOCUMENTS_BASE = '/documents/',
-    invoiceDocuments = require('./routes/documents/invoices');
-
-var app = express();
-
+    invoiceDocuments = require('./routes/documents/invoices')(forRoutes);
 
 app.engine('jade', require('jade').__express);
 app.set('views', __dirname + '/templates');
@@ -83,28 +106,4 @@ app.get(DOCUMENTS_BASE + 'invoices/:invoiceId', invoiceDocuments);
 // Any unhandled routes will return the client app.
 app.use(function(req, res){
     res.sendfile(path.join(__dirname, '../client/index.html'));
-});
-
-var hostname, httpPort, httpsPort;
-
-var config = require('./config.json');
-
-// Security
-var privateKey  = fs.readFileSync(path.join(__dirname, 'ia.key'), 'utf8'),
-    certificate = fs.readFileSync(path.join(__dirname, 'ia.crt'), 'utf8'),
-    credentials = {key: privateKey, cert: certificate};
-
-https.createServer(credentials, app).listen(config.httpsPort, function (){
-  console.log('HTTPS server listening on port ' +  config.httpsPort);
-});
-
-// Redirect ALL http traffic to https
-var redirectApp = express();
-
-redirectApp.get('*', function(req, res) {
-    res.redirect('https://' + config.hostname + ((config.httpsPort === 443) ? '' : ((':' + config.httpsPort) + req.url)));
-})
-
-http.createServer(redirectApp).listen(config.httpPort, function () {
-    console.log('HTTP->HTTPS redirecting server listening on port ' +  config.httpPort);
 });

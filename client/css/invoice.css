@@ -1,16 +1,124 @@
 body {
-    margin: 20px;
-    padding: 20px;
-    border: solid 3px #804618;
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
+    margin: 0.25in;
+    width: 8.5in;
 }
 
 .logo {
-    width: 256px;
+    width: 2.8in;
+    position: relative;
+    left: 0.05in;
 }
 
-@page {
-    size:8.5in 11in;
-    margin: .25in
+.headerText {
+    margin: 5px;
 }
+
+.header .contactInfo {
+    position: relative;
+}
+
+.header .docName {
+    position: relative;
+    top: -0.25in;
+    float: right;
+    text-align: right;
+    text-align: center;
+    background: lightgray;
+    padding: 0.1in;
+}
+
+.header .docNum {
+    position: relative;
+    top: -0.1in;
+    font-size: smaller;
+}
+
+.date {
+    font-weight: normal;
+    font-size: larger;
+}
+
+.topBoxes {
+    white-space: nowrap;
+}
+
+.summary {
+    white-space: normal;
+    background: lightgray;
+    display: inline-block;
+    padding: 0.1in;
+    vertical-align: top;
+}
+
+.billedTo {
+    white-space: normal;
+    display: inline-block;
+    font-weight: normal;
+    font-size: larger;
+    vertical-align: top;
+    margin-left: 1in;
+}
+
+.order {
+    display: block;
+    margin-bottom: 0.1in;
+    page-break-inside: avoid;
+}
+
+.orderName {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.orderTable, .footerTable {
+    margin-left: 0.5in;
+    width: 7in;
+    border-spacing: 0;
+}
+
+.orderTable .nameCol {
+    width: 3in;
+}
+
+.orderTable .unitPriceCol, .quantityCol, .itemTotalCol {
+    width: 1in;
+}
+
+.footerTable .descriptionCol {
+    width: 3in;
+}
+
+.footerTable .emptyCol1, .emptyCol2, .numberCol {
+    width: 1in;
+}
+
+.orderTable .header {
+    font-style: italic;
+    font-size: smaller;
+}
+
+.orderTable .subtotal {
+    font-weight: 500;
+    background: lightgray;
+}
+
+.footerTable {
+    font-size: larger;
+    padding: 0.1in;
+    border: solid 1px lightgray;
+    page-break-inside: avoid;
+}
+
+.totalDue {
+    font-weight: bold;
+}
+
+.bottomNote {
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.25in;
+}
+

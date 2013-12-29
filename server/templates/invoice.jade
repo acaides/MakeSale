@@ -1,20 +1,104 @@
 doctype html
 html(lang="en")
     head
-        title Invoice from Beurrage
+        title Beurrage Invoice ##{invoice.id}
         link(href='//fonts.googleapis.com/css?family=Roboto:400,300,100,700', rel='stylesheet', type='text/css')
         link(href='/css/invoice.css', rel='stylesheet', type='text/css')
     body
-        img.logo(src='/img/simpleLogo.png')
-        h1
-            | Invoice #
-            = invoice.id
-        h4
-            | Billed to:&nbsp;
-            = invoice.billedToName
-            br
-            = invoice.billedToEmail
-        ol
+        div.header
+            h1.docName INVOICE
+                br
+                span.docNum #{invoice.id}
+            img.logo(src='/img/simpleLogo.png')
+            div.contactInfo
+                span.headerText 1248 W 18th Street, Pilsen, Chicago, IL
+                br
+                span.headerText billing@beurrage.com
+                span.headerText 773 998 2371
+                br
+                span.headerText beurrage.com
+                div.headerText.date #{moment(invoice.modifiedTimestamp).format('dddd, MMMM Do YYYY') }
+        div.topBoxes
+            div.summary Invoice Summary:
+                table
+                    thead
+                        tr.header
+                            td.descriptionCol
+                            td.emptyCol1
+                            td.emptyCol2
+                            td.numberCol
+                    tbody
+                        tr.orderCount
+                            td Order#{ invoice.orderCount > 1 ? 's' : ''}
+                            td
+                            td
+                            td #{invoice.orderCount}
+                        tr.subtotal
+                            td Subtotal
+                            td
+                            td
+                            td $#{_.str.numberFormat(invoice.subtotal, 2)}
+                        tr.totalDue
+                            td Total Due
+                            td
+                            td
+                            td $#{_.str.numberFormat(invoice.total, 2)}
+            div.billedTo Billed to:
+                br
+                = invoice.billedToName
+                br
+                = invoice.billedToEmail
+                br
+                = invoice.billedToAddress
+        br
+        br
+        div
             - invoice.orders.forEach(function (order) {
-            li #{order.modifiedTimestamp}, #{order.itemCount}, #{order.total}
+            div.order
+                span.orderName #{moment(order.modifiedTimestamp).format('dddd - MM/DD/YY') } #{order.name ? '(' + order.name + ')' : ''}
+                table.orderTable
+                    thead
+                        tr.header
+                            td.nameCol Item Name
+                            td.unitPriceCol Unit Price
+                            td.quantityCol Quantity
+                            td.itemTotalCol Item Total
+                    tbody
+                        - order.items.forEach(function (item) {
+                        tr.item
+                            td #{item.name}
+                            td $#{_.str.numberFormat(item.unitPrice, 2)}
+                            td #{item.quantity}
+                            td $#{_.str.numberFormat(item.itemTotal, 2)}
+                        - })
+                        tr.subtotal
+                            td Order Subtotal
+                            td
+                            td #{order.itemCount}
+                            td $#{_.str.numberFormat(order.total, 2)}
             - })
+        div.footer
+            table.footerTable
+                thead
+                    tr.header
+                        td.descriptionCol
+                        td.emptyCol1
+                        td.emptyCol2
+                        td.numberCol
+                tbody
+                    tr.orderCount
+                        td Order#{ invoice.orderCount > 1 ? 's' : ''}
+                        td
+                        td
+                        td #{invoice.orderCount}
+                    tr.subtotal
+                        td Subtotal
+                        td
+                        td
+                        td $#{_.str.numberFormat(invoice.subtotal, 2)}
+                    tr.totalDue
+                        td Total Due
+                        td
+                        td
+                        td $#{_.str.numberFormat(invoice.total, 2)}
+        div.bottomNote Thanks!

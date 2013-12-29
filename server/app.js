@@ -45,6 +45,9 @@ var V1_SERVICES_BASE = '/services/v1/',
     DOCUMENTS_BASE = '/documents/',
     invoiceDocuments = require('./routes/documents/invoices')(forRoutes);
 
+app.locals._ = require('lodash');
+app.locals._.str = require('underscore.string');
+app.locals.moment = require('moment');
 app.engine('jade', require('jade').__express);
 app.set('views', __dirname + '/templates');
 app.use(express.favicon());

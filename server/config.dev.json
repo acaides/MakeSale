@@ -1,0 +1,8 @@
+{
+    "httpPort": 3000,
+    "masterAccessCode": "louisAndLanaLoveCroissants",
+    "dbHost": "localhost",
+    "dbUsername": "makesale",
+    "dbPassword": "makesale",
+    "dbName": "beurrage"
+}

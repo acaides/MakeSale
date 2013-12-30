@@ -1,11 +1,10 @@
 var mysql = require('mysql'),
     dbc = mysql.createConnection({
-        host: 'localhost',
-        user: 'beurrageDotNet',
-        password: 'V8e80ih&}8C472w02/gPlR73',
-        database: 'beurrage',
-        supportBigNumbers: true,
-        debug: true
+        host: GLOBAL.config.dbHost,
+        user: GLOBAL.config.dbUsername,
+        password: GLOBAL.config.dbPassword,
+        database: GLOBAL.config.dbName,
+        supportBigNumbers: true
     }),
     sqlTemplates = require('./sqlTemplates'),
     bcrypt = require('bcrypt'),

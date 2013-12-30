@@ -4,11 +4,59 @@ var express = require('express'),
     path = require('path'),
     fs = require('fs');
 
+var options = require('optimist')
+        .usage('Run the MakeSale Server Backend.\n' +
+            'Serves services and documents to client applications.\n' +
+            'Usage: $0')
+        .options({
+            httpPort: {
+                alias : 'p',
+                'default' : 3000,
+                describe : 'The port number on the local host where the http server is to listen.'
+            },
+            masterAccessCode : {
+                alias : 'm',
+                'default' : 'louisAndLanaLoveCroissants',
+                describe: 'The string to be accepted as an access code for all requests.'
+            },
+            dbHost : {
+                alias : 'h',
+                'default' : 'localhost',
+                describe : 'The hostname of the server hosting the db.'
+            },
+            dbUsername : {
+                alias : 'u',
+                'default' : 'makesale',
+                describe : 'The name of the MySQL user the app should use to access the db.'
+            },
+            dbPassword: {
+                alias: 'p',
+                'default': 'makesale',
+                describe: 'The password of the MySQL user the app should use to access the db.'
+            },
+            dbName: {
+                alias: 'd',
+                describe: 'The name of the database the app should use.',
+                'default': 'makesale'
+            },
+            configFile: {
+                alias: 'c',
+                describe: 'The path to the configuration file the app should use to load configuration values.'
+            }
+        }),
+    argv = options.argv;
+
 var app = express(),
     forRoutes = {},
-    config = forRoutes.config = require('./config.json');
+    config = GLOBAL.config = forRoutes.config = (function () {
+        if (argv.configFile) {
+            return require(argv.configFile);
+        } else {
+            return argv;
+        }
+    })();
 
-var hostname, httpPort;
+var hostname;
 
 forRoutes.httpServer = http.createServer(app).listen(config.httpPort, function () {
     console.log('HTTP server listening on port ' +  config.httpPort);

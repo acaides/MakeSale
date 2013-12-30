@@ -15,6 +15,7 @@
     "jade": "~1.0.0",
     "express": "~3.4.7",
     "phantom": "~0.5.4",
-    "underscore.string": "~2.3.3"
+    "underscore.string": "~2.3.3",
+    "optimist": "~0.6.0"
   }
 }

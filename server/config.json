@@ -1,6 +1,5 @@
 {
     "hostname": "localhost",
     "httpPort": 9000,
-    "httpsPort": 9001,
     "masterAccessCode": "louisAndLanaLoveCroissants"
 }

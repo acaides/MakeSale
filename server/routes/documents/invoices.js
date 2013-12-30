@@ -88,7 +88,7 @@ module.exports = function (params) {
     masterAccessCode = params.config.masterAccessCode;
     serverRoot = (function (addr) {
         return addr.address + ':' + addr.port
-    })(params.httpsServer.address());
+    })(params.httpServer.address());
 
     return getInvoiceDocument;
 };

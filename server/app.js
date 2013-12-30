@@ -1,7 +1,6 @@
 // External dependencies.
 var express = require('express'),
     http = require('http'),
-    https = require('https'),
     path = require('path'),
     fs = require('fs');
 
@@ -9,26 +8,10 @@ var app = express(),
     forRoutes = {},
     config = forRoutes.config = require('./config.json');
 
-var hostname, httpPort, httpsPort;
+var hostname, httpPort;
 
-// Security
-var privateKey  = fs.readFileSync(path.join(__dirname, 'ia.key'), 'utf8'),
-    certificate = fs.readFileSync(path.join(__dirname, 'ia.crt'), 'utf8'),
-    credentials = {key: privateKey, cert: certificate};
-
-forRoutes.httpsServer = https.createServer(credentials, app).listen(config.httpsPort, function () {
-    console.log('HTTPS server listening on port ' +  config.httpsPort);
-});
-
-// Redirect ALL http traffic to https
-var redirectApp = express();
-
-redirectApp.get('*', function(req, res) {
-    res.redirect('https://' + config.hostname + ((config.httpsPort === 443) ? '' : ((':' + config.httpsPort) + req.url)));
-})
-
-forRoutes.httpServer = http.createServer(redirectApp).listen(config.httpPort, function () {
-    console.log('HTTP->HTTPS redirecting server listening on port ' +  config.httpPort);
+forRoutes.httpServer = http.createServer(app).listen(config.httpPort, function () {
+    console.log('HTTP server listening on port ' +  config.httpPort);
 });
 
 // Routes

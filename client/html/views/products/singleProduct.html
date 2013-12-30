@@ -1,4 +1,28 @@
-<div>
-    {{ product.name }}<br>
-    {{ product.description }}
+<div class="view" style="margin-top: 48px;">
+    <div class="header">
+        <a href="/products" class="headerTitle">
+            {{ product.name }}
+        </a>
+        <div class="headerActions">
+            <!--<a class="headerAction" ng-hide="showingCompleted" ng-click="toggleShowingCompleted()">-->
+            <!--show completed-->
+            <!--</a>-->
+            <!--<a class="headerAction" ng-show="showingCompleted" ng-click="toggleShowingCompleted()">-->
+            <!--hide completed-->
+            <!--</a>-->
+            <!--<a class="headerAction" href="/products/add">-->
+                <!--add-->
+            <!--</a>-->
+        </div>
+        <!--<div class="subHeader">-->
+        <!--<div class="columnHeaders">-->
+        <!--<div class="columnHeader" style="width: 36%;">Name</div>-->
+        <!--<div class="columnHeader" style="width: 38%;">Name</div>-->
+        <!--<div class="columnHeader" style="width: 16%;">Total</div>-->
+        <!--</div>-->
+        <!--</div>-->
+    </div>
+    <div>
+        {{ product.description }}
+    </div>
 </div>

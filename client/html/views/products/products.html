@@ -1,10 +1,45 @@
-<div>
-    <div>
-        Products <a href="/products/add">add</a>
-    </div>
-    <a ng-repeat="product in products" href="/products/{{ product.id }}">
-        <div>
-            {{ product.name }}
+<div class="view" style="margin-top: 48px;">
+    <div class="header">
+        <a href="/" class="headerTitle">
+            Products
+        </a>
+        <div class="headerActions">
+            <!--<a class="headerAction" ng-hide="showingCompleted" ng-click="toggleShowingCompleted()">-->
+                <!--show completed-->
+            <!--</a>-->
+            <!--<a class="headerAction" ng-show="showingCompleted" ng-click="toggleShowingCompleted()">-->
+                <!--hide completed-->
+            <!--</a>-->
+            <a class="headerAction" href="/products/add">
+                add
+            </a>
         </div>
-    </a>
+        <!--<div class="subHeader">-->
+            <!--<div class="columnHeaders">-->
+                <!--<div class="columnHeader" style="width: 36%;">Name</div>-->
+                <!--<div class="columnHeader" style="width: 38%;">Name</div>-->
+                <!--<div class="columnHeader" style="width: 16%;">Total</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+    <div>
+        <a class="linkedRow" ng-repeat="product in products" href="/products/{{ product.id }}">
+            <div class="columns" style="position: relative; top: 6px;">
+                <div class="column" style="width: 80%;">{{ product.name }}</div>
+                <!--<div class="column" style="width: 38%;">{{ order.name || order.createdTimestamp.toDateString() }}</div>-->
+                <!--<div class="column" style="width: 16%;">{{ order.total | currency }}</div>-->
+            </div>
+
+            <div class="rowFootnote">
+                {{ product.description }}
+            </div>
+            <!--<div ng-hide="order.statusId == 1" class="rowFootnote">-->
+                <!--#{{ order.id }}, {{ itemCountText(order) }}, {{ order.status.toUpperCase() }}-->
+            <!--</div>-->
+        </a>
+    </div>
+    <div class="viewMessage" ng-hide="products.length" style="margin-top: 100px;">
+        No Products.<br><br><br><br>
+        <a href="/products/add">add a new product</a>
+    </div>
 </div>

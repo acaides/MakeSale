@@ -16,6 +16,7 @@
     "express": "~3.4.7",
     "phantom": "~0.5.4",
     "underscore.string": "~2.3.3",
-    "optimist": "~0.6.0"
+    "optimist": "~0.6.0",
+    "forever": "~0.10.11"
   }
 }

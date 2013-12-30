@@ -65,6 +65,7 @@
         <div class="footer" ng-show="invoice.orders.length">
             <div class="footerText">{{ orderCountText(invoice) }}, {{ invoice.total | currency }}</div>
             <div class="footerActions">
+                <a class="footerAction" href="/documents/invoices/{{ invoice.id }}?ac={{ invoice.accessCode }}">view document</a>
                 <a class="footerAction" ng-show="invoice.statusId == 1" href="/invoices/{{ invoice.id }}/addOrder">add order</a>
                 <a class="footerAction" ng-show="invoice.statusId == 1" ng-click="complete()">complete</a>
                 <a class="footerAction" ng-show="invoice.statusId == 2 && !sendAck.loading" ng-click="send()">send</a>

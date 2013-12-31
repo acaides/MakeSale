@@ -28,14 +28,14 @@ module.exports = {
     SELECT_USERS_BY_EMAIL: 'SELECT * FROM `user` WHERE ',
     INSERT_CUSTOMER: 'INSERT INTO `customer` (`name`, `address`, `phone`, `email`) VALUES (?, ?, ?, ?);',
     SELECT_CUSTOMER_LISTING: 'SELECT * FROM `customer`;',
-    SELECT_CUSTOMERS_BY_ID: 'SELECT * FROM `customer` WHERE ',
+    SELECT_CUSTOMERS_BY_ID: 'SELECT * FROM `customer` WHERE `id` IN(?);',
     SELECT_CUSTOMERS_BY_EMAIL: 'SELECT * FROM `customer` WHERE ',
     INSERT_PRODUCT: 'INSERT INTO `product` (`name`, `description`, `unit_id`, `enabled`) VALUES (?, ?, ?, ?);',
     UPDATE_PRODUCT: 'UPDATE `product` SET ?',
     INSERT_PRODUCT_PRICE: 'INSERT INTO `product_price` (`product_id`, `order_type_id`, `unit_price`) VALUES (?, ?, ?);',
     SELECT_PRODUCT_PRICES_BY_PRODUCT_ID: 'SELECT * FROM `product_price` WHERE `product_id` = ?;',
     UPDATE_PRODUCT_PRICE: 'UPDATE `product_price` SET `unit_price` = ? WHERE `product_id` = ? AND `order_type_id` = ?;',
-    SELECT_PRODUCTS_BY_ID: 'SELECT * FROM `product` WHERE id IN(?);',
+    SELECT_PRODUCTS_BY_ID: 'SELECT * FROM `product` WHERE `id` IN(?);',
     SELECT_PRODUCTS: 'SELECT * FROM `product`;',
     SELECT_PRODUCTS_FOR_ORDER_TYPE: 'SELECT `product`.*, `product_price`.`unit_price`, `unit`.`name` AS `unit_name` ' +
         'FROM `product` ' +

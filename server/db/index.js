@@ -157,7 +157,17 @@ var db = module.exports = {
         }
     },
 
-    selectCustomersById: function selectCustomersById (customerIds, cb) {},
+    selectCustomersById: function selectCustomersById (customerIds, cb) {
+        if(_.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_CUSTOMERS_BY_ID, [ _.isArray(customerIds) ? customerIds : [ customerIds ] ], function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, us2cc(result));
+                }
+            });
+        }
+    },
 
     insertProducts: function insertProducts (newProducts, cb) {
         var results = [],

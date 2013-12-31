@@ -45,5 +45,23 @@ module.exports = {
                 res.send(200, customers);
             }
         });
+    },
+
+    retrieve: function retrieveCustomer (req, res) {
+        var customerId = parseInt(req.param('customerId'), 10);
+
+        if(_.isNumber(customerId) && customerId > 0) {
+            db.selectCustomersById(customerId, function (err, customers) {
+                if(err) {
+                    res.send(500, { error: err });
+                } else if(customers.length !== 1) {
+                    res.send(404, { error: 'No such customer.' });
+                } else {
+                    res.send(200, customers[0]);
+                }
+            });
+        } else {
+            res.send(400, { error: 'Invalid customer id.' });
+        }
     }
 };

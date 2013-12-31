@@ -63,5 +63,27 @@ module.exports = {
         } else {
             res.send(400, { error: 'Invalid customer id.' });
         }
+    },
+
+    modify: function modifyCustomer (req, res) {
+        var cMods = req.body,
+            customerId = parseInt(req.param('customerId'), 10);
+
+        if(!_.isNumber(customerId) || customerId < 1) {
+            res.send(400, { error: 'Invalid customer id.' });
+            return;
+        }
+
+        if(_.isPlainObject(cMods)) {
+            db.updateCustomer(customerId, cMods, function (err, customer) {
+                if(err) {
+                    res.send(500, { error: err });
+                } else {
+                    res.send(200, customer);
+                }
+            });
+        } else {
+            res.send(400, { error: 'No customer modifications specified.' });
+        }
     }
 };

@@ -27,6 +27,7 @@ module.exports = {
     SELECT_USERS_BY_ID: 'SELECT * FROM `user` WHERE ',
     SELECT_USERS_BY_EMAIL: 'SELECT * FROM `user` WHERE ',
     INSERT_CUSTOMER: 'INSERT INTO `customer` (`name`, `address`, `phone`, `email`) VALUES (?, ?, ?, ?);',
+    UPDATE_CUSTOMER: 'UPDATE `customer` SET ?',
     SELECT_CUSTOMER_LISTING: 'SELECT * FROM `customer`;',
     SELECT_CUSTOMERS_BY_ID: 'SELECT * FROM `customer` WHERE `id` IN(?);',
     SELECT_CUSTOMERS_BY_EMAIL: 'SELECT * FROM `customer` WHERE ',

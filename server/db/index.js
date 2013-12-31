@@ -145,6 +145,22 @@ var db = module.exports = {
         });
     },
 
+    updateCustomer: function updateCustomer (customerId, mods, cb) {
+        if(customerId && mods) {
+            delete mods.id;
+
+            dbc.query(sqlTemplates.UPDATE_CUSTOMER + ' WHERE `id` = ' + customerId + ';', cc2us(mods), function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, result);
+                }
+            });
+        } else {
+            cb('Missing required input.');
+        }
+    },
+
     selectCustomers: function selectCustomers (options, cb) {
         if(_.isFunction(cb)) {
             dbc.query(sqlTemplates.SELECT_CUSTOMER_LISTING, function (err, customers) {

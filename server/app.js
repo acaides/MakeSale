@@ -98,6 +98,7 @@ app.post(V1_SERVICES_BASE + 'users', users.create);
 // Customers routes
 app.get(V1_SERVICES_BASE + 'customers', customers.list);
 app.get(V1_SERVICES_BASE + 'customers/:customerId', customers.retrieve);
+app.patch(V1_SERVICES_BASE + 'customers/:customerId', customers.modify);
 app.post(V1_SERVICES_BASE + 'customers', customers.create);
 
 // Products routes

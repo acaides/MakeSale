@@ -10,12 +10,12 @@ function render (invoiceId, accessCode, format, done) {
     phantom.create('--ignore-ssl-errors=yes', function(ph) {
         ph.createPage(function(page) {
             page.set('paperSize', { format: 'Letter', orientation: 'portrait', border: '.25in' });
-//            page.set('zoomFactor', 1);
-            page.open('https://' + serverRoot + '/documents/invoices/' + invoiceId + '?ac=' + accessCode, function(status) {
-                page.render(invoiceId + '.' + format, function () {
-                    console.log('Rendered PDF for Invoice #' + invoiceId);
+            page.open('http://' + serverRoot + '/documents/invoices/' + invoiceId + '?ac=' + accessCode, function(status) {
+                var fileName = './docs/invoices/' + invoiceId + '.' + format;
+                page.render(fileName, function () {
+                    console.log('Rendered document for Invoice #' + invoiceId);
                     ph.exit();
-                    done(invoiceId + '.' + format);
+                    done(fileName);
                     page.close();
                 });
             });

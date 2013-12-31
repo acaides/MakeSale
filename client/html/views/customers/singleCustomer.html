@@ -5,12 +5,38 @@
         </a>
     </div>
     <div>
-        Customer info goes here.
+        <div>
+            <div style="background: #E5D9CF;">
+                Customer Name
+            </div>
+            <input class="textInputRow" type="text" ng-model="customer.name" ng-change="changed = true;">
+        </div>
+
+        <div>
+            <div style="background: #E5D9CF;">
+                Customer Address
+            </div>
+            <input class="textInputRow" type="text" ng-model="customer.address" ng-change="changed = true;">
+        </div>
+
+        <div>
+            <div style="background: #E5D9CF;">
+                Customer Phone Number
+            </div>
+            <input class="textInputRow" type="text" ng-model="customer.phone" ng-change="changed = true;">
+        </div>
+
+        <div>
+            <div style="background: #E5D9CF;">
+                Customer Email Address
+            </div>
+            <input class="textInputRow" type="text" ng-model="customer.email" ng-change="changed = true;">
+        </div>
     </div>
 
-    <!--<div class="footer">-->
-        <!--<div class="footerActions">-->
-            <!--<a class="footerAction" ng-click="add()">add</a>-->
-        <!--</div>-->
-    <!--</div>-->
+    <div class="footer" ng-show="changed">
+        <div class="footerActions">
+            <a class="footerAction" ng-click="update()">update</a>
+        </div>
+    </div>
 </div>

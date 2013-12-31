@@ -66,6 +66,43 @@ define([ './module' ], function (services) {
                 return customer;
             },
 
+            addCustomer: function BNAddCustomer (newCustomer, cb) {
+                var customer = {},
+                    c = _.isFunction(cb) ? cb : function () {};
+
+                $http({ method: 'POST', url: SB + 'customers', data: newCustomer }).
+                    success(function(data, status, headers, config) {
+                        _.extend(customer, data);
+                        c(customer);
+                    }).
+                    error(function(data, status, headers, config) {
+
+                    });
+
+                return customer;
+            },
+
+            updateCustomer: function BNUpdateCustomer (customerId, mods, cb) {
+                var c = _.isFunction(cb) ? cb : function () {},
+                    customer = {
+                        loading: true
+                    };
+
+                $http({ method: 'PATCH', url: SB + 'customers/' + customerId, data: mods }).
+                    success(function(data, status, headers, config) {
+                        delete customer.loading;
+                        _.extend(customer, data);
+                        c(customer);
+                    }).
+                    error(function(data, status, headers, config) {
+                        delete customer.loading;
+                        _.extend(customer, data);
+                        c(customer);
+                    });
+
+                return customer;
+            },
+
             startOrder: function BNStartOrder (customerId, typeId, name, cb) {
                 var order = {
                     loading: true

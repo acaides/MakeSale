@@ -15,7 +15,8 @@ define([ './app' ], function (app) {
         });
 
         $routeProvider.when('/products/add', {
-            templateUrl: '/html/views/products/addProduct.html'
+            templateUrl: '/html/views/products/addProduct.html',
+            controller: 'AddProductController'
         });
 
         $routeProvider.when('/products/:productId', {
@@ -48,9 +49,19 @@ define([ './app' ], function (app) {
             controller: 'AddItemController'
         });
 
-        $routeProvider.when('/documents', {
-            templateUrl: '/html/views/documents/documents.html',
-            controller: 'DocumentsController'
+        $routeProvider.when('/customers', {
+            templateUrl: '/html/views/customers/customers.html',
+            controller: 'CustomersController'
+        });
+
+        $routeProvider.when('/customers/add', {
+            templateUrl: '/html/views/customers/addCustomer.html',
+            controller: 'AddCustomerController'
+        });
+
+        $routeProvider.when('/customers/:customerId', {
+            templateUrl: '/html/views/customers/singleCustomer.html',
+            controller: 'SingleCustomerController'
         });
 
         $routeProvider.when('/invoices', {

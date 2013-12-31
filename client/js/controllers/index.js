@@ -2,14 +2,17 @@ define([
     './HomeController',
     './ProductsController',
     './SingleProductController',
+    './AddProductController',
     './OrdersController',
     './SingleOrderController',
     './StartOrderController',
     './AddItemController',
     './EditOrderController',
-    './DocumentsController',
     './InvoicesController',
     './SingleInvoiceController',
     './AddOrderController',
-    './StartInvoiceController'
+    './StartInvoiceController',
+    './CustomersController',
+    './SingleCustomerController',
+    './AddCustomerController'
 ], function () {});

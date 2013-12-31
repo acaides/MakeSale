@@ -50,6 +50,22 @@ define([ './module' ], function (services) {
                 return customers;
             },
 
+            getCustomerById: function BNGetCustomerById (customerId, cb) {
+                var customer = {},
+                    c = _.isFunction(cb) ? cb : function () {};
+
+                $http({ method: 'GET', url: SB + 'customers/' + customerId }).
+                    success(function(data, status, headers, config) {
+                        _.extend(customer, data);
+                        c(customer);
+                    }).
+                    error(function(data, status, headers, config) {
+
+                    });
+
+                return customer;
+            },
+
             startOrder: function BNStartOrder (customerId, typeId, name, cb) {
                 var order = {
                     loading: true

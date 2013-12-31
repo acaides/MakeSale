@@ -1,0 +1,45 @@
+<div class="view" style="margin-top: 48px;">
+    <div class="header">
+        <a href="/" class="headerTitle">
+            Customers
+        </a>
+        <div class="headerActions">
+            <!--<a class="headerAction" ng-hide="showingCompleted" ng-click="toggleShowingCompleted()">-->
+            <!--show completed-->
+            <!--</a>-->
+            <!--<a class="headerAction" ng-show="showingCompleted" ng-click="toggleShowingCompleted()">-->
+            <!--hide completed-->
+            <!--</a>-->
+            <a class="headerAction" href="/customers/add">
+                add
+            </a>
+        </div>
+        <!--<div class="subHeader">-->
+        <!--<div class="columnHeaders">-->
+        <!--<div class="columnHeader" style="width: 36%;">Name</div>-->
+        <!--<div class="columnHeader" style="width: 38%;">Name</div>-->
+        <!--<div class="columnHeader" style="width: 16%;">Total</div>-->
+        <!--</div>-->
+        <!--</div>-->
+    </div>
+    <div>
+        <a class="linkedRow" ng-repeat="customer in customers" href="/customers/{{ customer.id }}">
+            <div class="columns" style="position: relative; top: 6px;">
+                <div class="column" style="width: 80%;">{{ customer.name }}</div>
+                <!--<div class="column" style="width: 38%;">{{ order.name || order.createdTimestamp.toDateString() }}</div>-->
+                <!--<div class="column" style="width: 16%;">{{ order.total | currency }}</div>-->
+            </div>
+
+            <!--<div class="rowFootnote">-->
+                <!--{{ product.description }}-->
+            <!--</div>-->
+            <!--<div ng-hide="order.statusId == 1" class="rowFootnote">-->
+            <!--#{{ order.id }}, {{ itemCountText(order) }}, {{ order.status.toUpperCase() }}-->
+            <!--</div>-->
+        </a>
+    </div>
+    <div class="viewMessage" ng-hide="customers.length" style="margin-top: 100px;">
+        No Customers.<br><br><br><br>
+        <a href="/customers/add">add a new customer</a>
+    </div>
+</div>

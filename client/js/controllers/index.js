@@ -3,6 +3,8 @@ define([
     './ProductsController',
     './SingleProductController',
     './AddProductController',
+    './AddProductPriceController',
+    './SingleProductPriceController',
     './OrdersController',
     './SingleOrderController',
     './StartOrderController',

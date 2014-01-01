@@ -35,10 +35,22 @@
                 </div>
             </div>
         </div>
+
+        <div>
+            <div style="background: #E5D9CF;">
+                Prices:
+            </div>
+            <a class="linkedRow" ng-repeat="price in prices" ng-href="/products/{{ product.id }}/prices/{{ price.id }}">
+                <div style="margin-top: 12px; margin-left: 4px;">
+                    {{ price.unitPrice | currency }} for {{ price.orderTypeName }} orders <span ng-show="price.customerId">from {{ price.customerName}}</span>
+                </div>
+            </a>
+        </div>
     </div>
 
     <div class="footer">
         <div class="footerActions">
+            <a class="footerAction" ng-href="/products/{{ product.id }}/addPrice">add price</a>
             <a class="footerAction" ng-click="update()">update</a>
         </div>
     </div>

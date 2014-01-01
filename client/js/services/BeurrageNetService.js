@@ -79,12 +79,61 @@ define([ './module' ], function (services) {
                 $http({ method: 'GET', url: SB + 'units' }).
                     success(function(data, status, headers, config) {
                         _.extend(units, data);
+                        c(units);
                     }).
                     error(function(data, status, headers, config) {
 
                     });
 
                 return units;
+            },
+
+            getProductPrices: function BNGetProductPrices (productId, cb) {
+                var c = _.isFunction(cb) ? cb : function () {},
+                    prices = [];
+
+                $http({ method: 'GET', url: SB + 'products/' + productId + '/prices' }).
+                    success(function(data, status, headers, config) {
+                        _.extend(prices, data);
+                        c(prices);
+                    }).
+                    error(function(data, status, headers, config) {
+
+                    });
+
+                return prices;
+            },
+
+            addProductPrice: function BNAddProductPrice (productId, pp, cb) {
+                var productPrice = {},
+                    c = _.isFunction(cb) ? cb : function () {};
+
+                $http({ method: 'POST', url: SB + 'products/' + productId + '/prices', data: pp }).
+                    success(function(data, status, headers, config) {
+                        _.extend(productPrice, data);
+                        c(productPrice);
+                    }).
+                    error(function(data, status, headers, config) {
+
+                    });
+
+                return productPrice;
+            },
+
+            updateProductPrice: function BNAddProductPrice (productId, priceId, unitPrice, cb) {
+                var productPrice = {},
+                    c = _.isFunction(cb) ? cb : function () {};
+
+                $http({ method: 'PATCH', url: SB + 'products/' + productId + '/prices/' + priceId, data: { unitPrice: unitPrice } }).
+                    success(function(data, status, headers, config) {
+                        _.extend(productPrice, data);
+                        c(productPrice);
+                    }).
+                    error(function(data, status, headers, config) {
+
+                    });
+
+                return productPrice;
             },
 
             getCustomers: function BNGetCustomers (cb) {

@@ -1,0 +1,59 @@
+<div class="view">
+    <div class="header">
+        <a class="headerTitle" ng-href="/products/{{ product.id }}">
+            Add Price for {{ product.name }}
+        </a>
+    </div>
+
+    <div>
+        <div>
+            <div style="background: #E5D9CF;">
+                To which type of order does this price apply?
+            </div>
+            <div class="row"
+                 ng-repeat="orderType in orderTypes"
+                 ng-click="selectOrderType(orderType.id)"
+                 ng-class="{ selectedRow: selectedOrderType == orderType.id, hiddenRow: selectedOrderType && selectedOrderType != orderType.id }">
+                <div style="margin-top: 12px; margin-left: 4px;">
+                    {{ orderType.name }} <span style="float: right; margin-right: 8px; font-style: italic; font-size: 14px;" ng-show="selectedOrderType == orderType.id">change?</span>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="selectedOrderType">
+            <div style="background: #E5D9CF;">
+                To which customer does this price apply?
+            </div>
+            <div>
+                <div class="row"
+                     ng-click="selectCustomer(-1)"
+                     ng-class="{ selectedRow: selectedCustomer == -1, hiddenRow: selectedCustomer && selectedCustomer != -1 }">
+                    <div style="margin-top: 12px; margin-left: 4px;">
+                        All Customers <span style="float: right; margin-right: 8px; font-style: italic; font-size: 14px;" ng-show="selectedCustomer == -1">change?</span>
+                    </div>
+                </div>
+                <div class="row"
+                     ng-repeat="customer in customers"
+                     ng-click="selectCustomer(customer.id)"
+                     ng-class="{ selectedRow: selectedCustomer == customer.id, hiddenRow: selectedCustomer && selectedCustomer != customer.id }">
+                    <div style="margin-top: 12px; margin-left: 4px;">
+                        {{ customer.name }} <span style="float: right; margin-right: 8px; font-style: italic; font-size: 14px;" ng-show="selectedCustomer == customer.id">change?</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="selectedCustomer && selectedOrderType">
+            <div style="background: #E5D9CF;">
+                What is the price per unit, in dollars?
+            </div>
+            <input class="textInputRow" type="number" ng-model="unitPrice">
+        </div>
+    </div>
+
+    <div class="footer" ng-show="selectedOrderType && unitPrice">
+        <div class="footerActions">
+            <a class="footerAction" ng-click="add()">add</a>
+        </div>
+    </div>
+</div>

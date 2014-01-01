@@ -12,6 +12,7 @@ define([ './module' ], function (controllers) {
                 $.selectedUnit = unit;
             }
         };
+        $.prices = BN.getProductPrices($routeParams.productId);
 
         $.update = function SingleProductControllerUpdate () {
             BN.updateProduct($.product.id, $.product, function () {

@@ -24,6 +24,16 @@ define([ './app' ], function (app) {
             controller: 'SingleProductController'
         });
 
+        $routeProvider.when('/products/:productId/addPrice', {
+            templateUrl: '/html/views/products/addProductPrice.html',
+            controller: 'AddProductPriceController'
+        });
+
+        $routeProvider.when('/products/:productId/prices/:priceId', {
+            templateUrl: '/html/views/products/singleProductPrice.html',
+            controller: 'SingleProductPriceController'
+        });
+
         $routeProvider.when('/orders', {
             templateUrl: '/html/views/orders/orders.html',
             controller: 'OrdersController'

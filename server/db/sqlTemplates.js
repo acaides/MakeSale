@@ -33,14 +33,21 @@ module.exports = {
     SELECT_CUSTOMERS_BY_EMAIL: 'SELECT * FROM `customer` WHERE ',
     INSERT_PRODUCT: 'INSERT INTO `product` (`name`, `description`, `unit_id`, `enabled`) VALUES (?, ?, ?, ?);',
     UPDATE_PRODUCT: 'UPDATE `product` SET ?',
-    INSERT_PRODUCT_PRICE: 'INSERT INTO `product_price` (`product_id`, `order_type_id`, `unit_price`) VALUES (?, ?, ?);',
-    SELECT_PRODUCT_PRICES_BY_PRODUCT_ID: 'SELECT * FROM `product_price` WHERE `product_id` = ?;',
+    INSERT_PRODUCT_PRICE: 'INSERT INTO `product_price` (`product_id`, `order_type_id`, `unit_price`, `customer_id`) VALUES (?, ?, ?, ?);',
+//    SELECT_PRODUCT_PRICES_BY_PRODUCT_ID: 'SELECT * FROM `product_price` WHERE `product_id` = ?;',
+    SELECT_PRODUCT_PRICES_BY_PRODUCT_ID: 'SELECT `product_price`.*, ' +
+        '`order_type`.`name` AS `order_type_name`, ' +
+        '`customer`.`name` AS `customer_name` ' +
+        'FROM `product_price` ' +
+        'JOIN `order_type` ON `order_type`.`id` = `product_price`.`order_type_id` ' +
+        'LEFT JOIN `customer` ON `customer`.`id` = `product_price`.`customer_id` ' +
+        'WHERE `product_id` = ?;',
     SELECT_PRODUCT_PRICE_FOR_ORDER: 'SELECT ' +
         '`product_price`.`unit_price` AS `unit_price`, ' +
         '`product_price`.`customer_id` AS `customer_id` ' +
         'FROM `product_price` ' +
         'WHERE `product_id` = ? AND `order_type_id` = ?;',
-    UPDATE_PRODUCT_PRICE: 'UPDATE `product_price` SET `unit_price` = ? WHERE `product_id` = ? AND `order_type_id` = ?;',
+    UPDATE_PRODUCT_PRICE: 'UPDATE `product_price` SET `unit_price` = ? WHERE `product_id` = ? AND `id` = ?;',
     SELECT_PRODUCTS_BY_ID: 'SELECT * FROM `product` WHERE `id` IN(?);',
     SELECT_PRODUCTS: 'SELECT * FROM `product` ORDER BY `name`;',
     SELECT_PRODUCTS_FOR_ORDER: 'SELECT `default_prices`.`id`, ' +

@@ -67,20 +67,20 @@ module.exports = {
 
     modify: function modifyProductPrice (req, res) {
         var productId = parseInt(req.param('productId'), 10),
-            orderTypeId = parseInt(req.param('orderTypeId'), 10);
+            priceId = parseInt(req.param('priceId'), 10);
 
         if(!_.isNumber(productId) || productId < 1) {
             res.send(400, { error: 'Invalid product id.' });
             return;
         }
 
-        if(!_.isNumber(orderTypeId) || orderTypeId < 1) {
-            res.send(400, { error: 'Invalid order type id.' });
+        if(!_.isNumber(priceId) || priceId < 1) {
+            res.send(400, { error: 'Invalid price id.' });
             return;
         }
 
         if(_.isPlainObject(req.body) && 'unitPrice' in req.body) {
-            db.updateProductPrice(productId, orderTypeId, req.body.unitPrice, function (err, result) {
+            db.updateProductPrice(productId, priceId, req.body.unitPrice, function (err, result) {
                 if(err) {
                     res.send(500, { error: err });
                 } else {

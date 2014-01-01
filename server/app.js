@@ -110,8 +110,8 @@ app.patch(V1_SERVICES_BASE + 'products/:productId', products.modify);
 app.post(V1_SERVICES_BASE + 'products', products.create);
 app.get(V1_SERVICES_BASE + 'products/:productId/prices', productPrices.list);
 app.post(V1_SERVICES_BASE + 'products/:productId/prices', productPrices.create);
-app.put(V1_SERVICES_BASE + 'products/:productId/prices/:orderTypeId', productPrices.modify);
-app.patch(V1_SERVICES_BASE + 'products/:productId/prices/:orderTypeId', productPrices.modify);
+app.put(V1_SERVICES_BASE + 'products/:productId/prices/:priceId', productPrices.modify);
+app.patch(V1_SERVICES_BASE + 'products/:productId/prices/:priceId', productPrices.modify);
 
 // Units routes
 app.get(V1_SERVICES_BASE + 'units', units.list);

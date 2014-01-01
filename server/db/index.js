@@ -258,7 +258,8 @@ var db = module.exports = {
                 dbc.query(sqlTemplates.INSERT_PRODUCT_PRICE, [
                     newProductPrice.productId,
                     newProductPrice.orderTypeId,
-                    newProductPrice.unitPrice
+                    newProductPrice.unitPrice,
+                    newProductPrice.customerId
                 ], function (err, result) {
                     if(err) {
                         done([ err ]);
@@ -325,9 +326,9 @@ var db = module.exports = {
         }
     },
 
-    updateProductPrice: function updateProductPrice (productId, orderTypeId, unitPrice, cb) {
-        if(productId && orderTypeId && unitPrice) {
-            dbc.query(sqlTemplates.UPDATE_PRODUCT_PRICE, [ unitPrice, productId, orderTypeId ], function (err, result) {
+    updateProductPrice: function updateProductPrice (productId, priceId, unitPrice, cb) {
+        if(productId && priceId && unitPrice) {
+            dbc.query(sqlTemplates.UPDATE_PRODUCT_PRICE, [ unitPrice, productId, priceId ], function (err, result) {
                 if(err) {
                     cb(err);
                 } else {

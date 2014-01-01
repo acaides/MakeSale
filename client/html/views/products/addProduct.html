@@ -4,8 +4,37 @@
             Add A New Product
         </a>
     </div>
+
     <div>
-        Add product info goes here.
+        <div>
+            <div style="background: #E5D9CF;">
+                What is the product's name?
+            </div>
+            <input class="textInputRow" type="text" ng-model="product.name">
+        </div>
+
+        <div>
+            <div style="background: #E5D9CF;">
+                Briefly describe the product:
+            </div>
+            <input class="textInputRow" type="text" ng-model="product.description">
+        </div>
+
+        <div>
+            <div style="background: #E5D9CF;">
+                What is the unit of measure for the product?
+            </div>
+            <div>
+                <div class="row"
+                     ng-repeat="unit in units"
+                     ng-click="selectUnit(unit)"
+                     ng-class="{ selectedRow: selectedUnit == unit, hiddenRow: selectedUnit && selectedUnit != unit }">
+                    <div style="margin-top: 12px; margin-left: 4px;">
+                        {{ unit.name }} <span style="float: right; margin-right: 8px; font-style: italic; font-size: 14px;" ng-show="selectedUnit == unit">change?</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="footer">

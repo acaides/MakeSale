@@ -341,6 +341,30 @@ var db = module.exports = {
         }
     },
 
+    selectUnits: function selectUnits (options, cb) {
+        if(_.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_UNITS, function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, us2cc(result));
+                }
+            });
+        }
+    },
+
+    selectUnitsById: function selectUnitsById (unitIds, cb) {
+        if(_.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_UNITS_BY_ID, [ _.isArray(unitIds) ? unitIds : [ unitIds ] ], function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, us2cc(result));
+                }
+            });
+        }
+    },
+
     insertOrders: function insertOrders (newOrders, cb) {
         var results = [],
             requests = _.isArray(newOrders) ? newOrders : [ newOrders ],

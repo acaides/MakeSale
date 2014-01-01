@@ -42,7 +42,7 @@ module.exports = {
         'WHERE `product_id` = ? AND `order_type_id` = ?;',
     UPDATE_PRODUCT_PRICE: 'UPDATE `product_price` SET `unit_price` = ? WHERE `product_id` = ? AND `order_type_id` = ?;',
     SELECT_PRODUCTS_BY_ID: 'SELECT * FROM `product` WHERE `id` IN(?);',
-    SELECT_PRODUCTS: 'SELECT * FROM `product`;',
+    SELECT_PRODUCTS: 'SELECT * FROM `product` ORDER BY `name`;',
     SELECT_PRODUCTS_FOR_ORDER: 'SELECT `default_prices`.`id`, ' +
         '`default_prices`.`name`, ' +
         '`default_prices`.`description`, ' +
@@ -74,7 +74,7 @@ module.exports = {
         'ON `unit`.`id` = `product`.`unit_id` ' +
         'WHERE  `product_price`.`customer_id` = ?) `customer_specific` ' +
         'ON `default_prices`.`product_id` = ' +
-        '`customer_specific`.`product_id`;',
+        '`customer_specific`.`product_id` ORDER BY `name`;',
 //    SELECT_PRODUCTS_FOR_ORDER: 'SELECT `product`.*, `product_price`.`unit_price`, `unit`.`name` AS `unit_name` ' +
 //        'FROM `product` ' +
 //        'JOIN `product_price` ON `product_price`.`product_id` = `product`.`id` ' +
@@ -169,5 +169,7 @@ module.exports = {
 
         return 'UPDATE `invoice` SET ' + vs.join(', ') + ', `modified_timestamp` = NOW() WHERE `id` = ?;'
     },
-    SELECT_ORDER_STATUS_ID_BY_ORDER_ID: 'SELECT `status_id` FROM `order` WHERE `id` = ?;'
+    SELECT_ORDER_STATUS_ID_BY_ORDER_ID: 'SELECT `status_id` FROM `order` WHERE `id` = ?;',
+    SELECT_UNITS: 'SELECT * FROM `unit`;',
+    SELECT_UNITS_BY_ID: 'SELECT * FROM `unit` WHERE `id` IN(?);'
 };

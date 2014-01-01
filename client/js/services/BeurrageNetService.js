@@ -19,18 +19,72 @@ define([ './module' ], function (services) {
                 return products;
             },
 
-            getProductById: function BNGetProductById (productId) {
-                var product = {};
+            getProductById: function BNGetProductById (productId, cb) {
+                var product = {},
+                    c = _.isFunction(cb) ? cb : function () {};
 
                 $http({ method: 'GET', url: SB + 'products/' + productId }).
                     success(function(data, status, headers, config) {
                         _.extend(product, data);
+                        c(product);
                     }).
                     error(function(data, status, headers, config) {
 
                     });
 
                 return product;
+            },
+
+            addProduct: function BNAddProduct (newProduct, cb) {
+                var product = {},
+                    c = _.isFunction(cb) ? cb : function () {};
+
+                $http({ method: 'POST', url: SB + 'products', data: newProduct }).
+                    success(function(data, status, headers, config) {
+                        _.extend(product, data);
+                        c(product);
+                    }).
+                    error(function(data, status, headers, config) {
+
+                    });
+
+                return product;
+            },
+
+            updateProduct: function BNUpdateProduct (productId, mods, cb) {
+                var c = _.isFunction(cb) ? cb : function () {},
+                    product = {
+                        loading: true
+                    };
+
+                $http({ method: 'PATCH', url: SB + 'products/' + productId, data: mods }).
+                    success(function(data, status, headers, config) {
+                        delete product.loading;
+                        _.extend(product, data);
+                        c(product);
+                    }).
+                    error(function(data, status, headers, config) {
+                        delete product.loading;
+                        _.extend(product, data);
+                        c(product);
+                    });
+
+                return product;
+            },
+
+            getUnits: function BNGetUnits (cb) {
+                var c = _.isFunction(cb) ? cb : function () {},
+                    units = [];
+
+                $http({ method: 'GET', url: SB + 'units' }).
+                    success(function(data, status, headers, config) {
+                        _.extend(units, data);
+                    }).
+                    error(function(data, status, headers, config) {
+
+                    });
+
+                return units;
             },
 
             getCustomers: function BNGetCustomers (cb) {

@@ -28,7 +28,7 @@ module.exports = {
     SELECT_USERS_BY_EMAIL: 'SELECT * FROM `user` WHERE ',
     INSERT_CUSTOMER: 'INSERT INTO `customer` (`name`, `address`, `phone`, `email`) VALUES (?, ?, ?, ?);',
     UPDATE_CUSTOMER: 'UPDATE `customer` SET ?',
-    SELECT_CUSTOMER_LISTING: 'SELECT * FROM `customer`;',
+    SELECT_CUSTOMER_LISTING: 'SELECT * FROM `customer` ORDER BY `name`;',
     SELECT_CUSTOMERS_BY_ID: 'SELECT * FROM `customer` WHERE `id` IN(?);',
     SELECT_CUSTOMERS_BY_EMAIL: 'SELECT * FROM `customer` WHERE ',
     INSERT_PRODUCT: 'INSERT INTO `product` (`name`, `description`, `unit_id`, `enabled`) VALUES (?, ?, ?, ?);',
@@ -58,7 +58,7 @@ module.exports = {
         '`default_prices`.`enabled`, ' +
         'Ifnull(`customer_specific`.`customer_price`, `unit_price`) AS ' +
         '`unit_price` ' +
-        'FROM   (SELECT `product`.*, ' +
+        'FROM (SELECT `product`.*, ' +
         '`product_price`.`product_id`, ' +
         '`product_price`.`unit_price`, ' +
         '`unit`.`name` AS `unit_name` ' +

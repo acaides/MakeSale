@@ -100,6 +100,30 @@ body {
     padding: 12px 4px 4px 4px;
 }
 
+.footerError, .footerMsg {
+    position: absolute;
+    bottom: 53px;
+    background: indianred;
+    border: solid 1px red;
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+    text-align: right;
+    right: 5px;
+}
+
+.footerError:after {
+    content: "\2715";
+    margin-left: 5px;
+    color: #800;
+}
+
+.footerMsg {
+    background: palegreen;
+    color: darkgreen;
+    border: solid 1px darkgreen;
+}
+
 .headerActions, .footerActions {
     position: absolute;
     top: 0;

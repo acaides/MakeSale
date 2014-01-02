@@ -45,7 +45,8 @@ define([ './module' ], function (services) {
                         c(product);
                     }).
                     error(function(data, status, headers, config) {
-
+                        _.extend(product, data);
+                        c(product);
                     });
 
                 return product;

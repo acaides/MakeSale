@@ -80,13 +80,17 @@
 
         </div>
         <div class="footer" ng-show="order.items.length">
-            <div class="footerText">
+            <div class="footerText" ng-show="order.statusId == 1 && !confirmComplete">
                 {{ itemCountText(order) }}, {{ order.total | currency }}
+            </div>
+            <div class="footerText" ng-show="order.statusId == 1 && confirmComplete">
+                Permanently lock the order?
             </div>
             <div class="footerActions">
                 <a class="footerAction" ng-show="order.statusId == 1 && !confirmComplete" href="/orders/{{ order.id }}/addItem">add item</a>
                 <a class="footerAction" ng-show="order.statusId == 1 && !confirmComplete" ng-click="confirmComplete = true">complete</a>
-                <a class="footerAction" ng-show="order.statusId == 1 && confirmComplete" ng-click="complete()">lock the order?</a>
+                <a class="footerAction" ng-show="order.statusId == 1 && confirmComplete" ng-click="complete()">YES</a>
+                <a class="footerAction" ng-show="order.statusId == 1 && confirmComplete" ng-click="confirmComplete = false">cancel</a>
                 <a class="footerAction" ng-show="order.statusId == 2 && !confirmComplete" ng-click="addToInvoice()">add to invoice</a>
             </div>
         </div>

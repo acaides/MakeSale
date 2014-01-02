@@ -14,11 +14,24 @@ define([ './module' ], function (controllers) {
         };
 
         $.add = function AddProductControllerAdd () {
-            $.product.unitId = $.selectedUnit.id;
+            delete $.addError;
+            $.adding = true;
 
-            BN.addProduct($.product, function (product) {
-                $location.path('/products');
-            });
+            if('selectedUnit' in $ && 'name' in $.product) {
+                $.product.unitId = $.selectedUnit.id;
+
+                BN.addProduct($.product, function (product) {
+                    delete $.adding;
+
+                    if(product.error) {
+                        $.addError = 'DUPLICATE';
+                    } else {
+                        $location.path('/products');
+                    }
+                });
+            } else {
+                $.addError = 'MISSING_INFO';
+            }
         };
     } ]);
 });

@@ -37,7 +37,14 @@
         </div>
     </div>
 
-    <div class="footer">
+    <div class="footer" ng-show="selectedUnit && product.name">
+        <div class="footerError" ng-show="addError" ng-click="addError = null" ng-swipe-right="addError = null">
+            <span ng-show="addError == 'MISSING_INFO'">You need to enter a name and select a unit before adding.</span>
+            <span ng-show="addError == 'DUPLICATE'">Sorry, there's already a product with that name.</span>
+        </div>
+        <div class="footerMsg" ng-show="adding">
+            Adding {{ product.name }} to the catalog...
+        </div>
         <div class="footerActions">
             <a class="footerAction" ng-click="add()">add</a>
         </div>

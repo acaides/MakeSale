@@ -693,22 +693,26 @@ var db = module.exports = {
                                                 });
                                             }
 
-                                            dbc.query(
-                                                sqlTemplates.INSERT_ORDER_ITEM,
-                                                [
-                                                    orderId,
-                                                    orderItem.productId,
-                                                    orderItem.quantity,
-                                                    productPrice.unitPrice
-                                                ],
-                                                function (err, result) {
-                                                    if(err) {
-                                                        done([ err ]);
-                                                    } else {
-                                                        done([ false, _.extend(result, orderItem) ]);
+                                            if(productPrice) {
+                                                dbc.query(
+                                                    sqlTemplates.INSERT_ORDER_ITEM,
+                                                    [
+                                                        orderId,
+                                                        orderItem.productId,
+                                                        orderItem.quantity,
+                                                        productPrice.unitPrice
+                                                    ],
+                                                    function (err, result) {
+                                                        if(err) {
+                                                            done([ err ]);
+                                                        } else {
+                                                            done([ false, _.extend(result, orderItem) ]);
+                                                        }
                                                     }
-                                                }
-                                            );
+                                                );
+                                            } else {
+                                                done([ 'Unable to retrieve appropriate price for product.' ]);
+                                            }
                                         });
                                     } else {
                                         // If there's already an item in the order of the specified product,

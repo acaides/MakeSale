@@ -1,5 +1,6 @@
 var db = require('../../../db'),
     docs = require('../../../docs'),
+    crypto = require('crypto'),
     _ = require('lodash');
 
 module.exports = {
@@ -35,12 +36,13 @@ module.exports = {
         }
     },
     create: function createInvoice (req, res) {
-        var invoices = _.isArray(req.body) ? req.body : [ req.body ];
+        var invoices = _.isArray(req.body) ? req.body : [ req.body ],
+            currentDate = (new Date()).valueOf().toString();
 
         _.forEach(invoices, function (invoice) {
             invoice.createdUserId = 1;
             invoice.modifiedUserId = 1;
-            invoice.accessCode = '00000000';
+            invoice.accessCode = crypto.createHash('sha1').update(currentDate + Math.random().toString()).digest('hex');
         });
 
         db.insertInvoices(invoices, function (err, result) {

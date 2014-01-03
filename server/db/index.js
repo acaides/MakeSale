@@ -694,7 +694,7 @@ var db = module.exports = {
                                             // a customer id - The "all customers" price.
                                             if(!productPrice) {
                                                 _.forEach(productPrices, function (pp) {
-                                                    if(pp.customer_id === order.customerId) {
+                                                    if(!pp.customer_id) {
                                                         productPrice = us2cc(pp);
                                                     }
                                                 });

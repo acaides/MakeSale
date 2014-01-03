@@ -683,9 +683,16 @@ var db = module.exports = {
 
                                             var productPrice;
 
-                                            if(productPrices.length === 1) {
-                                                productPrice = us2cc(productPrices[0]);
-                                            } else {
+                                            // Try to find a customer-specific price.
+                                            _.forEach(productPrices, function (pp) {
+                                                if(pp.customer_id === order.customerId) {
+                                                    productPrice = us2cc(pp);
+                                                }
+                                            });
+
+                                            // If there was no customer-specific price, find the price without
+                                            // a customer id - The "all customers" price.
+                                            if(!productPrice) {
                                                 _.forEach(productPrices, function (pp) {
                                                     if(pp.customer_id === order.customerId) {
                                                         productPrice = us2cc(pp);

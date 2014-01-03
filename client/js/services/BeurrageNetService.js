@@ -308,15 +308,16 @@ define([ './module' ], function (services) {
                     success(function(data, status, headers, config) {
                         _.extend(order, data);
 
-//                        order.createdTimestamp = new Date(order.createdTimestamp);
-//                        order.modifiedTimestamp = new Date(order.modifiedTimestamp);
-
                         if(_.isFunction(cb)) {
                             cb(order);
                         }
                     }).
                     error(function(data, status, headers, config) {
+                        _.extend(order, data);
 
+                        if(_.isFunction(cb)) {
+                            cb(order);
+                        }
                     });
 
                 return order;

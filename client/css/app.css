@@ -66,6 +66,10 @@ body {
     display: inline-block;
     padding: 10px 11px 11px 14px;
     position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 94%;
+    text-overflow: ellipsis;
 }
 
 .headerTitle:before {
@@ -278,6 +282,7 @@ a {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    width: 95%;
 }
 
 .homeLogo {

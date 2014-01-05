@@ -13,6 +13,10 @@ var mysql = require('mysql'),
 function us2cc (obj) {
     if(_.isObject(obj) && !_.isDate(obj)) {
         return _.transform(obj, function (result, value, key) {
+            if(_.isNull(value) || _.isUndefined(value) ) {
+                return;
+            }
+
             if(_.isString(key)) {
                 var ccKey = key.replace(/(\_[a-z])/g, function($1) {
                     return $1.toUpperCase().replace('_', '');
@@ -30,6 +34,10 @@ function us2cc (obj) {
 function cc2us (obj) {
     if(_.isObject(obj) && !_.isDate(obj)) {
         return _.transform(obj, function (result, value, key) {
+            if(_.isNull(value) || _.isUndefined(value) ) {
+                return;
+            }
+
             if(_.isString(key)) {
                     var ccKey = key.replace(/([A-Z])/g, function ($1) {
                     return '_' + $1.toLowerCase();

@@ -40,8 +40,8 @@ module.exports = {
     list: function listProducts (req, res) {
         var options = {};
 
-        if('orderId' in req.query) {
-            var orderId = parseInt(req.query.orderId, 10);
+        if('forOrderId' in req.query) {
+            var orderId = parseInt(req.query.forOrderId, 10);
 
             if(_.isNumber(orderId) && orderId > 0) {
                 options.orderId = orderId;
@@ -55,7 +55,25 @@ module.exports = {
             if(err) {
                 res.send(500, { error: err });
             } else {
-                res.send(200, products);
+                if((function () { try { return JSON.parse(req.query.asGroups); } catch (e) { return false; }})()) {
+                    var groups = {},
+                        listing;
+
+                    _.forEach(products, function (product) {
+                        if(product.productGroupName) {
+                            groups[product.productGroupName] = groups[product.productGroupName] || { name: product.productGroupName, group: true, products: [] };
+                            groups[product.productGroupName].products.push(product);
+                        }
+                    });
+
+                    listing = _.filter(products, function (product) { return !!!product.productGroupName; });
+
+                    listing.push.apply(listing, _.toArray(groups));
+
+                    res.send(200, listing.sort(function (a, b) { return a.name < b.name ? -1 : 1; }));
+                } else {
+                    res.send(200, products);
+                }
             }
         });
     },

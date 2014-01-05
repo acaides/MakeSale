@@ -49,7 +49,11 @@ module.exports = {
         'WHERE `product_id` = ? AND `order_type_id` = ?;',
     UPDATE_PRODUCT_PRICE: 'UPDATE `product_price` SET `unit_price` = ? WHERE `product_id` = ? AND `id` = ?;',
     SELECT_PRODUCTS_BY_ID: 'SELECT * FROM `product` WHERE `id` IN(?);',
-    SELECT_PRODUCTS: 'SELECT * FROM `product` ORDER BY `name`;',
+    SELECT_PRODUCTS: 'SELECT `product`.*, ' +
+        '`product_group`.`name` AS `product_group_name` ' +
+        'FROM `product` ' +
+        'LEFT JOIN `product_group` ON `product`.`product_group_id` = `product_group`.`id` ' +
+        'ORDER BY `product_group`.`name`, `product`.`name`;',
     SELECT_PRODUCTS_FOR_ORDER: 'SELECT `default_prices`.`id`, ' +
         '`default_prices`.`name`, ' +
         '`default_prices`.`description`, ' +

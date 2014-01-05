@@ -1,7 +1,9 @@
 define([
     './HomeController',
     './ProductsController',
+    './ProductGroupsController',
     './SingleProductController',
+    './SingleProductGroupController',
     './AddProductController',
     './AddProductPriceController',
     './SingleProductPriceController',

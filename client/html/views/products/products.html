@@ -4,6 +4,9 @@
             Products
         </a>
         <div class="headerActions">
+            <a class="headerAction" href="/products/groups">
+                groups
+            </a>
             <a class="headerAction" href="/products/add">
                 add
             </a>
@@ -12,10 +15,16 @@
     <div>
         <div ng-repeat="product in products" class="linkedRow" ng-class="{ noArrow: product.group, productGroupRow: product.group}" ng-style="rowStyle(product)">
             <div ng-if="product.group" ng-click="product.groupVisible = !product.groupVisible" style="font-style: italic; padding: 5px;">
-                &nbsp;{{ product.name }}
+                <div ng-class="{ closedArrow: !product.groupVisible, openArrow: product.groupVisible }"></div>
+                <span style="margin-left: 15px">{{ product.name }}</span>
             </div>
 
-            <a ng-if="product.group" ng-show="product.groupVisible" class="linkedRow" ng-repeat="groupProduct in product.products" href="/products/{{ groupProduct.id }}">
+            <a ng-if="product.group"
+               ng-show="product.groupVisible"
+               class="linkedRow"
+               ng-repeat="groupProduct in product.products"
+               href="/products/{{ groupProduct.id }}"
+               style="text-indent: 15px;">
                 <div class="columns" style="position: relative; top: 6px;">
                     <div class="column" style="width: 95%;">{{ groupProduct.name }}</div>
                 </div>

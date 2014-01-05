@@ -5,18 +5,75 @@ define([ './module' ], function (services) {
 
     services.service('BeurrageNet', [ '$http', function ($http) {
         return {
-            getProducts: function BNGetProducts (orderId) {
-                var products = [];
+            getProducts: function BNGetProducts (orderId, groupId, cb) {
+                var products = [],
+                    c = _.isFunction(cb) ? cb : function () {};
 
-                $http({ method: 'GET', url: SB + 'products?asGroups=true' + (orderId ? ('&byOrderId=' + orderId) : '') }).
+                $http({ method: 'GET', url: SB + 'products?' +
+                    + (!groupId ? 'asGroups=true' : '')
+                    + (orderId ? ('&byOrderId=' + orderId) : '')
+                    + (groupId ? ('&inProductGroupId=' + groupId) : '') }).
                     success(function(data, status, headers, config) {
                         _.extend(products, data);
+                        c(products);
                     }).
                     error(function(data, status, headers, config) {
-
+                        _.extend(products, data);
+                        c(products);
                     });
 
                 return products;
+            },
+
+            getProductGroups: function BNGetProductGroups (cb) {
+                var productGroups = [],
+                    c = _.isFunction(cb) ? cb : function () {};
+
+                $http({ method: 'GET', url: SB + 'products/groups' }).
+                    success(function(data, status, headers, config) {
+                        _.extend(productGroups, data);
+                        c(productGroups);
+                    }).
+                    error(function(data, status, headers, config) {
+                        _.extend(productGroups, data);
+                        c(productGroups);
+                    });
+
+                return productGroups;
+            },
+
+            getProductGroupById: function BNGetProductGroupById (productGroupId, cb) {
+                var productGroup = {},
+                    c = _.isFunction(cb) ? cb : function () {};
+
+                $http({ method: 'GET', url: SB + 'products/groups/' + productGroupId }).
+                    success(function(data, status, headers, config) {
+                        _.extend(productGroup, data);
+                        c(productGroup);
+                    }).
+                    error(function(data, status, headers, config) {
+                        _.extend(productGroup, data);
+                        c(productGroup);
+                    });
+
+                return productGroup;
+            },
+
+            updateProductGroup: function BNUpdateProductGroup (productGroupId, mods, cb) {
+                var productGroup = {},
+                    c = _.isFunction(cb) ? cb : function () {};
+
+                $http({ method: 'PATCH', url: SB + 'products/groups/' + productGroupId, data: mods }).
+                    success(function(data, status, headers, config) {
+                        _.extend(productGroup, data);
+                        c(productGroup);
+                    }).
+                    error(function(data, status, headers, config) {
+                        _.extend(productGroup, data);
+                        c(productGroup);
+                    });
+
+                return productGroup;
             },
 
             getProductById: function BNGetProductById (productId, cb) {

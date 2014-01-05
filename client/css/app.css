@@ -291,14 +291,12 @@ a {
 }
 
 .productGroupRow {
-    text-indent: 16px;
     background: rgba(185, 92, 0, .1) !important;
 }
 
-.productGroupRow:before {
-    content: " ";
+.productGroupRow .openArrow {
     position: absolute;
-    top: 10px;
+    top: 9px;
     left: 5px;
     display: inline-block;
     width: 0;
@@ -306,4 +304,16 @@ a {
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
     border-top: 13px solid rgba(128, 70, 24, 0.6);
+}
+
+.productGroupRow .closedArrow {
+    position: absolute;
+    top: 8px;
+    left: 5px;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 13px solid rgba(128, 70, 24, 0.6);
 }

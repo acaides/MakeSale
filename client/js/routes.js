@@ -19,6 +19,21 @@ define([ './app' ], function (app) {
             controller: 'AddProductController'
         });
 
+        $routeProvider.when('/products/groups', {
+            templateUrl: '/html/views/products/productGroups.html',
+            controller: 'ProductGroupsController'
+        });
+
+        $routeProvider.when('/products/groups/add', {
+            templateUrl: '/html/views/products/addProductGroup.html',
+            controller: 'AddProductGroupController'
+        });
+
+        $routeProvider.when('/products/groups/:productGroupId', {
+            templateUrl: '/html/views/products/singleProductGroup.html',
+            controller: 'SingleProductGroupController'
+        });
+
         $routeProvider.when('/products/:productId', {
             templateUrl: '/html/views/products/singleProduct.html',
             controller: 'SingleProductController'

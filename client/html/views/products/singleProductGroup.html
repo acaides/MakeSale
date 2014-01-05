@@ -1,0 +1,45 @@
+<div class="view" style="margin-top: 48px;">
+    <div class="header">
+        <a href="/" class="headerTitle">
+            {{ productGroup.name }} Product Group
+        </a>
+        <div class="headerActions">
+            <a class="headerAction" ng-href="/products/groups/{{ productGroup.id}}/addProduct">
+                add product
+            </a>
+        </div>
+    </div>
+    <div>
+        <div>
+            <div style="background: #E5D9CF;">
+                Name:
+            </div>
+            <input class="textInputRow" type="text" ng-model="productGroup.name">
+        </div>
+        <div>
+            <div style="background: #E5D9CF;">
+                Products:
+            </div>
+            <a class="linkedRow" ng-repeat="product in products" ng-href="/products/{{ product.id }}">
+                <div class="columns" style="position: relative; top: 6px;">
+                    <div class="column" style="width: 95%;">{{ product.name }}</div>
+                </div>
+
+                <div class="rowFootnote">
+                    {{ product.description }}
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="viewMessage" ng-hide="productGroup" style="margin-top: 100px;">
+        No Such Product Group.<br><br><br><br>
+        <a href="/products/groups">see all product groups</a>
+    </div>
+
+    <div class="footer" ng-show="productGroup.name != origName">
+        <div class="footerActions">
+            <a class="footerAction" ng-click="update()">update</a>
+        </div>
+    </div>
+</div>

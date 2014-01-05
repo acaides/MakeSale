@@ -51,6 +51,17 @@ module.exports = {
             }
         }
 
+        if('inProductGroupId' in req.query) {
+            var productGroupId = parseInt(req.query.inProductGroupId, 10);
+
+            if(_.isNumber(productGroupId) && productGroupId > 0) {
+                options.productGroupId = productGroupId;
+            } else {
+                res.send(400, { error: 'Invalid product group id.' });
+                return;
+            }
+        }
+
         db.selectProducts(options, function (err, products) {
             if(err) {
                 res.send(500, { error: err });

@@ -56,6 +56,12 @@ module.exports = {
         'FROM `product` ' +
         'LEFT JOIN `product_group` ON `product`.`product_group_id` = `product_group`.`id` ' +
         'ORDER BY `product_group`.`name`, `product`.`name`;',
+    SELECT_PRODUCTS_BY_GROUP_ID: 'SELECT `product`.*, ' +
+        '`product_group`.`name` AS `product_group_name` ' +
+        'FROM `product` ' +
+        'LEFT JOIN `product_group` ON `product`.`product_group_id` = `product_group`.`id` ' +
+        'WHERE `product`.`product_group_id` = ? ' +
+        'ORDER BY `product_group`.`name`, `product`.`name`;',
     SELECT_PRODUCT_GROUPS: 'SELECT * FROM `product_group` ORDER BY `name`;',
     SELECT_PRODUCT_GROUP_BY_ID: 'SELECT * FROM `product_group` WHERE `id` = ?;',
     SELECT_PRODUCTS_FOR_ORDER: 'SELECT `default_prices`.`id`, ' +

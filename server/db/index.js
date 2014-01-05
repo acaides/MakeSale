@@ -395,6 +395,8 @@ var db = module.exports = {
                         cb('No such order.');
                     }
                 });
+            } else if('productGroupId' in options && _.isNumber(options.productGroupId) && options.productGroupId > 0) {
+                dbc.query(sqlTemplates.SELECT_PRODUCTS_BY_GROUP_ID, options.productGroupId, p);
             } else {
                 dbc.query(sqlTemplates.SELECT_PRODUCTS, p);
             }

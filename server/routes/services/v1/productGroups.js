@@ -81,8 +81,10 @@ module.exports = {
         db.selectProductGroupById(productGroupId, function (err, result) {
             if(err) {
                 res.send(500, { error: err });
+            } else if(result.length === 0) {
+                res.send(400, { error: 'No such product group.' });
             } else {
-                res.send(200, result);
+                res.send(200, result[0]);
             }
         });
     }

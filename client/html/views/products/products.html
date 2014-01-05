@@ -10,15 +10,31 @@
         </div>
     </div>
     <div>
-        <a class="linkedRow" ng-repeat="product in products" href="/products/{{ product.id }}">
-            <div class="columns" style="position: relative; top: 6px;">
-                <div class="column" style="width: 95%;">{{ product.name }}</div>
+        <div ng-repeat="product in products" class="linkedRow" ng-class="{ noArrow: product.group, productGroupRow: product.group}" ng-style="rowStyle(product)">
+            <div ng-if="product.group" ng-click="product.groupVisible = !product.groupVisible" style="font-style: italic; padding: 5px;">
+                &nbsp;{{ product.name }}
             </div>
 
-            <div class="rowFootnote">
-                {{ product.description }}
-            </div>
-        </a>
+            <a ng-if="product.group" ng-show="product.groupVisible" class="linkedRow" ng-repeat="groupProduct in product.products" href="/products/{{ groupProduct.id }}">
+                <div class="columns" style="position: relative; top: 6px;">
+                    <div class="column" style="width: 95%;">{{ groupProduct.name }}</div>
+                </div>
+
+                <div class="rowFootnote">
+                    {{ groupProduct.description }}
+                </div>
+            </a>
+
+            <a ng-if="!product.group" href="/products/{{ product.id }}" style="display: block; height: 100%; color: black;">
+                <div class="columns" style="position: relative; top: 6px;">
+                    <div class="column" style="width: 95%;">{{ product.name }}</div>
+                </div>
+
+                <div class="rowFootnote">
+                    {{ product.description }}
+                </div>
+            </a>
+        </div>
     </div>
     <div class="viewMessage" ng-hide="products.length" style="margin-top: 100px;">
         No Products.<br><br><br><br>

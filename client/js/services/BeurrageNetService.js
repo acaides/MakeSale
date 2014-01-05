@@ -8,7 +8,7 @@ define([ './module' ], function (services) {
             getProducts: function BNGetProducts (orderId) {
                 var products = [];
 
-                $http({ method: 'GET', url: SB + 'products' + (orderId ? ('?orderId=' + orderId) : '') }).
+                $http({ method: 'GET', url: SB + 'products?asGroups=true' + (orderId ? ('&byOrderId=' + orderId) : '') }).
                     success(function(data, status, headers, config) {
                         _.extend(products, data);
                     }).

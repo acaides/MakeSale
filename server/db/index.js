@@ -193,6 +193,40 @@ var db = module.exports = {
         }
     },
 
+    insertProductGroups: function insertProductGroups (newProductGroups, cb) {
+        var results = [],
+            requests = _.isArray(newProductGroups) ? newProductGroups : [ newProductGroups ],
+            done = function (result) {
+                results.push(result);
+
+                if(results.length === requests.length) {
+                    if(_.isFunction(cb)) {
+                        if(results.length === 1) {
+                            cb.apply(results[0], results[0]);
+                        } else {
+                            cb(false, results);
+                        }
+                    }
+                }
+            };
+
+        _.forEach(requests, function (newProductGroup) {
+            if('name' in newProductGroup) {
+                dbc.query(sqlTemplates.INSERT_PRODUCT_GROUP, [
+                    newProductGroup.name,
+                ], function (err, result) {
+                    if(err) {
+                        done([ err ]);
+                    } else {
+                        done([ false, _.extend(result, newProductGroup) ]);
+                    }
+                });
+            } else {
+                done([ 'Missing required information in newProductGroup.' ]);
+            }
+        });
+    },
+
     insertProducts: function insertProducts (newProducts, cb) {
         var results = [],
             requests = _.isArray(newProducts) ? newProducts : [ newProducts ],
@@ -216,7 +250,8 @@ var db = module.exports = {
                     newProduct.name,
                     newProduct.description,
                     newProduct.unitId,
-                    newProduct.enabled
+                    newProduct.enabled,
+                    newProduct.productGroupId
                 ], function (err, result) {
                     if(err) {
                         done([ err ]);
@@ -233,6 +268,20 @@ var db = module.exports = {
     updateProduct: function updateProduct (productId, mods, cb) {
         if(productId && mods) {
             dbc.query(sqlTemplates.UPDATE_PRODUCT + ' WHERE `id` = ' + productId + ';', cc2us(mods), function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, result);
+                }
+            });
+        } else {
+            cb('Missing required input.');
+        }
+    },
+
+    updateProductGroup: function updateProductGroups (productGroupId, mods, cb) {
+        if(productGroupId && mods) {
+            dbc.query(sqlTemplates.UPDATE_PRODUCT_GROUP + ' WHERE `id` = ' + productGroupId + ';', cc2us(mods), function (err, result) {
                 if(err) {
                     cb(err);
                 } else {
@@ -290,6 +339,36 @@ var db = module.exports = {
                     cb(false, us2cc(result));
                 }
             });
+        }
+    },
+
+    selectProductGroups: function selectProductGroups (cb) {
+        if(_.isFunction(cb)) {
+            var p = function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, us2cc(result));
+                }
+            };
+
+            dbc.query(sqlTemplates.SELECT_PRODUCT_GROUPS, p);
+        }
+    },
+
+    selectProductGroupById: function selectProductGroupById (productGroupId, cb) {
+        if(_.isNumber(productGroupId) && productGroupId > 0 && _.isFunction(cb)) {
+            var p = function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    cb(false, us2cc(result));
+                }
+            };
+
+            dbc.query(sqlTemplates.SELECT_PRODUCT_GROUP_BY_ID, productGroupId, p);
+        } else if(_.isFunction(cb)) {
+            cb('Bad parameters for selectProductGroupById.');
         }
     },
 

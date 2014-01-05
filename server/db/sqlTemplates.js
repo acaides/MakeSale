@@ -31,8 +31,10 @@ module.exports = {
     SELECT_CUSTOMER_LISTING: 'SELECT * FROM `customer` ORDER BY `name`;',
     SELECT_CUSTOMERS_BY_ID: 'SELECT * FROM `customer` WHERE `id` IN(?);',
     SELECT_CUSTOMERS_BY_EMAIL: 'SELECT * FROM `customer` WHERE ',
-    INSERT_PRODUCT: 'INSERT INTO `product` (`name`, `description`, `unit_id`, `enabled`) VALUES (?, ?, ?, ?);',
+    INSERT_PRODUCT: 'INSERT INTO `product` (`name`, `description`, `unit_id`, `enabled`, `product_group_id`) VALUES (?, ?, ?, ?, ?);',
+    INSERT_PRODUCT_GROUP: 'INSERT INTO `product_group` (`name`) VALUES (?);',
     UPDATE_PRODUCT: 'UPDATE `product` SET ?',
+    UPDATE_PRODUCT_GROUP: 'UPDATE `product_group` SET ?',
     INSERT_PRODUCT_PRICE: 'INSERT INTO `product_price` (`product_id`, `order_type_id`, `unit_price`, `customer_id`) VALUES (?, ?, ?, ?);',
 //    SELECT_PRODUCT_PRICES_BY_PRODUCT_ID: 'SELECT * FROM `product_price` WHERE `product_id` = ?;',
     SELECT_PRODUCT_PRICES_BY_PRODUCT_ID: 'SELECT `product_price`.*, ' +
@@ -54,6 +56,8 @@ module.exports = {
         'FROM `product` ' +
         'LEFT JOIN `product_group` ON `product`.`product_group_id` = `product_group`.`id` ' +
         'ORDER BY `product_group`.`name`, `product`.`name`;',
+    SELECT_PRODUCT_GROUPS: 'SELECT * FROM `product_group` ORDER BY `name`;',
+    SELECT_PRODUCT_GROUP_BY_ID: 'SELECT * FROM `product_group` WHERE `id` = ?;',
     SELECT_PRODUCTS_FOR_ORDER: 'SELECT `default_prices`.`id`, ' +
         '`default_prices`.`name`, ' +
         '`default_prices`.`description`, ' +

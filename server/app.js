@@ -68,6 +68,7 @@ var V1_SERVICES_BASE = '/services/v1/',
     customers = require('./routes/services/v1/customers'),
     products = require('./routes/services/v1/products'),
     productPrices = require('./routes/services/v1/productPrices'),
+    productGroups = require('./routes/services/v1/productGroups'),
     units = require('./routes/services/v1/units'),
     orders = require('./routes/services/v1/orders'),
     orderItems = require('./routes/services/v1/orderItems'),
@@ -103,6 +104,11 @@ app.patch(V1_SERVICES_BASE + 'customers/:customerId', customers.modify);
 app.post(V1_SERVICES_BASE + 'customers', customers.create);
 
 // Products routes
+app.get(V1_SERVICES_BASE + 'products/groups', productGroups.list);
+app.get(V1_SERVICES_BASE + 'products/groups/:productGroupId', productGroups.retrieve);
+app.post(V1_SERVICES_BASE + 'products/groups', productGroups.create);
+app.put(V1_SERVICES_BASE + 'products/groups/:productGroupId', productGroups.modify);
+app.patch(V1_SERVICES_BASE + 'products/groups/:productGroupId', productGroups.modify);
 app.get(V1_SERVICES_BASE + 'products', products.list);
 app.get(V1_SERVICES_BASE + 'products/:productId', products.retrieve);
 app.put(V1_SERVICES_BASE + 'products/:productId', products.modify);

@@ -5,7 +5,18 @@ define([ './module' ], function (controllers) {
             $.origName = pg.name;
         });
 
-        $.products = BN.getProducts(null, $routeParams.productGroupId);
+        $.products = BN.getProducts({ notAsGroups: true });
+        $.toggleProductInclusion = function SingleProductGroupControllerToggleProductInclusion (product) {
+            var cb = function () {
+                $.products = BN.getProducts({ notAsGroups: true });
+            };
+
+            if('' + product.productGroupId === '' + $routeParams.productGroupId) {
+                BN.updateProduct(product.id, { productGroupId: null }, cb);
+            } else {
+                BN.updateProduct(product.id, { productGroupId: $routeParams.productGroupId }, cb);
+            }
+        };
 
         $.update = function SingleProductGroupControllerUpdate () {
             BN.updateProductGroup($routeParams.productGroupId, $.productGroup, function (pg) {

@@ -2,7 +2,7 @@ define([ './module' ], function (controllers) {
     'use strict';
     controllers.controller('AddItemController', [ '$scope', 'BeurrageNet', '$routeParams', '$location', function ($, BN, $routeParams, $location) {
         $.order = BN.getOrderById($routeParams.orderId);
-        $.products = BN.getProducts($routeParams.orderId);
+        $.products = BN.getProducts({ orderId: $routeParams.orderId });
         $.quantity = 1;
         $.add = function () {
             $.adding = true;

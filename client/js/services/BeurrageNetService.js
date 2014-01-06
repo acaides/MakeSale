@@ -5,14 +5,15 @@ define([ './module' ], function (services) {
 
     services.service('BeurrageNet', [ '$http', function ($http) {
         return {
-            getProducts: function BNGetProducts (orderId, groupId, cb) {
+            getProducts: function BNGetProducts (options, cb) {
                 var products = [],
-                    c = _.isFunction(cb) ? cb : function () {};
+                    o = _.isPlainObject(options) ? options : {},
+                    c = _.isFunction(options) ? options : (_.isFunction(cb) ? cb : function () {});
 
-                $http({ method: 'GET', url: SB + 'products?' +
-                    + (!groupId ? 'asGroups=true' : '')
-                    + (orderId ? ('&byOrderId=' + orderId) : '')
-                    + (groupId ? ('&inProductGroupId=' + groupId) : '') }).
+                $http({ method: 'GET', url: SB + 'products?'
+                    + (!o.productGroupId && !o.notAsGroups ? 'asGroups=true' : '')
+                    + (o.orderId ? ('&byOrderId=' + o.orderId) : '')
+                    + (o.productGroupId ? ('&inProductGroupId=' + o.productGroupId) : '') }).
                     success(function(data, status, headers, config) {
                         _.extend(products, data);
                         c(products);
@@ -47,6 +48,23 @@ define([ './module' ], function (services) {
                     c = _.isFunction(cb) ? cb : function () {};
 
                 $http({ method: 'GET', url: SB + 'products/groups/' + productGroupId }).
+                    success(function(data, status, headers, config) {
+                        _.extend(productGroup, data);
+                        c(productGroup);
+                    }).
+                    error(function(data, status, headers, config) {
+                        _.extend(productGroup, data);
+                        c(productGroup);
+                    });
+
+                return productGroup;
+            },
+
+            addProductGroup: function BNAddProductGroup (newProductGroup, cb) {
+                var productGroup = {},
+                    c = _.isFunction(cb) ? cb : function () {};
+
+                $http({ method: 'POST', url: SB + 'products/groups/', data: newProductGroup }).
                     success(function(data, status, headers, config) {
                         _.extend(productGroup, data);
                         c(productGroup);

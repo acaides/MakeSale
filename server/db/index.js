@@ -10,10 +10,10 @@ var mysql = require('mysql'),
     bcrypt = require('bcrypt'),
     _ = require('lodash');
 
-function us2cc (obj) {
+function us2cc (obj, preserveNulls) {
     if(_.isObject(obj) && !_.isDate(obj)) {
         return _.transform(obj, function (result, value, key) {
-            if(_.isNull(value) || _.isUndefined(value) ) {
+            if(!preserveNulls && (_.isNull(value) || _.isUndefined(value))) {
                 return;
             }
 
@@ -31,10 +31,10 @@ function us2cc (obj) {
     }
 }
 
-function cc2us (obj) {
+function cc2us (obj, preserveNulls) {
     if(_.isObject(obj) && !_.isDate(obj)) {
         return _.transform(obj, function (result, value, key) {
-            if(_.isNull(value) || _.isUndefined(value) ) {
+            if(!preserveNulls && (_.isNull(value) || _.isUndefined(value))) {
                 return;
             }
 
@@ -213,7 +213,7 @@ var db = module.exports = {
         _.forEach(requests, function (newProductGroup) {
             if('name' in newProductGroup) {
                 dbc.query(sqlTemplates.INSERT_PRODUCT_GROUP, [
-                    newProductGroup.name,
+                    newProductGroup.name
                 ], function (err, result) {
                     if(err) {
                         done([ err ]);
@@ -267,7 +267,7 @@ var db = module.exports = {
 
     updateProduct: function updateProduct (productId, mods, cb) {
         if(productId && mods) {
-            dbc.query(sqlTemplates.UPDATE_PRODUCT + ' WHERE `id` = ' + productId + ';', cc2us(mods), function (err, result) {
+            dbc.query(sqlTemplates.UPDATE_PRODUCT + ' WHERE `id` = ' + productId + ';', cc2us(mods, true), function (err, result) {
                 if(err) {
                     cb(err);
                 } else {

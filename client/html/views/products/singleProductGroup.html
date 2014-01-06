@@ -1,13 +1,8 @@
 <div class="view" style="margin-top: 48px;">
     <div class="header">
-        <a href="/" class="headerTitle">
+        <a href="/products/groups" class="headerTitle">
             {{ productGroup.name }} Product Group
         </a>
-        <div class="headerActions">
-            <a class="headerAction" ng-href="/products/groups/{{ productGroup.id}}/addProduct">
-                add product
-            </a>
-        </div>
     </div>
     <div>
         <div>
@@ -18,9 +13,13 @@
         </div>
         <div>
             <div style="background: #E5D9CF;">
-                Products:
+                Tap products to toggle inclusion in this group:
             </div>
-            <a class="linkedRow" ng-repeat="product in products" ng-href="/products/{{ product.id }}">
+            <div class="row"
+                 ng-hide="product.productGroupId && product.productGroupId != productGroup.id"
+                 ng-repeat="product in products | orderBy: 'name'"
+                 ng-class="{ selectedRow: product.productGroupId == productGroup.id }"
+                 ng-click="toggleProductInclusion(product)">
                 <div class="columns" style="position: relative; top: 6px;">
                     <div class="column" style="width: 95%;">{{ product.name }}</div>
                 </div>
@@ -28,7 +27,7 @@
                 <div class="rowFootnote">
                     {{ product.description }}
                 </div>
-            </a>
+            </div>
         </div>
     </div>
 

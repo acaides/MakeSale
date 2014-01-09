@@ -70,32 +70,70 @@ module.exports = {
         '`default_prices`.`unit_id`, ' +
         '`default_prices`.`unit_name`, ' +
         '`default_prices`.`enabled`, ' +
+        '`default_prices`.`product_group_id`, ' +
+        '`default_prices`.`product_group_name`, ' +
         'Ifnull(`customer_specific`.`customer_price`, `unit_price`) AS ' +
         '`unit_price` ' +
         'FROM (SELECT `product`.*, ' +
         '`product_price`.`product_id`, ' +
         '`product_price`.`unit_price`, ' +
-        '`unit`.`name` AS `unit_name` ' +
+        '`unit`.`name` AS `unit_name`, ' +
+        '`product_group`.`name` AS `product_group_name` ' +
         'FROM   `product` ' +
         'JOIN `product_price` ' +
         'ON `product_price`.`product_id` = `product`.`id` ' +
-        'AND `product_price`.`order_type_id` = ? ' +
+        'AND `product_price`.`order_type_id` = 1 ' +
         'JOIN `unit` ' +
         'ON `unit`.`id` = `product`.`unit_id` ' +
+        'LEFT JOIN `product_group` ON `product`.`product_group_id` = `product_group`.`id` ' +
         'WHERE  `product_price`.`customer_id` IS NULL) default_prices ' +
         'LEFT JOIN (SELECT `product`.*, ' +
         '`product_price`.`product_id`, ' +
         '`product_price`.`unit_price` AS `customer_price`, ' +
-        '`unit`.`NAME` AS `unit_name` ' +
+        '`unit`.`name` AS `unit_name`, ' +
+        '`product_group`.`name` AS `product_group_name` ' +
         'FROM   `product` ' +
         'JOIN `product_price` ' +
         'ON `product_price`.`product_id` = `product`.`id` ' +
-        'AND `product_price`.`order_type_id` = ? ' +
+        'AND `product_price`.`order_type_id` = 1 ' +
         'JOIN `unit` ' +
         'ON `unit`.`id` = `product`.`unit_id` ' +
-        'WHERE  `product_price`.`customer_id` = ?) `customer_specific` ' +
-        'ON `default_prices`.`product_id` = ' +
-        '`customer_specific`.`product_id` ORDER BY `name`;',
+        'LEFT JOIN `product_group` ON `product`.`product_group_id` = `product_group`.`id` ' +
+        'WHERE  `product_price`.`customer_id` = 1) `customer_specific` ' +
+        'ON `default_prices`.`product_id` = `customer_specific`.`product_id` ' +
+        'ORDER BY `product_group_name`, `name`;',
+//    SELECT_PRODUCTS_FOR_ORDER: 'SELECT `default_prices`.`id`, ' +
+//        '`default_prices`.`name`, ' +
+//        '`default_prices`.`description`, ' +
+//        '`default_prices`.`unit_id`, ' +
+//        '`default_prices`.`unit_name`, ' +
+//        '`default_prices`.`enabled`, ' +
+//        'Ifnull(`customer_specific`.`customer_price`, `unit_price`) AS ' +
+//        '`unit_price` ' +
+//        'FROM (SELECT `product`.*, ' +
+//        '`product_price`.`product_id`, ' +
+//        '`product_price`.`unit_price`, ' +
+//        '`unit`.`name` AS `unit_name` ' +
+//        'FROM   `product` ' +
+//        'JOIN `product_price` ' +
+//        'ON `product_price`.`product_id` = `product`.`id` ' +
+//        'AND `product_price`.`order_type_id` = ? ' +
+//        'JOIN `unit` ' +
+//        'ON `unit`.`id` = `product`.`unit_id` ' +
+//        'WHERE  `product_price`.`customer_id` IS NULL) default_prices ' +
+//        'LEFT JOIN (SELECT `product`.*, ' +
+//        '`product_price`.`product_id`, ' +
+//        '`product_price`.`unit_price` AS `customer_price`, ' +
+//        '`unit`.`NAME` AS `unit_name` ' +
+//        'FROM   `product` ' +
+//        'JOIN `product_price` ' +
+//        'ON `product_price`.`product_id` = `product`.`id` ' +
+//        'AND `product_price`.`order_type_id` = ? ' +
+//        'JOIN `unit` ' +
+//        'ON `unit`.`id` = `product`.`unit_id` ' +
+//        'WHERE  `product_price`.`customer_id` = ?) `customer_specific` ' +
+//        'ON `default_prices`.`product_id` = ' +
+//        '`customer_specific`.`product_id` ORDER BY `name`;',
 //    SELECT_PRODUCTS_FOR_ORDER: 'SELECT `product`.*, `product_price`.`unit_price`, `unit`.`name` AS `unit_name` ' +
 //        'FROM `product` ' +
 //        'JOIN `product_price` ON `product_price`.`product_id` = `product`.`id` ' +

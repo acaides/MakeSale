@@ -12,7 +12,7 @@ define([ './module' ], function (services) {
 
                 $http({ method: 'GET', url: SB + 'products?'
                     + (!o.productGroupId && !o.notAsGroups ? 'asGroups=true' : '')
-                    + (o.orderId ? ('&byOrderId=' + o.orderId) : '')
+                    + (o.orderId ? ('&forOrderId=' + o.orderId) : '')
                     + (o.productGroupId ? ('&inProductGroupId=' + o.productGroupId) : '') }).
                     success(function(data, status, headers, config) {
                         _.extend(products, data);

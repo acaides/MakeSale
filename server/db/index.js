@@ -1262,10 +1262,10 @@ var db = module.exports = {
     },
 
     deleteInvoiceOrder: function deleteInvoiceOrder (invoiceId, orderId, cb) {
-        if(_.isNumber(orderId) && orderId < 1) {
+        if(_.isNumber(orderId) && orderId > 0) {
             // TODO: Make this transactional!
             // First, change the order item quantity.
-            dbc.query(sqlTemplates.DELETE_INVOICE_ORDER_BY_ORDER_ID, [ orderId ], function (err, result) {
+            dbc.query(sqlTemplates.DELETE_INVOICE_ORDER_BY_ORDER_ID, [ invoiceId, orderId ], function (err, result) {
                 if(err) {
                     cb(err);
                 } else {

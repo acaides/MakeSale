@@ -27,10 +27,24 @@ define([ './module' ], function (controllers) {
             });
         };
 
-        $.removeOrder = function (item) {
-//            BN.updateOrderItemQuantity($.order.id, item.id, 0, function (order) {
-//                $.order = order;
-//            });
+        $.orderClick = function (order) {
+            if($.removingOrder === order) {
+                delete $.removingOrder;
+            } else {
+                $location.url('/orders/' +  order.id + '?from=/invoices/' + $.invoice.id);
+            }
+        };
+
+        $.removeOrder = function (order, force) {
+            if(!force) {
+                $.removingOrder = order;
+            } else {
+                delete $.removingOrder;
+
+                BN.removeInvoiceOrder($.invoice.id, order.id, function (invoice) {
+                    $.invoice = invoice;
+                });
+            }
         };
 
         $.selectOrder = function (order) {

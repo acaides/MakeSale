@@ -536,6 +536,29 @@ define([ './module' ], function (services) {
                 return res;
             },
 
+            removeInvoiceOrder: function BNRemoveInvoiceOrder (invoiceId, orderId, cb) {
+                var c = _.isFunction(cb) ? cb : function () {},
+                    res = {};
+
+                $http({ method: 'DELETE', url: SB + 'invoices/' + invoiceId + '/orders/' + orderId }).
+                    success(function(data, status, headers, config) {
+                        _.extend(res, data);
+
+                        _.forEach(res.orders, function (order) {
+                            order.createdTimestamp = new Date(order.createdTimestamp);
+                            order.modifiedTimestamp = new Date(order.modifiedTimestamp);
+                        });
+
+                        c(res);
+                    }).
+                    error(function(data, status, headers, config) {
+                        _.extend(res, data);
+                        c(res);
+                    });
+
+                return res;
+            },
+
             updateInvoice: function BNUpdateInvoice (invoiceId, mods, cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     invoice = {

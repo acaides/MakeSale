@@ -144,7 +144,7 @@ app.put(V1_SERVICES_BASE + 'invoices/:invoiceId', invoices.modify);
 app.patch(V1_SERVICES_BASE + 'invoices/:invoiceId', invoices.modify);
 app.get(V1_SERVICES_BASE + 'invoices/:invoiceId/orders', invoiceOrders.list);
 app.post(V1_SERVICES_BASE + 'invoices/:invoiceId/orders', invoiceOrders.create);
-app.delete(V1_SERVICES_BASE + 'invoices/:invoiceId/orders/:invoiceItemId', invoiceOrders.destroy);
+app.delete(V1_SERVICES_BASE + 'invoices/:invoiceId/orders/:orderId', invoiceOrders.destroy);
 
 // Document Routes //
 

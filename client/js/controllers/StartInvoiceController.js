@@ -34,6 +34,11 @@ define([ './module' ], function (controllers) {
                 name: 'All Orders Completed In ' + monthNames[d2s.getMonth()],
                 start: d2s.toString(),
                 end: d2e.toString()
+            },
+            {
+                name: 'Nothing',
+                start: null,
+                end: null
             }
         ];
         $.selectOrderSuggestion = function (orderSuggestion) {
@@ -52,22 +57,26 @@ define([ './module' ], function (controllers) {
                 billedToPhone: $.selectedCustomer.phone,
                 billedToEmail: $.selectedCustomer.email
             }, function (invoice) {
-                BN.getOrders({
-                    customerId: $.selectedCustomer.id,
-                    statusId: 2,
-                    modifiedOnOrAfter: $.selectedOrderSuggestion.start,
-                    modifiedOnOrBefore: $.selectedOrderSuggestion.end
-                }, function (orders) {
-                    if(orders.length) {
-                        BN.addInvoiceOrders(invoice.id, orders, function (orders) {
-                            if(!invoice.error) {
-                                $location.path('/invoices/' + invoice.id);
-                            }
-                        });
-                    } else {
-                        $location.path('/invoices/' + invoice.id);
-                    }
-                });
+                if($.selectedOrderSuggestion.start !== null) {
+                    BN.getOrders({
+                        customerId: $.selectedCustomer.id,
+                        statusId: 2,
+                        modifiedOnOrAfter: $.selectedOrderSuggestion.start,
+                        modifiedOnOrBefore: $.selectedOrderSuggestion.end
+                    }, function (orders) {
+                        if(orders.length) {
+                            BN.addInvoiceOrders(invoice.id, orders, function (orders) {
+                                if(!invoice.error) {
+                                    $location.path('/invoices/' + invoice.id);
+                                }
+                            });
+                        } else {
+                            $location.path('/invoices/' + invoice.id);
+                        }
+                    });
+                } else {
+                    $location.path('/invoices/' + invoice.id);
+                }
             });
         };
     } ]);

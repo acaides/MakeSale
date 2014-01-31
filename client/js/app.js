@@ -9,6 +9,7 @@ define([
         'ngRoute',
         'ngResource',
         'ngAnimate',
+        'ngTouch',
         'net.beurrage.services',
         'net.beurrage.controllers'
     ]);

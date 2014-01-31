@@ -193,7 +193,7 @@ module.exports = {
         '`billed_to_name`, `billed_to_address`, `billed_to_phone`, `billed_to_email`, `billed_to_customer_id`) ' +
         'VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?);',
     SELECT_INVOICE_BY_ID: sqlStubs.SELECT_INVOICE + ' WHERE `invoice`.`id` = ?;',
-    DELETE_INVOICE_ORDER_BY_ORDER_ID: 'DELETE FROM `invoice_order` WHERE `id` = ? AND `order_id` = ?;',
+    DELETE_INVOICE_ORDER_BY_ORDER_ID: 'DELETE FROM `invoice_order` WHERE `invoice_id` = ? AND `order_id` = ?;',
     SELECT_INVOICE_ORDERS_BY_INVOICE_ID: 'SELECT `order`.`id`, ' +
         '`order`.`type_id`, `order_type`.`name` AS `type_name`, ' +
         '`order`.`status_id`, `order_status`.`name` AS `status_name`, ' +

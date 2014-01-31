@@ -55,7 +55,7 @@ html(lang="en")
         div
             - invoice.orders.forEach(function (order) {
             div.order
-                span.orderName #{ order.name ? order.name : moment(order.modifiedTimestamp).format('dddd - MM/DD/YY') }
+                span.orderName #{ order.name ? order.name : moment(order.createdTimestamp).format('dddd - MM/DD/YY') }
                 table.orderTable
                     thead
                         tr.header

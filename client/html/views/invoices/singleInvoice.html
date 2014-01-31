@@ -1,4 +1,4 @@
-<div class="view" style="margin-top: 150px;" ng-click="clearSelectedOrder()">
+<div class="view" style="margin-top: 150px;">
     <div class="viewMessage" ng-show="invoice.loading">
         Loading...
     </div>
@@ -13,7 +13,7 @@
                 Invoice #{{ invoice.id }}
             </a>
             <div class="headerActions" ng-show="invoice.statusId == 1">
-                <a class="headerAction" href="/invoice/{{ invoice.id }}/edit">edit</a>
+                <a class="headerAction" ng-href="/invoices/{{ invoice.id }}/addOrder">add order</a>
             </div>
             <div class="subHeader">
                 <div style="text-indent: 4px;">
@@ -40,34 +40,34 @@
                 There are no orders in this invoice.<br><br>
                 <a ng-show="invoice.statusId == 1" href="/invoices/{{ invoice.id }}/addOrder" style="font-weight: bold;">add an order now</a>
             </div>
-            <div>
-                <a class="linkedRow"
-                   ng-repeat="order in invoice.orders"
-                   ng-class="{ selectedRow: selectedOrder == order }"
-                   href="/orders/{{ order.id }}?from=/invoices/{{ invoice.id }}">
-                    <div class="columns" style="top: 12px;">
-                        <div class="column"
-                             style="width: 20%; font-size: 16px; text-align: center;"
-                             ng-click="selectOrder(order); $event.stopPropagation();">
-                            {{ order.itemCount }}
-                        </div>
-                        <div class="column" style="width: 55%; font-size: 16px;">
-                            {{ order.name || order.createdTimestamp.toDateString() }}
-                        </div>
-                        <div class="column" style="width: 25%; font-size: 16px;">
-                            {{ order.total | currency }}
-                        </div>
-                    </div>
-                </a>
-            </div>
 
+            <div ng-click="orderClick(order)"
+                 ng-class="{ selectedRow: removingOrder == order }"
+                 ng-swipe-right="removeOrder(order)"
+                 class="linkedRow"
+                 ng-repeat="order in invoice.orders">
+                <div class="columns" style="top: 12px;">
+                    <div class="column"
+                         style="width: 20%; font-size: 16px; text-align: center;">
+                        {{ order.itemCount }}
+                    </div>
+                    <div class="column" style="width: 55%; font-size: 16px;">
+                        {{ order.name || order.createdTimestamp.toDateString() }}
+                    </div>
+                    <div ng-hide="removingOrder == order" class="column" style="width: 25%; font-size: 16px;" >
+                        {{ order.total | currency }}
+                    </div>
+                    <div ng-show="removingOrder == order" class="column" style="width: 25%; font-size: 16px;" ng-click="removeOrder(order, true); $event.stopPropagation();">
+                        remove?
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="footer" ng-show="invoice.orders.length">
             <div class="footerText">{{ orderCountText(invoice) }}, {{ invoice.total | currency }}</div>
             <div class="footerActions">
-                <a class="footerAction" target="_self" ng-href="/documents/invoices/{{ invoice.id }}?ac={{ invoice.accessCode }}">view web doc</a>
-                <a class="footerAction" target="_self" ng-href="/documents/invoices/{{ invoice.id }}.pdf?ac={{ invoice.accessCode }}">view pdf doc</a>
-                <a class="footerAction" ng-show="invoice.statusId == 1" ng-href="/invoices/{{ invoice.id }}/addOrder">add order</a>
+                <a class="footerAction" target="_blank" ng-href="/documents/invoices/{{ invoice.id }}?ac={{ invoice.accessCode }}">html</a>
+                <a class="footerAction" target="_blank" ng-href="/documents/invoices/{{ invoice.id }}.pdf?ac={{ invoice.accessCode }}">pdf</a>
                 <a class="footerAction" ng-show="invoice.statusId == 1" ng-click="complete()">complete</a>
                 <a class="footerAction" ng-show="invoice.statusId == 2 && !sendAck.loading" ng-click="send()">send</a>
                 <a class="footerAction" ng-show="invoice.statusId == 2 && sendAck.loading" >sending...</a>

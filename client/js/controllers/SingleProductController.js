@@ -1,10 +1,10 @@
 define([ './module' ], function (controllers) {
     'use strict';
-    controllers.controller('SingleProductController', [ '$scope', 'BeurrageNet', '$routeParams', '$location', function ($, BN, $routeParams, $location) {
-        $.product = BN.getProductById($routeParams.productId, function (product) {
+    controllers.controller('SingleProductController', [ '$scope', 'MSApi', '$routeParams', '$location', function ($, MSApi, $routeParams, $location) {
+        $.product = MSApi.getProductById($routeParams.productId, function (product) {
             $.selectUnit(product.unitId);
         });
-        $.units = BN.getUnits();
+        $.units = MSApi.getUnits();
         $.selectUnit = function (unit) {
             if($.selectedUnit === unit) {
                 delete $.selectedUnit;
@@ -12,10 +12,10 @@ define([ './module' ], function (controllers) {
                 $.selectedUnit = unit;
             }
         };
-        $.prices = BN.getProductPrices($routeParams.productId);
+        $.prices = MSApi.getProductPrices($routeParams.productId);
 
         $.update = function SingleProductControllerUpdate () {
-            BN.updateProduct($.product.id, $.product, function () {
+            MSApi.updateProduct($.product.id, $.product, function () {
                 $location.path('/products');
             });
         };

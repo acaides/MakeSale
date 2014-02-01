@@ -1,1 +1,1 @@
-define([ '' ], function () {});
+define([ './MSAuthDirective' ], function () {});

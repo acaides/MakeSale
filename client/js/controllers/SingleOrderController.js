@@ -1,10 +1,10 @@
 define([ './module' ], function (controllers) {
     'use strict';
     controllers.controller('SingleOrderController', [
-        '$scope', 'BeurrageNet', '$routeParams', '$location', '$timeout', '$window',
-        function ($, BN, $routeParams, $location, $timeout, $window) {
+        '$scope', 'MSApi', '$routeParams', '$location', '$timeout', '$window',
+        function ($, MSApi, $routeParams, $location, $timeout, $window) {
             $.from = $routeParams.from;
-            $.order = BN.getOrderById($routeParams.orderId);
+            $.order = MSApi.getOrderById($routeParams.orderId);
 
             $.itemCountText = function () {
                 if($.order.itemCount === 0) {
@@ -22,7 +22,7 @@ define([ './module' ], function (controllers) {
                 $timeout.cancel(p);
 
                 var f = function () {
-                    BN.updateOrderItemQuantity($.order.id, item.id, item.quantity, function (order) {
+                    MSApi.updateOrderItemQuantity($.order.id, item.id, item.quantity, function (order) {
                         $.order = order;
                     });
                 };
@@ -35,14 +35,14 @@ define([ './module' ], function (controllers) {
             };
 
             $.complete = function () {
-                BN.updateOrder($.order.id, { statusId: 2 }, function (order) {
+                MSApi.updateOrder($.order.id, { statusId: 2 }, function (order) {
                     angular.extend($.order, order);
                     $.confirmComplete = false;
                 });
             };
 
             $.removeItem = function (item) {
-                BN.updateOrderItemQuantity($.order.id, item.id, 0, function (order) {
+                MSApi.updateOrderItemQuantity($.order.id, item.id, 0, function (order) {
                     $.order = order;
                 });
             };

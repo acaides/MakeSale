@@ -1,8 +1,8 @@
 define([ './module' ], function (controllers) {
     'use strict';
-    controllers.controller('AddProductPriceController', [ '$scope', 'BeurrageNet', '$routeParams', '$location', function ($, BN, $routeParams, $location) {
-        $.product = BN.getProductById($routeParams.productId);
-        $.customers = BN.getCustomers();
+    controllers.controller('AddProductPriceController', [ '$scope', 'MSApi', '$routeParams', '$location', function ($, MSApi, $routeParams, $location) {
+        $.product = MSApi.getProductById($routeParams.productId);
+        $.customers = MSApi.getCustomers();
         $.selectCustomer = function (customer) {
             if($.selectedCustomer === customer) {
                 delete $.selectedCustomer;
@@ -11,7 +11,7 @@ define([ './module' ], function (controllers) {
             }
         };
 
-        $.orderTypes = BN.getOrderTypes();
+        $.orderTypes = MSApi.getOrderTypes();
         $.selectOrderType = function (orderType) {
             if($.selectedOrderType === orderType) {
                 delete $.selectedOrderType;
@@ -30,7 +30,7 @@ define([ './module' ], function (controllers) {
                 p.customerId = $.selectedCustomer;
             }
 
-            BN.addProductPrice($routeParams.productId, p, function (productPrice) {
+            MSApi.addProductPrice($routeParams.productId, p, function (productPrice) {
                 $location.path('/products/' + $routeParams.productId);
             });
         };

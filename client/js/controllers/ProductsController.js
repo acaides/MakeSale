@@ -1,7 +1,7 @@
 define([ './module' ], function (controllers) {
     'use strict';
-    controllers.controller('ProductsController', [ '$scope', 'BeurrageNet', function ($, BN) {
-        $.products = BN.getProducts();
+    controllers.controller('ProductsController', [ '$scope', 'MSApi', function ($, MSApi) {
+        $.products = MSApi.getProducts();
 
         var pi = 0,
             groupStyle = {

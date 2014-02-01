@@ -1,6 +1,6 @@
 define([ './module' ], function (controllers) {
     'use strict';
-    controllers.controller('StartOrderController', [ '$scope', 'BeurrageNet', '$location', function ($, BN, $location) {
+    controllers.controller('StartOrderController', [ '$scope', 'MSApi', '$location', function ($, MSApi, $location) {
         function buildSuggestions() {
             var today = new Date();
             $.suggestedNames = [];
@@ -9,7 +9,7 @@ define([ './module' ], function (controllers) {
             }
         }
 
-        $.customers = BN.getCustomers();
+        $.customers = MSApi.getCustomers();
         $.selectCustomer = function (customer) {
             if($.selectedCustomer === customer) {
                 delete $.selectedCustomer;
@@ -20,7 +20,7 @@ define([ './module' ], function (controllers) {
             buildSuggestions();
         };
 
-        $.types = BN.getOrderTypes();
+        $.types = MSApi.getOrderTypes();
         $.selectType = function (type) {
             if($.selectedType === type) {
                 delete $.selectedType;
@@ -32,7 +32,7 @@ define([ './module' ], function (controllers) {
         };
 
         $.start = function () {
-            BN.startOrder($.selectedCustomer.id, $.selectedType.id, $.name, function (order) {
+            MSApi.startOrder($.selectedCustomer.id, $.selectedType.id, $.name, function (order) {
                 $location.path('/orders/' + order.id);
             });
         };

@@ -1,4 +1,4 @@
 define([ 'angular' ], function (ng) {
     'use strict';
-    return ng.module('net.beurrage.services', []);
+    return ng.module('co.makesale.client.mobile.web.services', []);
 });

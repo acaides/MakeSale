@@ -1,8 +1,8 @@
 define([ './module' ], function (controllers) {
     'use strict';
-    controllers.controller('EditOrderController', [ '$scope', 'BeurrageNet', '$routeParams', '$location', function ($, BN, $routeParams, $location) {
-        $.order = BN.getOrderById($routeParams.orderId, function (order) {
-            $.customers = BN.getCustomers(function (customers) {
+    controllers.controller('EditOrderController', [ '$scope', 'MSApi', '$routeParams', '$location', function ($, MSApi, $routeParams, $location) {
+        $.order = MSApi.getOrderById($routeParams.orderId, function (order) {
+            $.customers = MSApi.getCustomers(function (customers) {
                 angular.forEach(customers, function (customer) {
                     if(customer.id === order.customerId) {
                         $.selectedCustomer = customer;
@@ -11,7 +11,7 @@ define([ './module' ], function (controllers) {
                 });
             });
 
-            $.types = BN.getOrderTypes(function (types) {
+            $.types = MSApi.getOrderTypes(function (types) {
                 angular.forEach(types, function (type) {
                     if(type.id === order.typeId) {
                         $.selectedType = type;
@@ -58,7 +58,7 @@ define([ './module' ], function (controllers) {
             }
 
             if(mod) {
-                BN.updateOrder($.order.id, mods, function (order) {
+                MSApi.updateOrder($.order.id, mods, function (order) {
                     $location.path('/orders/' + order.id);
                 });
             }

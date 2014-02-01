@@ -8,11 +8,11 @@ body {
 
 .viewUnderlay {
     background: white;
-    width: 512px;
+    width: 800px;
     position: fixed;
     height: 100%;
     left: 50%;
-    margin-left: -256px;
+    margin-left: -400px;
     z-index: -1;
     top: 0;
     box-shadow: 0px 0px 3px black;
@@ -22,7 +22,7 @@ body {
     position: relative;
     margin: 48px auto 0 auto;
     width: 100%;
-    max-width: 512px;
+    max-width: 800px;
 }
 
 .viewMessage {
@@ -31,7 +31,7 @@ body {
 
 .header, .footer {
     width: 100%;
-    max-width: 512px;
+    max-width: 800px;
     margin: auto;
 
     position: fixed;
@@ -85,7 +85,22 @@ body {
     border-right: 8px solid rgba(255, 255, 255, 0.3);
 }
 
+button {
+    color: #00B7FF;
+    border: none;
+    font: inherit;
+    display: block;
+    appearance: normal;
+    -moz-appearance: normal; /* Firefox */
+    -webkit-appearance: normal; /* Safari and Chrome */
+}
+
+button.headerAction, button.footerAction {
+    padding: 0 6px 0 6px;
+}
+
 .headerAction, .footerAction {
+    color: #00B7FF;
     display: inline-block;
     padding: 12px 6px 6px 6px;
     min-width: 48px;
@@ -287,7 +302,7 @@ a {
 
 .homeLogo {
     width: 100%;
-    max-width: 512px;
+    max-width: 800px;
 }
 
 .productGroupRow {

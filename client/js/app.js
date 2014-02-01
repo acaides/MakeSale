@@ -1,16 +1,18 @@
 define([
     'angular',
     './services/index',
-    './controllers/index'
+    './controllers/index',
+    './directives/index'
 ], function (ng) {
     'use strict';
 
-    return ng.module('net.beurrage', [
+    return ng.module('co.makesale.client.mobile.web', [
         'ngRoute',
         'ngResource',
         'ngAnimate',
         'ngTouch',
-        'net.beurrage.services',
-        'net.beurrage.controllers'
+        'co.makesale.client.mobile.web.services',
+        'co.makesale.client.mobile.web.controllers',
+        'co.makesale.client.mobile.web.directives'
     ]);
 });

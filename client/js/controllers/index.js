@@ -1,5 +1,6 @@
 define([
     './HomeController',
+    './MSAuthController',
     './ProductsController',
     './ProductGroupsController',
     './AddProductGroupController',

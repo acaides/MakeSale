@@ -1,7 +1,7 @@
 define([ './module' ], function (controllers) {
     'use strict';
-    controllers.controller('InvoicesController', [ '$scope', 'BeurrageNet', function ($, BN) {
-        BN.getInvoices(function (invoices) {
+    controllers.controller('InvoicesController', [ '$scope', 'MSApi', function ($, MSApi) {
+        MSApi.getInvoices(function (invoices) {
             $.allInvoices = invoices;
             $.unpaidInvoices = [];
 

@@ -9,6 +9,11 @@ define([ './app' ], function (app) {
             controller: 'HomeController'
         });
 
+        $routeProvider.when('/auth', {
+            templateUrl: '/html/views/auth.html',
+            controller: 'MSAuthController'
+        });
+
         $routeProvider.when('/products', {
             templateUrl: '/html/views/products/products.html',
             controller: 'ProductsController'

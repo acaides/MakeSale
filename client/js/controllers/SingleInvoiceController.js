@@ -1,7 +1,7 @@
 define([ './module' ], function (controllers) {
     'use strict';
-    controllers.controller('SingleInvoiceController', [ '$scope', 'BeurrageNet', '$routeParams', '$location', function ($, BN, $routeParams, $location) {
-        $.invoice = BN.getInvoiceById($routeParams.invoiceId);
+    controllers.controller('SingleInvoiceController', [ '$scope', 'MSApi', '$routeParams', '$location', function ($, MSApi, $routeParams, $location) {
+        $.invoice = MSApi.getInvoiceById($routeParams.invoiceId);
         $.sendAck = {};
 
         $.orderCountText = function () {
@@ -15,14 +15,14 @@ define([ './module' ], function (controllers) {
         };
 
         $.complete = function () {
-            BN.updateInvoice($.invoice.id, { statusId: 2 }, function (invoice) {
+            MSApi.updateInvoice($.invoice.id, { statusId: 2 }, function (invoice) {
                 _.extend($.invoice, invoice);
                 //$location.path('/invoices');
             });
         };
 
         $.send = function () {
-            BN.sendInvoice($.invoice.id, function (ack) {
+            MSApi.sendInvoice($.invoice.id, function (ack) {
                 _.extend($.sendAck, ack);
             });
         };
@@ -41,7 +41,7 @@ define([ './module' ], function (controllers) {
             } else {
                 delete $.removingOrder;
 
-                BN.removeInvoiceOrder($.invoice.id, order.id, function (invoice) {
+                MSApi.removeInvoiceOrder($.invoice.id, order.id, function (invoice) {
                     $.invoice = invoice;
                 });
             }

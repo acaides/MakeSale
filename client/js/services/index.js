@@ -1,1 +1,4 @@
-define([ './BeurrageNetService' ], function () {});
+define([
+    './MSApiService',
+    './MSAuthService'
+], function () {});

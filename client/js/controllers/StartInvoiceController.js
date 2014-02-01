@@ -1,7 +1,7 @@
 define([ './module' ], function (controllers) {
     'use strict';
-    controllers.controller('StartInvoiceController', [ '$scope', 'BeurrageNet', '$routeParams', '$location', function ($, BN, $routeParams, $location) {
-        $.customers = BN.getCustomers();
+    controllers.controller('StartInvoiceController', [ '$scope', 'MSApi', '$routeParams', '$location', function ($, MSApi, $routeParams, $location) {
+        $.customers = MSApi.getCustomers();
         $.selectCustomer = function (customer) {
             if($.selectedCustomer === customer) {
                 delete $.selectedCustomer;
@@ -50,7 +50,7 @@ define([ './module' ], function (controllers) {
         };
 
         $.start = function () {
-            BN.startInvoice({
+            MSApi.startInvoice({
                 billedToCustomerId: $.selectedCustomer.id,
                 billedToName: $.selectedCustomer.name,
                 billedToAddress: $.selectedCustomer.address,
@@ -58,14 +58,14 @@ define([ './module' ], function (controllers) {
                 billedToEmail: $.selectedCustomer.email
             }, function (invoice) {
                 if($.selectedOrderSuggestion.start !== null) {
-                    BN.getOrders({
+                    MSApi.getOrders({
                         customerId: $.selectedCustomer.id,
                         statusId: 2,
                         modifiedOnOrAfter: $.selectedOrderSuggestion.start,
                         modifiedOnOrBefore: $.selectedOrderSuggestion.end
                     }, function (orders) {
                         if(orders.length) {
-                            BN.addInvoiceOrders(invoice.id, orders, function (orders) {
+                            MSApi.addInvoiceOrders(invoice.id, orders, function (orders) {
                                 if(!invoice.error) {
                                     $location.path('/invoices/' + invoice.id);
                                 }

@@ -1,7 +1,7 @@
 define([ './module' ], function (controllers) {
     'use strict';
-    controllers.controller('OrdersController', [ '$scope', 'BeurrageNet', function ($, BN) {
-        BN.getOrders(function (orders) {
+    controllers.controller('OrdersController', [ '$scope', 'MSApi', function ($, MSApi) {
+        MSApi.getOrders(function (orders) {
             $.allOrders = orders;
             $.incompleteOrders = [];
 

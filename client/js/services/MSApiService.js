@@ -3,9 +3,9 @@ define([ './module' ], function (services) {
 
     var SB = '/services/v1/';
 
-    services.service('BeurrageNet', [ '$http', function ($http) {
+    services.service('MSApi', [ '$http', function ($http) {
         return {
-            getProducts: function BNGetProducts (options, cb) {
+            getProducts: function MSApiGetProducts (options, cb) {
                 var products = [],
                     o = _.isPlainObject(options) ? options : {},
                     c = _.isFunction(options) ? options : (_.isFunction(cb) ? cb : function () {});
@@ -26,7 +26,7 @@ define([ './module' ], function (services) {
                 return products;
             },
 
-            getProductGroups: function BNGetProductGroups (cb) {
+            getProductGroups: function MSApiGetProductGroups (cb) {
                 var productGroups = [],
                     c = _.isFunction(cb) ? cb : function () {};
 
@@ -43,7 +43,7 @@ define([ './module' ], function (services) {
                 return productGroups;
             },
 
-            getProductGroupById: function BNGetProductGroupById (productGroupId, cb) {
+            getProductGroupById: function MSApiGetProductGroupById (productGroupId, cb) {
                 var productGroup = {},
                     c = _.isFunction(cb) ? cb : function () {};
 
@@ -60,7 +60,7 @@ define([ './module' ], function (services) {
                 return productGroup;
             },
 
-            addProductGroup: function BNAddProductGroup (newProductGroup, cb) {
+            addProductGroup: function MSApiAddProductGroup (newProductGroup, cb) {
                 var productGroup = {},
                     c = _.isFunction(cb) ? cb : function () {};
 
@@ -77,7 +77,7 @@ define([ './module' ], function (services) {
                 return productGroup;
             },
 
-            updateProductGroup: function BNUpdateProductGroup (productGroupId, mods, cb) {
+            updateProductGroup: function MSApiUpdateProductGroup (productGroupId, mods, cb) {
                 var productGroup = {},
                     c = _.isFunction(cb) ? cb : function () {};
 
@@ -94,7 +94,7 @@ define([ './module' ], function (services) {
                 return productGroup;
             },
 
-            getProductById: function BNGetProductById (productId, cb) {
+            getProductById: function MSApiGetProductById (productId, cb) {
                 var product = {},
                     c = _.isFunction(cb) ? cb : function () {};
 
@@ -110,7 +110,7 @@ define([ './module' ], function (services) {
                 return product;
             },
 
-            addProduct: function BNAddProduct (newProduct, cb) {
+            addProduct: function MSApiAddProduct (newProduct, cb) {
                 var product = {},
                     c = _.isFunction(cb) ? cb : function () {};
 
@@ -127,7 +127,7 @@ define([ './module' ], function (services) {
                 return product;
             },
 
-            updateProduct: function BNUpdateProduct (productId, mods, cb) {
+            updateProduct: function MSApiUpdateProduct (productId, mods, cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     product = {
                         loading: true
@@ -148,7 +148,7 @@ define([ './module' ], function (services) {
                 return product;
             },
 
-            getUnits: function BNGetUnits (cb) {
+            getUnits: function MSApiGetUnits (cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     units = [];
 
@@ -164,7 +164,7 @@ define([ './module' ], function (services) {
                 return units;
             },
 
-            getProductPrices: function BNGetProductPrices (productId, cb) {
+            getProductPrices: function MSApiGetProductPrices (productId, cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     prices = [];
 
@@ -180,7 +180,7 @@ define([ './module' ], function (services) {
                 return prices;
             },
 
-            addProductPrice: function BNAddProductPrice (productId, pp, cb) {
+            addProductPrice: function MSApiAddProductPrice (productId, pp, cb) {
                 var productPrice = {},
                     c = _.isFunction(cb) ? cb : function () {};
 
@@ -196,7 +196,7 @@ define([ './module' ], function (services) {
                 return productPrice;
             },
 
-            updateProductPrice: function BNAddProductPrice (productId, priceId, unitPrice, cb) {
+            updateProductPrice: function MSApiAddProductPrice (productId, priceId, unitPrice, cb) {
                 var productPrice = {},
                     c = _.isFunction(cb) ? cb : function () {};
 
@@ -212,7 +212,7 @@ define([ './module' ], function (services) {
                 return productPrice;
             },
 
-            getCustomers: function BNGetCustomers (cb) {
+            getCustomers: function MSApiGetCustomers (cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     customers = [];
 
@@ -229,7 +229,7 @@ define([ './module' ], function (services) {
                 return customers;
             },
 
-            getCustomerById: function BNGetCustomerById (customerId, cb) {
+            getCustomerById: function MSApiGetCustomerById (customerId, cb) {
                 var customer = {},
                     c = _.isFunction(cb) ? cb : function () {};
 
@@ -245,7 +245,7 @@ define([ './module' ], function (services) {
                 return customer;
             },
 
-            addCustomer: function BNAddCustomer (newCustomer, cb) {
+            addCustomer: function MSApiAddCustomer (newCustomer, cb) {
                 var customer = {},
                     c = _.isFunction(cb) ? cb : function () {};
 
@@ -261,7 +261,7 @@ define([ './module' ], function (services) {
                 return customer;
             },
 
-            updateCustomer: function BNUpdateCustomer (customerId, mods, cb) {
+            updateCustomer: function MSApiUpdateCustomer (customerId, mods, cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     customer = {
                         loading: true
@@ -282,7 +282,7 @@ define([ './module' ], function (services) {
                 return customer;
             },
 
-            startOrder: function BNStartOrder (customerId, typeId, name, cb) {
+            startOrder: function MSApiStartOrder (customerId, typeId, name, cb) {
                 var order = {
                     loading: true
                 };
@@ -311,7 +311,7 @@ define([ './module' ], function (services) {
                 return order;
             },
 
-            getOrders: function BNGetOrders (p0, p1) {
+            getOrders: function MSApiGetOrders (p0, p1) {
                 var c = _.isFunction(p0) ? p0 : (_.isFunction(p1) ? p1 : function () {}),
                     limits = _.isPlainObject(p0) ? p0 : {},
                     orders = [];
@@ -335,7 +335,7 @@ define([ './module' ], function (services) {
                 return orders;
             },
 
-            getOrderTypes: function BNGetOrderTypes (cb) {
+            getOrderTypes: function MSApiGetOrderTypes (cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     orderTypes = [];
 
@@ -352,7 +352,7 @@ define([ './module' ], function (services) {
                 return orderTypes;
             },
 
-            getOrderById: function BNGetOrderById (orderId, cb) {
+            getOrderById: function MSApiGetOrderById (orderId, cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     order = {
                         loading: true
@@ -376,7 +376,7 @@ define([ './module' ], function (services) {
                 return order;
             },
 
-            addOrderItem: function BNAddOrderItem (orderId, productId, quantity, cb) {
+            addOrderItem: function MSApiAddOrderItem (orderId, productId, quantity, cb) {
                 var order = {};
 
                 $http({ method: 'POST', url: SB + 'orders/' + orderId + '/items', data: { productId: productId, quantity: quantity } }).
@@ -398,7 +398,7 @@ define([ './module' ], function (services) {
                 return order;
             },
 
-            updateOrderItemQuantity: function BNUpdateOrderItemQuantity (orderId, itemId, newQuantity, cb) {
+            updateOrderItemQuantity: function MSApiUpdateOrderItemQuantity (orderId, itemId, newQuantity, cb) {
                 var order = {};
 
                 $http({ method: 'PATCH', url: SB + 'orders/' + orderId + '/items/' + itemId, data: { quantity: newQuantity } }).
@@ -419,7 +419,7 @@ define([ './module' ], function (services) {
                 return order;
             },
 
-            updateOrder: function BNUpdateOrder (orderId, mods, cb) {
+            updateOrder: function MSApiUpdateOrder (orderId, mods, cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     order = {
                         loading: true
@@ -443,7 +443,7 @@ define([ './module' ], function (services) {
                 return order;
             },
 
-            getInvoices: function BNGetInvoices (cb) {
+            getInvoices: function MSApiGetInvoices (cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     invoices = [];
 
@@ -466,7 +466,7 @@ define([ './module' ], function (services) {
                 return invoices;
             },
 
-            getInvoiceById: function BNGetInvoiceById (invoiceId, cb) {
+            getInvoiceById: function MSApiGetInvoiceById (invoiceId, cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     invoice = {
                         loading: true
@@ -496,7 +496,7 @@ define([ './module' ], function (services) {
                 return invoice;
             },
 
-            startInvoice: function BNStartOrder (billToInfo, cb) {
+            startInvoice: function MSApiStartOrder (billToInfo, cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     invoice = {
                         loading: true
@@ -519,7 +519,7 @@ define([ './module' ], function (services) {
                 return invoice;
             },
 
-            addInvoiceOrders: function BNAddInvoiceOrders (invoiceId, orders, cb) {
+            addInvoiceOrders: function MSApiAddInvoiceOrders (invoiceId, orders, cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     res = {};
 
@@ -536,7 +536,7 @@ define([ './module' ], function (services) {
                 return res;
             },
 
-            removeInvoiceOrder: function BNRemoveInvoiceOrder (invoiceId, orderId, cb) {
+            removeInvoiceOrder: function MSApiRemoveInvoiceOrder (invoiceId, orderId, cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     res = {};
 
@@ -559,7 +559,7 @@ define([ './module' ], function (services) {
                 return res;
             },
 
-            updateInvoice: function BNUpdateInvoice (invoiceId, mods, cb) {
+            updateInvoice: function MSApiUpdateInvoice (invoiceId, mods, cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     invoice = {
                         loading: true
@@ -583,7 +583,7 @@ define([ './module' ], function (services) {
                 return invoice;
             },
 
-            sendInvoice: function BNUpdateInvoice (invoiceId, cb) {
+            sendInvoice: function MSApiUpdateInvoice (invoiceId, cb) {
                 var c = _.isFunction(cb) ? cb : function () {},
                     sendAck = {
                         loading: true

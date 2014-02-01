@@ -2,6 +2,6 @@ define([ 'require', 'angular', 'angular-route', 'angular-touch', 'angular-resour
     'use strict';
 
     require([ 'domReady!' ], function (document) {
-        ng.bootstrap(document, [ 'net.beurrage' ]);
+        ng.bootstrap(document, [ 'co.makesale.client.mobile.web' ]);
      });
 });

@@ -1,11 +1,11 @@
 define([ './module' ], function (controllers) {
     'use strict';
-    controllers.controller('AddCustomerController', [ '$scope', 'BeurrageNet', '$routeParams', '$location', function ($, BN, $routeParams, $location) {
+    controllers.controller('AddCustomerController', [ '$scope', 'MSApi', '$routeParams', '$location', function ($, MSApi, $routeParams, $location) {
         $.customer = {};
         $.adding = false;
         $.add = function () {
             $.adding = true;
-            BN.addCustomer($.customer, function () {
+            MSApi.addCustomer($.customer, function () {
                 $.adding = false;
                 $location.path('/customers');
             });

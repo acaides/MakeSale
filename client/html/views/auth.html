@@ -1,0 +1,42 @@
+<div class="view" style="margin-top: 0;">
+    <form ng-submit="signIn()">
+        <div class="header">
+            <img class="homeLogo" src="/img/mainLogo.png">
+        </div>
+        <img class="homeLogo" style="margin-top: -6px;" src="/img/mainLogo.png">
+        <div>
+            <div style="text-align: center; font-size: 24px; padding-top: 20px; padding-bottom: 40px;">
+                Welcome to MakeSale!
+                <div ng-hide="authenticated">
+                    <br><br>Sign in to get started.
+                </div>
+                <div ng-show="authenticated">
+                    <br><br>You are signed in as<br><br>
+                    <span style="border: solid 1px #E5D9CF; padding: 15px;">{{ authentication.email }}</span>
+                </div>
+            </div>
+
+            <div ng-hide="authenticated">
+                <div>
+                    <div style="background: #E5D9CF;">
+                        Beurrage Email Address:
+                    </div>
+                    <input class="textInputRow" type="email" ng-model="email" placeholder="first.last@beurrage.com" required>
+                </div>
+                <div>
+                    <div style="background: #E5D9CF;">
+                        Password:
+                    </div>
+                    <input class="textInputRow" type="password" ng-model="password" required>
+                </div>
+            </div>
+        </div>
+        <div class="footer" ng-show="authenticated || (email && password)">
+            <div class="footerActions">
+                <button ng-hide="authenticated" type="submit" class="footerAction">sign in</button>
+                <div ng-show="authenticated" class="footerAction" ng-click="signOut()">sign out</div>
+                <a ng-show="authenticated" class="footerAction" href="/">home</a>
+            </div>
+        </div>
+    </form>
+</div>

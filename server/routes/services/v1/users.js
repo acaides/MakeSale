@@ -42,15 +42,3 @@ module.exports = {
         res.send(501, { error: 'User listing is not yet implemented.' });
     }
 };
-
-/*
- * GET users listing.
- */
-
-//exports.list = function(req, res){
-//  res.send({
-//      one: 1,
-//      two: '2',
-//      three: [ 3, '3' ]
-//  });
-//};

@@ -690,7 +690,7 @@ var db = module.exports = {
         }
 
         if(_.isFunction(c)) {
-            dbc.query(_.size(l) > 0 ? sqlTemplates.SELECT_100_MOST_RECENT_ORDERS_LIMITED_LISTING(l) : sqlTemplates.SELECT_100_MOST_RECENT_ORDERS_LISTING, function (err, result) {
+            dbc.query(_.size(l) > 0 ? sqlTemplates.SELECT_MOST_RECENT_ORDERS_LIMITED_LISTING(l) : sqlTemplates.SELECT_MOST_RECENT_ORDERS_LISTING, function (err, result) {
                 if(err) {
                     c(err);
                 } else {
@@ -1305,7 +1305,7 @@ var db = module.exports = {
 
     selectInvoices: function selectInvoices (cb) {
         if(_.isFunction(cb)) {
-            dbc.query(sqlTemplates.SELECT_100_MOST_RECENT_INVOICES_LISTING, function (err, result) {
+            dbc.query(sqlTemplates.SELECT_MOST_RECENT_INVOICES_LISTING, function (err, result) {
                 if(err) {
                     cb(err);
                 } else {

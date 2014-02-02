@@ -9,9 +9,9 @@ define([ './module' ], function MSAuthDirectiveDefinition (directives) {
             return {
                 restrict: 'AE',
                 link: function ($, el, attrs) {
-                    if(!MSAuth.isAuthenticated()) {
-                        $location.url('/auth');
-                    }
+//                    if(!MSAuth.isAuthenticated()) {
+//                        $location.url('/auth');
+//                    }
                 }
             };
         }

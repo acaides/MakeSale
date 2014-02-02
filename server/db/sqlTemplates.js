@@ -140,10 +140,10 @@ module.exports = {
 //        'AND `product_price`.`order_type_id` = ? ' +
 //        'JOIN `unit` ON `unit`.`id` = `product`.`unit_id`;',
     INSERT_ORDER: 'INSERT INTO `order` (`customer_id`, `created_user_id`, `modified_user_id`, `type_id`, `name`, `access_code`) VALUES (?, ?, ?, ?, ?, ?);',
-    SELECT_100_MOST_RECENT_ORDERS_LISTING: sqlStubs.SELECT_ORDER +
+    SELECT_MOST_RECENT_ORDERS_LISTING: sqlStubs.SELECT_ORDER +
         'ORDER BY `modified_timestamp` DESC ' +
-        'LIMIT 100;',
-    SELECT_100_MOST_RECENT_ORDERS_LIMITED_LISTING: function (limits) {
+        'LIMIT 300;',
+    SELECT_MOST_RECENT_ORDERS_LIMITED_LISTING: function (limits) {
         var where = [];
 
         _.forEach(limits, function (limit) {
@@ -155,7 +155,7 @@ module.exports = {
         return sqlStubs.SELECT_ORDER +
             where +
             'ORDER BY `modified_timestamp` DESC ' +
-            'LIMIT 100';
+            'LIMIT 300';
     },
     SELECT_ORDER_BY_ID: sqlStubs.SELECT_ORDER +
         'WHERE `order`.`id` = ?;',
@@ -217,9 +217,9 @@ module.exports = {
         'JOIN `invoice_order` on `invoice_order`.`invoice_id` = `invoice`.`id` ' +
         'JOIN `order` on `order`.`id` = `invoice_order`.`order_id` ' +
         'WHERE `invoice`.`id` = ?;',
-    SELECT_100_MOST_RECENT_INVOICES_LISTING: sqlStubs.SELECT_INVOICE +
+    SELECT_MOST_RECENT_INVOICES_LISTING: sqlStubs.SELECT_INVOICE +
         'ORDER BY `modified_timestamp` DESC ' +
-        'LIMIT 100;',
+        'LIMIT 300;',
     SELECT_INVOICE_IDS_BY_ORDER_ID: 'SELECT `invoice_id` AS `id` FROM `invoice_order` WHERE `order_id` = ?;',
     UPDATE_INVOICE: function (values) {
         var vs = _.map(values, function (value, key) {

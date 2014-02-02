@@ -64,6 +64,7 @@ forRoutes.httpServer = http.createServer(app).listen(config.httpPort, function (
 
 // Routes
 var V1_SERVICES_BASE = '/services/v1/',
+    //authentications = require('./routes/services/v1/authentications'),
     users = require('./routes/services/v1/users'),
     customers = require('./routes/services/v1/customers'),
     products = require('./routes/services/v1/products'),
@@ -92,6 +93,11 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, '../client')));
 
 // Service Routes //
+
+// Authentications routes
+//app.get(V1_SERVICES_BASE + 'authentications', authentications.list);
+//app.post(V1_SERVICES_BASE + 'authentications', authentications.create);
+//app.delete(V1_SERVICES_BASE + 'authentications/:authenticationId', authentications.destroy);
 
 // Users routes
 app.get(V1_SERVICES_BASE + 'users', users.list);

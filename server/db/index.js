@@ -1340,5 +1340,31 @@ var db = module.exports = {
                 });
             }
         });
+    },
+
+    selectAuthentication: function (authToken, cb) {
+        if(_.isString(authToken) && _.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_AUTHENTICATION_BY_TOKEN, [ authToken ], function (err, results) {
+                if(err) {
+                    cb(err || true);
+                } else {
+                    cb(false, us2cc(results[0]));
+                }
+            });
+        }
+    },
+
+    selectUserPermissions: function (userId, cb) {
+        var uid = parseInt(userId, 10);
+
+        if(uid !== NaN && uid > 0 && _.isFunction(cb)) {
+            dbc.query(sqlTemplates.SELECT_USER_PERMISSIONS_BY_USER_ID, [ userId ], function (err, results) {
+                if(err) {
+                    cb(err || true);
+                } else {
+                    cb(false, us2cc(results));
+                }
+            });
+        }
     }
 };

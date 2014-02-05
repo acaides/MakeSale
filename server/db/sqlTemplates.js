@@ -230,5 +230,7 @@ module.exports = {
     },
     SELECT_ORDER_STATUS_ID_BY_ORDER_ID: 'SELECT `status_id` FROM `order` WHERE `id` = ?;',
     SELECT_UNITS: 'SELECT * FROM `unit`;',
-    SELECT_UNITS_BY_ID: 'SELECT * FROM `unit` WHERE `id` IN(?);'
+    SELECT_UNITS_BY_ID: 'SELECT * FROM `unit` WHERE `id` IN(?);',
+    SELECT_AUTHENTICATION_BY_TOKEN: 'SELECT * FROM `authentication` WHERE `token` = ?;',
+    SELECT_USER_PERMISSIONS_BY_USER_ID: 'SELECT * FROM `user_permission` WHERE `user_id` = ?;'
 };

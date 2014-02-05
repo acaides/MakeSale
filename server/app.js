@@ -64,7 +64,7 @@ forRoutes.httpServer = http.createServer(app).listen(config.httpPort, function (
 
 // Routes
 var V1_SERVICES_BASE = '/services/v1/',
-    //authentications = require('./routes/services/v1/authentications'),
+    authentications = require('./routes/services/v1/authentications'),
     users = require('./routes/services/v1/users'),
     customers = require('./routes/services/v1/customers'),
     products = require('./routes/services/v1/products'),
@@ -79,12 +79,17 @@ var V1_SERVICES_BASE = '/services/v1/',
     DOCUMENTS_BASE = '/documents/',
     invoiceDocuments = require('./routes/documents/invoices')(forRoutes);
 
+// Middlewear
+
+var MSAuthMiddlewear = require('./middlewear/MSAuthMiddlewear');
+
 app.locals._ = require('lodash');
 app.locals._.str = require('underscore.string');
 app.locals.moment = require('moment');
 app.engine('jade', require('jade').__express);
 app.set('views', __dirname + '/templates');
 app.use(express.favicon());
+app.use(MSAuthMiddlewear);
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
@@ -92,12 +97,14 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, '../client')));
 
+
 // Service Routes //
 
 // Authentications routes
-//app.get(V1_SERVICES_BASE + 'authentications', authentications.list);
-//app.post(V1_SERVICES_BASE + 'authentications', authentications.create);
-//app.delete(V1_SERVICES_BASE + 'authentications/:authenticationId', authentications.destroy);
+app.get(V1_SERVICES_BASE + 'authentications', authentications.list);
+app.get(V1_SERVICES_BASE + 'authentications/:authenticationId', authentications.retrieve);
+app.post(V1_SERVICES_BASE + 'authentications', authentications.create);
+app.delete(V1_SERVICES_BASE + 'authentications/:authenticationId', authentications.destroy);
 
 // Users routes
 app.get(V1_SERVICES_BASE + 'users', users.list);

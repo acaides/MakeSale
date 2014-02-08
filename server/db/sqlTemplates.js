@@ -82,7 +82,7 @@ module.exports = {
         'FROM   `product` ' +
         'JOIN `product_price` ' +
         'ON `product_price`.`product_id` = `product`.`id` ' +
-        'AND `product_price`.`order_type_id` = 1 ' +
+        'AND `product_price`.`order_type_id` = ? ' +
         'JOIN `unit` ' +
         'ON `unit`.`id` = `product`.`unit_id` ' +
         'LEFT JOIN `product_group` ON `product`.`product_group_id` = `product_group`.`id` ' +
@@ -95,11 +95,11 @@ module.exports = {
         'FROM   `product` ' +
         'JOIN `product_price` ' +
         'ON `product_price`.`product_id` = `product`.`id` ' +
-        'AND `product_price`.`order_type_id` = 1 ' +
+        'AND `product_price`.`order_type_id` = ? ' +
         'JOIN `unit` ' +
         'ON `unit`.`id` = `product`.`unit_id` ' +
         'LEFT JOIN `product_group` ON `product`.`product_group_id` = `product_group`.`id` ' +
-        'WHERE  `product_price`.`customer_id` = 1) `customer_specific` ' +
+        'WHERE  `product_price`.`customer_id` = ?) `customer_specific` ' +
         'ON `default_prices`.`product_id` = `customer_specific`.`product_id` ' +
         'ORDER BY `product_group_name`, `name`;',
 //    SELECT_PRODUCTS_FOR_ORDER: 'SELECT `default_prices`.`id`, ' +

@@ -4,7 +4,16 @@ define([ './module' ], function (services) {
     var SB = '/services/v1/';
 
     services.service('MSApi', [ '$http', function ($http) {
-        return {
+        var api = {
+
+            setAuthToken: function (authToken) {
+                $http.defaults.headers.common['MS-Auth-Token'] = authToken;
+            },
+
+            clearAuthToken: function () {
+                delete $http.defaults.headers.common['MS-Auth-Token'];
+            },
+
             getProducts: function MSApiGetProducts (options, cb) {
                 var products = [],
                     o = _.isPlainObject(options) ? options : {},
@@ -603,7 +612,40 @@ define([ './module' ], function (services) {
                     });
 
                 return sendAck;
+            },
+
+            createAuthentication: function MSApiServiceCreateAuthentication (email, password, name, cb) {
+                var auth = {},
+                    c = _.isFunction(cb) ? cb : function () {};
+
+                $http({ method: 'POST', url: SB + 'authentications', data: { email: email, password: password, name: name } }).
+                    success(function(data, status, headers, config) {
+                        _.extend(auth, data);
+                        c(auth);
+                    }).
+                    error(function(data, status, headers, config) {
+                        _.extend(auth, data);
+                        c(auth);
+                    });
+
+            },
+
+            deleteAuthentication: function MSApiServiceDeleteAuthentication (authId, cb) {
+                var auth = {},
+                    c = _.isFunction(cb) ? cb : function () {};
+
+                $http({ method: 'DELETE', url: SB + 'authentications/' + authId }).
+                    success(function(data, status, headers, config) {
+                        _.extend(auth, data);
+                        c(auth);
+                    }).
+                    error(function(data, status, headers, config) {
+                        _.extend(auth, data);
+                        c(auth);
+                    });
             }
         };
+
+        return api;
     } ]);
 });

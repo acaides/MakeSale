@@ -30,6 +30,9 @@
                     <input class="textInputRow" type="password" ng-model="password" required>
                 </div>
             </div>
+            <div ng-show="authenticationError">
+                {{ authenticationError }}
+            </div>
         </div>
         <div class="footer" ng-show="authenticated || (email && password)">
             <div class="footerActions">

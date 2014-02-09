@@ -81,7 +81,7 @@ var V1_SERVICES_BASE = '/services/v1/',
 
 // Middlewear
 
-//var MSAuthMiddlewear = require('./middlewear/MSAuthMiddlewear');
+var MSAuthMiddlewear = require('./middlewear/MSAuthMiddlewear');
 
 app.locals._ = require('lodash');
 app.locals._.str = require('underscore.string');
@@ -89,7 +89,7 @@ app.locals.moment = require('moment');
 app.engine('jade', require('jade').__express);
 app.set('views', __dirname + '/templates');
 app.use(express.favicon());
-//app.use(MSAuthMiddlewear);
+app.use(MSAuthMiddlewear);
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());

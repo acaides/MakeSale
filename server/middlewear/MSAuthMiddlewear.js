@@ -30,7 +30,7 @@ module.exports = function MSAuth (req, res, next) {
                 next();
             } else {
                 db.selectAuthentication(authToken, function (err, auth) {
-                    if(!err) {
+                    if(!err && !!auth) {
                         db.selectUserPermissions(auth.userId, function (err, userPermissions) {
                             if(!err) {
                                 auth.userPermissions = userPermissions;
@@ -40,9 +40,9 @@ module.exports = function MSAuth (req, res, next) {
 
                             next();
                         });
+                    } else {
+                        next();
                     }
-
-                    next();
                 });
             }
         });

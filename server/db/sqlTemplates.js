@@ -24,8 +24,8 @@ module.exports = {
         '(`first_name`, `last_name`, `email`, `password`, `last_auth_timestamp`, `created_timestamp`, `address`, ' +
         '`phone`, `enabled`) ' +
         'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);',
-    SELECT_USERS_BY_ID: 'SELECT * FROM `user` WHERE ',
-    SELECT_USERS_BY_EMAIL: 'SELECT * FROM `user` WHERE ',
+    SELECT_USER_BY_ID: 'SELECT * FROM `user` WHERE `id` = ?;',
+    SELECT_USER_BY_EMAIL: 'SELECT * FROM `user` WHERE `email` = ?;',
     INSERT_CUSTOMER: 'INSERT INTO `customer` (`name`, `address`, `phone`, `email`) VALUES (?, ?, ?, ?);',
     UPDATE_CUSTOMER: 'UPDATE `customer` SET ?',
     SELECT_CUSTOMER_LISTING: 'SELECT * FROM `customer` ORDER BY `name`;',
@@ -232,5 +232,7 @@ module.exports = {
     SELECT_UNITS: 'SELECT * FROM `unit`;',
     SELECT_UNITS_BY_ID: 'SELECT * FROM `unit` WHERE `id` IN(?);',
     SELECT_AUTHENTICATION_BY_TOKEN: 'SELECT * FROM `authentication` WHERE `token` = ?;',
+    INSERT_AUTHENTICATION: 'INSERT INTO `authentication` (`user_id`, `token`, `name`) VALUES (?, ?, ?);',
+    DELETE_AUTHENTICATION: 'DELETE FROM `authentication` WHERE `id` = ? && `user_id` = ?;',
     SELECT_USER_PERMISSIONS_BY_USER_ID: 'SELECT * FROM `user_permission` WHERE `user_id` = ?;'
 };

@@ -112,9 +112,37 @@ var db = module.exports = {
         });
     },
 
-    selectUsersById: function selectUsersById (userIds, cb) {},
+    selectUsersById: function selectUsersById (userId, cb) {
+        if(_.isFunction(cb)) {
+            if(_.isString(userId) || _.isNumber(userId)) {
+                dbc.query(sqlTemplates.SELECT_USER_BY_ID, [ userId ], function (err, results) {
+                    if(err) {
+                        cb(err || true);
+                    } else {
+                        cb(false, results[0]);
+                    }
+                });
+            } else {
+                cb('Bad user id.');
+            }
+        }
+    },
 
-    selectUsersByEmail: function selectUsersByEmail (userEmails, cb) {},
+    selectUserByEmail: function selectUserByEmail (email, cb) {
+        if(_.isFunction(cb)) {
+            if(_.isString(email)) {
+                dbc.query(sqlTemplates.SELECT_USER_BY_EMAIL, [ email ], function (err, results) {
+                    if(err) {
+                        cb(err || true);
+                    } else {
+                        cb(false, results[0]);
+                    }
+                });
+            } else {
+                cb('Bad user email.');
+            }
+        }
+    },
 
     insertCustomers: function insertCustomers (newCustomers, cb) {
         var results = [],
@@ -1351,6 +1379,38 @@ var db = module.exports = {
                     cb(false, us2cc(results[0]));
                 }
             });
+        }
+    },
+
+    insertAuthentication: function (auth, cb) {
+        if(_.isPlainObject(auth) && 'userId' in auth && 'token' in auth && 'name' in auth) {
+            dbc.query(sqlTemplates.INSERT_AUTHENTICATION, [ auth.userId, auth.token, auth.name ], function (err, results) {
+                if(_.isFunction(cb)) {
+                    if(err) {
+                        cb(err || true);
+                    } else {
+                        cb(false, _.extend({}, auth, { id: results.insertId }));
+                    }
+                }
+            });
+        } else if (_.isFunction(cb)) {
+            cb('Invalid input.');
+        }
+    },
+
+    deleteAuthorization: function (userId, authId, cb) {
+        if((_.isNumber(userId) || _.isString(userId)) && (_.isNumber(authId) || _.isString(authId))) {
+            dbc.query(sqlTemplates.DELETE_AUTHENTICATION, [ authId, userId ], function (err, results) {
+                if(_.isFunction(cb)) {
+                    if(err || results.affectedRows === 0) {
+                        cb('No such authorization.');
+                    } else {
+                        cb(false);
+                    }
+                }
+            });
+        } else if (_.isFunction(cb)) {
+            cb('Invalid input.');
         }
     },
 

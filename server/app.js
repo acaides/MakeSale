@@ -76,6 +76,7 @@ var V1_SERVICES_BASE = '/services/v1/',
     orderTypes = require('./routes/services/v1/orderTypes'),
     invoices = require('./routes/services/v1/invoices'),
     invoiceOrders = require('./routes/services/v1/invoiceOrders'),
+    invoiceAdjustments = require('./routes/services/v1/invoiceAdjustments'),
     DOCUMENTS_BASE = '/documents/',
     invoiceDocuments = require('./routes/documents/invoices')(forRoutes);
 
@@ -160,6 +161,9 @@ app.patch(V1_SERVICES_BASE + 'invoices/:invoiceId', invoices.modify);
 app.get(V1_SERVICES_BASE + 'invoices/:invoiceId/orders', invoiceOrders.list);
 app.post(V1_SERVICES_BASE + 'invoices/:invoiceId/orders', invoiceOrders.create);
 app.delete(V1_SERVICES_BASE + 'invoices/:invoiceId/orders/:orderId', invoiceOrders.destroy);
+app.get(V1_SERVICES_BASE + 'invoices/:invoiceId/adjustments', invoiceAdjustments.list);
+app.post(V1_SERVICES_BASE + 'invoices/:invoiceId/adjustments', invoiceAdjustments.create);
+app.delete(V1_SERVICES_BASE + 'invoices/:invoiceId/adjustments/:adjustmentId', invoiceAdjustments.destroy);
 
 // Document Routes //
 

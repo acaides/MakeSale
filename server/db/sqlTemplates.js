@@ -194,6 +194,7 @@ module.exports = {
         'VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?);',
     SELECT_INVOICE_BY_ID: sqlStubs.SELECT_INVOICE + ' WHERE `invoice`.`id` = ?;',
     DELETE_INVOICE_ORDER_BY_ORDER_ID: 'DELETE FROM `invoice_order` WHERE `invoice_id` = ? AND `order_id` = ?;',
+    DELETE_INVOICE_ADJUSTMENT_BY_ID: 'DELETE FROM `invoice_adjustment` WHERE `id` = ?;',
     SELECT_INVOICE_ORDERS_BY_INVOICE_ID: 'SELECT `order`.`id`, ' +
         '`order`.`type_id`, `order_type`.`name` AS `type_name`, ' +
         '`order`.`status_id`, `order_status`.`name` AS `status_name`, ' +
@@ -208,7 +209,21 @@ module.exports = {
         'JOIN `order_status` ON `order_status`.`id` = `order`.`status_id` ' +
         'JOIN `customer` ON `customer`.`id` = `order`.`customer_id` ' +
         'WHERE `invoice_id` = ?;',
+    SELECT_INVOICE_ADJUSTMENTS_BY_INVOICE_ID: 'SELECT `invoice_adjustment`.`id`, ' +
+        '`invoice_adjustment`.`type_id`, ' +
+        '`invoice_adjustment_type`.`name` AS `type_name`, ' +
+        '`invoice_adjustment`.`name`, ' +
+        '`invoice_adjustment`.`value`, ' +
+        '`invoice_adjustment`.`line_item`, ' +
+        '`invoice_adjustment`.`note` ' +
+        'FROM `invoice_adjustment` ' +
+        'JOIN `invoice_adjustment_type` ON `invoice_adjustment_type`.`id` = `invoice_adjustment`.`type_id` ' +
+        'WHERE `invoice_id` = ?;',
     INSERT_INVOICE_ORDER: 'INSERT INTO `invoice_order` (`invoice_id`, `order_id`) VALUES (?, ?);',
+    UPDATE_INVOICE_ADJUSTMENT_LINE_ITEM: 'UPDATE `invoice_adjustment` SET `line_item` = ? WHERE `id` = ?;',
+    INSERT_INVOICE_ADJUSTMENT: 'INSERT INTO `invoice_adjustment` (`type_id`, `invoice_id`, `name`, `value`, `line_item`, `note`) ' +
+        'VALUES ' +
+        '(?, ?, ?, ?, 0, ?);',
     SELECT_BARE_INVOICE_ORDERS_BY_INVOICE_ID: 'SELECT * FROM `invoice_order` WHERE `invoice_id` = ?;',
     SYNC_INVOICE: 'UPDATE `invoice` SET `total` = ?, `subtotal` = ?, `order_count` = ?, `modified_timestamp` = NOW() WHERE `id` = ?;',
     SELECT_INVOICE_ORDER_COUNT_AND_SUBTOTAL_BY_INVOICE_ID: 'SELECT COUNT(`invoice_order`.`order_id`) AS `count`, ' +

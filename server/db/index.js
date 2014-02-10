@@ -1112,14 +1112,42 @@ var db = module.exports = {
                 c(err);
             } else {
                 var q = result[0];
-                // Now, update the order entry.
-                dbc.query(sqlTemplates.SYNC_INVOICE, [ q.subtotal, q.subtotal, q.count, invoiceId ], function (err, result) {
-                    if(err) {
-                        c(err);
-                    } else {
-                        // And we're done!
-                        c(false, result);
-                    }
+
+                dbc.query(sqlTemplates.SELECT_INVOICE_ADJUSTMENTS_BY_INVOICE_ID, [ invoiceId ], function (err, result) {
+                    var ias = us2cc(result),
+                        constantAdjustmentTotal = 0,
+                        ratioAdjustmentTotal = 0;
+
+                    _.forEach(ias, function (ia) {
+                        if(ia.typeId === 1) {
+                            dbc.query(sqlTemplates.UPDATE_INVOICE_ADJUSTMENT_LINE_ITEM, [ ia.value, ia.id ]);
+                            constantAdjustmentTotal += ia.value;
+                        }
+                    });
+
+                    // NOTE: We apply ratio adjustments (like tax, % off, etc) to the order subtotal plus
+                    // constant adjustments. So if you have a +10% tax adjustment and a $10 off adjustment on an
+                    // invoice with a $100 order subtotal. The invoice total would be
+                    // (100 - 10) + ((100 - 10) * .1) = 99
+                    _.forEach(ias, function (ia) {
+                        if(ia.typeId === 2) {
+                            var iali = ia.value * (q.subtotal + constantAdjustmentTotal);
+                            dbc.query(sqlTemplates.UPDATE_INVOICE_ADJUSTMENT_LINE_ITEM, [ iali, ia.id ]);
+                            ratioAdjustmentTotal += iali;
+                        }
+                    });
+
+                    q.total = q.subtotal + constantAdjustmentTotal +  ratioAdjustmentTotal;
+
+                    // Now, update the order entry.
+                    dbc.query(sqlTemplates.SYNC_INVOICE, [ q.total, q.subtotal, q.count, invoiceId ], function (err, result) {
+                        if(err) {
+                            c(err);
+                        } else {
+                            // And we're done!
+                            c(false, result);
+                        }
+                    });
                 });
             }
         });
@@ -1311,6 +1339,95 @@ var db = module.exports = {
         } else {
             if(_.isFunction(cb)) {
                 cb('Invalid order id.');
+            }
+        }
+    },
+
+    insertInvoiceAdjustments: function insertInvoiceAdjustments (invoiceId, newInvoiceAdjustments, cb) {
+        var c = _.isFunction(cb) ? cb : _.noop,
+            results = [],
+            requests = _.isArray(newInvoiceAdjustments) ? newInvoiceAdjustments : [ newInvoiceAdjustments ],
+            done = function (result) {
+                results.push(result);
+
+                if(results.length === requests.length) {
+                    // Now, update the invoice.
+                    db.syncInvoice(invoiceId, function (err, result) {
+                        if(err) {
+                            c(err);
+                        } else {
+                            if(results.length === 1) {
+                                c.apply(results[0], results[0]);
+                            } else {
+                                c(false, results);
+                            }
+                        }
+                    });
+                }
+            };
+
+        // Make sure we have a valid invoice id.
+        if(!_.isNumber(invoiceId) || invoiceId < 1) {
+            c('Invalid invoice id.');
+            return;
+        }
+
+        if(requests.length === 0) {
+            c('Nothing to do.');
+            return;
+        }
+
+        if(requests.length > 100) {
+            c('Too many adjustments.');
+            return;
+        }
+
+        // Process each of the add order requests.
+        _.forEach(requests, function (ia) {
+            if(_.isPlainObject(ia) && 'typeId' in ia && 'name' in ia && 'value' in ia) {
+                dbc.query(sqlTemplates.INSERT_INVOICE_ADJUSTMENT, [ ia.typeId, invoiceId, ia.name, ia.value, ia.note ], done);
+            } else {
+                done({ error: 'Invalid input. '});
+            }
+        });
+    },
+
+    selectInvoiceAdjustmentsByInvoiceId: function selectInvoiceAdjustmentsByInvoiceId (invoiceId, cb) {
+        if(_.isFunction(cb)) {
+            if(_.isNumber(invoiceId) && invoiceId > 0) {
+                dbc.query(sqlTemplates.SELECT_INVOICE_ADJUSTMENTS_BY_INVOICE_ID, [ invoiceId ], function (err, result) {
+                    if(err) {
+                        cb(err);
+                    } else {
+                        cb(false, us2cc(result));
+                    }
+                });
+            } else {
+                cb('Invalid invoice id.');
+            }
+        }
+    },
+
+    deleteInvoiceAdjustment: function deleteInvoiceAdjustment (invoiceId, adjustmentId, cb) {
+        if(_.isNumber(adjustmentId) && adjustmentId > 0) {
+            dbc.query(sqlTemplates.DELETE_INVOICE_ADJUSTMENT_BY_ID, [ adjustmentId ], function (err, result) {
+                if(err) {
+                    cb(err);
+                } else {
+                    // Now, update the invoice.
+                    db.syncInvoice(invoiceId, function (err, result) {
+                        if(err) {
+                            cb(err);
+                        } else {
+                            // And we're done!
+                            cb(false, result);
+                        }
+                    });
+                }
+            });
+        } else {
+            if(_.isFunction(cb)) {
+                cb('Invalid adjustment id.');
             }
         }
     },

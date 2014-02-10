@@ -48,8 +48,22 @@ function getInvoiceDocument (req, res) {
             } else {
                 if(invoice.accessCode === accessCode || accessCode === masterAccessCode) {
                     db.selectInvoiceOrdersByInvoiceId(invoiceId, function (err, invoiceOrders) {
+                        var pullAdjustmentsAndRender = function () {
+                            db.selectInvoiceAdjustmentsByInvoiceId(invoiceId, function (err, ias) {
+                                if(err) {
+                                    res.send(500, 'Unable to retrieve invoice adjustments.');
+                                } else {
+                                    invoice.adjustments = ias;
+
+                                    res.render('invoice.jade', {
+                                        invoice: invoice
+                                    });
+                                }
+                            });
+                        };
+
                         if(err) {
-                            res.send(404, 'Unable to retrieve invoice orders.');
+                            res.send(500, 'Unable to retrieve invoice orders.');
                         } else {
                             invoice.orders = invoiceOrders;
 
@@ -63,16 +77,12 @@ function getInvoiceDocument (req, res) {
                                         }
 
                                         if(i === invoice.orders.length - 1) {
-                                            res.render('invoice.jade', {
-                                                invoice: invoice
-                                            });
+                                            pullAdjustmentsAndRender();
                                         }
                                     });
                                 });
                             } else {
-                                res.render('invoice.jade', {
-                                    invoice: invoice
-                                });
+                                pullAdjustmentsAndRender();
                             }
                         }
                     });

@@ -26,9 +26,19 @@ module.exports = {
                             res.send(500, { error: err });
                         } else {
                             invoice.orders = invoiceOrders;
-                            res.send(200, invoice);
+
+                            db.selectInvoiceAdjustmentsByInvoiceId(invoice.id, function (err, invoiceAdjustments) {
+                                if(err) {
+                                    res.send(500, { error: err });
+                                } else {
+                                    invoice.adjustments = invoiceAdjustments;
+                                    res.send(200, invoice);
+                                }
+                            });
                         }
                     });
+
+
                 }
             });
         } else {

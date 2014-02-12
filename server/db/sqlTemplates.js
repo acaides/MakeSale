@@ -219,6 +219,16 @@ module.exports = {
         'FROM `invoice_adjustment` ' +
         'JOIN `invoice_adjustment_type` ON `invoice_adjustment_type`.`id` = `invoice_adjustment`.`type_id` ' +
         'WHERE `invoice_id` = ?;',
+    SELECT_INVOICE_ADJUSTMENT_BY_ID: 'SELECT `invoice_adjustment`.`id`, ' +
+        '`invoice_adjustment`.`type_id`, ' +
+        '`invoice_adjustment_type`.`name` AS `type_name`, ' +
+        '`invoice_adjustment`.`name`, ' +
+        '`invoice_adjustment`.`value`, ' +
+        '`invoice_adjustment`.`line_item`, ' +
+        '`invoice_adjustment`.`note` ' +
+        'FROM `invoice_adjustment` ' +
+        'JOIN `invoice_adjustment_type` ON `invoice_adjustment_type`.`id` = `invoice_adjustment`.`type_id` ' +
+        'WHERE `invoice_adjustment`.`id` = ?;',
     INSERT_INVOICE_ORDER: 'INSERT INTO `invoice_order` (`invoice_id`, `order_id`) VALUES (?, ?);',
     UPDATE_INVOICE_ADJUSTMENT_LINE_ITEM: 'UPDATE `invoice_adjustment` SET `line_item` = ? WHERE `id` = ?;',
     INSERT_INVOICE_ADJUSTMENT: 'INSERT INTO `invoice_adjustment` (`type_id`, `invoice_id`, `name`, `value`, `line_item`, `note`) ' +

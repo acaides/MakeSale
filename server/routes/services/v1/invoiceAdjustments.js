@@ -2,6 +2,40 @@ var db = require('../../../db'),
     _ = require('lodash');
 
 module.exports = {
+    retrieve: function retrieveInvoiceAdjustment (req, res) {
+        var adjustmentId = parseInt(req.param('adjustmentId'), 10);
+
+        if(_.isNumber(adjustmentId) && adjustmentId > 0) {
+            db.selectInvoiceAdjustmentById(adjustmentId, function (err, invoiceAdjustments) {
+                if(err) {
+                    res.send(500, { error: err });
+                } else {
+                    res.send(200, invoiceAdjustments);
+                }
+            });
+        } else {
+            res.send(400, { error: 'Invalid invoice id.' });
+        }
+    },
+
+    modify: function modifyInvoiceAdjustment (req, res) {
+        res.send(501);
+//        var adjustmentId = parseInt(req.param('adjustmentId'), 10),
+//            adj = req.body;
+//
+//        if(_.isNumber(adjustmentId) && adjustmentId > 0) {
+//            db.updateInvoiceAdjustment(adj, function (err, invoiceAdjustments) {
+//                if(err) {
+//                    res.send(500, { error: err });
+//                } else {
+//                    res.send(200, invoiceAdjustments);
+//                }
+//            });
+//        } else {
+//            res.send(400, { error: 'Invalid adjustment id.' });
+//        }
+    },
+
     create: function createInvoiceAdjustments (req, res) {
         var invoiceId = parseInt(req.param('invoiceId'), 10);
 

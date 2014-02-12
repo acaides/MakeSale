@@ -163,6 +163,9 @@ app.post(V1_SERVICES_BASE + 'invoices/:invoiceId/orders', invoiceOrders.create);
 app.delete(V1_SERVICES_BASE + 'invoices/:invoiceId/orders/:orderId', invoiceOrders.destroy);
 app.get(V1_SERVICES_BASE + 'invoices/:invoiceId/adjustments', invoiceAdjustments.list);
 app.post(V1_SERVICES_BASE + 'invoices/:invoiceId/adjustments', invoiceAdjustments.create);
+app.get(V1_SERVICES_BASE + 'invoices/:invoiceId/adjustments/:adjustmentId', invoiceAdjustments.retrieve);
+app.put(V1_SERVICES_BASE + 'invoices/:invoiceId/adjustments/:adjustmentId', invoiceAdjustments.modify);
+app.patch(V1_SERVICES_BASE + 'invoices/:invoiceId/adjustments/:adjustmentId', invoiceAdjustments.modify);
 app.delete(V1_SERVICES_BASE + 'invoices/:invoiceId/adjustments/:adjustmentId', invoiceAdjustments.destroy);
 
 // Document Routes //

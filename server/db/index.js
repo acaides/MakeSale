@@ -1343,6 +1343,20 @@ var db = module.exports = {
         }
     },
 
+    updateInvoiceAdjustment: function updateInvoiceAdjustment (adjId, mods, cb) {
+//        if(adjId && mods) {
+//            dbc.query(sqlTemplates.UPDATE_INVOICE_ADJUSTMENT, function (err, result) {
+//                if(err) {
+//                    cb(err);
+//                } else {
+//                    cb(false, result);
+//                }
+//            });
+//        } else {
+//            cb('Missing required input.');
+//        }
+    },
+
     insertInvoiceAdjustments: function insertInvoiceAdjustments (invoiceId, newInvoiceAdjustments, cb) {
         var c = _.isFunction(cb) ? cb : _.noop,
             results = [],
@@ -1390,6 +1404,24 @@ var db = module.exports = {
                 done({ error: 'Invalid input. '});
             }
         });
+    },
+
+    selectInvoiceAdjustmentById: function selectInvoiceAdjustmentById (id, cb) {
+        if(_.isFunction(cb)) {
+            if(_.isNumber(id) && id > 0) {
+                dbc.query(sqlTemplates.SELECT_INVOICE_ADJUSTMENT_BY_ID, [ id ], function (err, result) {
+                    if(err) {
+                        cb(err);
+                    } else if(result.length === 1) {
+                        cb(false, us2cc(result[0]));
+                    } else {
+                        cb('No such adjustment.');
+                    }
+                });
+            } else {
+                cb('Invalid adjustment id.');
+            }
+        }
     },
 
     selectInvoiceAdjustmentsByInvoiceId: function selectInvoiceAdjustmentsByInvoiceId (invoiceId, cb) {

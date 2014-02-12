@@ -35,6 +35,14 @@ define([ './module' ], function (controllers) {
             }
         };
 
+        $.adjustmentClick = function (adjustment) {
+            if($.removingAdjustment) {
+                delete $.removingAdjustment;
+            } else {
+                $location.url('/invoices/' + $.invoice.id + '/adjustments/' + adjustment.id);
+            }
+        };
+
         $.removeOrder = function (order, force) {
             if(!force) {
                 $.removingOrder = order;
@@ -44,6 +52,18 @@ define([ './module' ], function (controllers) {
                 MSApi.removeInvoiceOrder($.invoice.id, order.id, function (invoice) {
                     $.invoice = invoice;
                 });
+            }
+        };
+
+        $.removeAdjustment = function (adjustment, force) {
+            if(!force) {
+                $.removingAdjustment = adjustment;
+            } else {
+                delete $.removingAdjustment;
+//
+//                MSApi.removeInvoiceAdjustment($.invoice.id, adjustment.id, function (invoice) {
+//                    $.invoice = invoice;
+//                });
             }
         };
 

@@ -1,4 +1,4 @@
-<div class="view" ms-auth style="margin-top: 150px;">
+<div class="view" ms-auth style="margin-top: 140px;">
     <div class="viewMessage" ng-show="invoice.loading">
         Loading...
     </div>
@@ -13,19 +13,16 @@
                 Invoice #{{ invoice.id }}
             </a>
             <div class="headerActions" ng-show="invoice.statusId == 1">
-                <a class="headerAction" ng-href="/invoices/{{ invoice.id }}/addOrder">add order</a>
+                <a class="headerAction" ng-href="/invoices/{{ invoice.id }}/addOrder">+ order</a>
+                <a class="headerAction" ng-href="/invoices/{{ invoice.id }}/addAdjustment">+ adjustment</a>
             </div>
             <div class="subHeader">
-                <div style="text-indent: 4px;">
-                    <div style="font-size: 14px">{{ invoice.name || invoice.createdTimestamp.toDateString() }} billed to {{ invoice.billedToName }}</div>
-                    <div style="font-size: 12px">
-                        <div ng-show="invoice.billedToPhone">phone #: {{ invoice.billedToPhone }}</div>
-                        <div ng-show="invoice.billedToEmail">email: {{ invoice.billedToEmail }}</div>
-                        <div>started on {{ invoice.createdTimestamp.toLocaleString() }}</div>
-                        <div>last updated {{ invoice.modifiedTimestamp.toLocaleString() }}</div>
-                        <div ng-hide="invoice.billedToPhone"><br></div>
-                        <div ng-hide="invoice.billedToEmail"><br></div>
-                    </div>
+                <div style="text-indent: 4px; font-size: 17px; margin-bottom: 2px;">
+                    <div>{{ invoice.name || invoice.createdTimestamp.toDateString() }} billed to {{ invoice.billedToName }}</div>
+                    <div ng-show="invoice.billedToPhone">phone: {{ invoice.billedToPhone }}</div>
+                    <div ng-show="invoice.billedToEmail">email: {{ invoice.billedToEmail }}</div>
+                    <div ng-hide="invoice.billedToPhone"><br></div>
+                    <div ng-hide="invoice.billedToEmail"><br></div>
                 </div>
                 <div class="columnHeaders" ng-show="invoice.orders.length">
                     <div class="columnHeader" style="width: 20%;">Items</div>
@@ -59,6 +56,40 @@
                     </div>
                     <div ng-show="removingOrder == order" class="column" style="width: 25%; font-size: 16px;" ng-click="removeOrder(order, true); $event.stopPropagation();">
                         remove?
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="invoice.adjustments.length > 0">
+                <div class="row" style=" background:  #C5B9AF;">
+                    <div class="columns" style="top: 12px;">
+                        <div class="column"
+                             style="width: 75%; font-size: 16px; text-indent: 10px;">
+                            Order Subtotal
+                        </div>
+                        <div class="column" style="width: 25%; font-size: 16px;" >
+                            {{ invoice.total | currency }}
+                        </div>
+                    </div>
+                </div>
+                <div style="background: #E5D9CF;">Adjustments</div>
+                <div ng-click="adjustmentClick(adjustment)"
+                     ng-class="{ selectedRow: removingAdjustment == adjustment }"
+                     ng-swipe-right="removeAdjustment(adjustment)"
+                     class="linkedRow"
+                     ng-repeat="adjustment in invoice.adjustments">
+                    <div class="columns" style="top: 12px;">
+                        <div class="column"
+                             style="width: 75%; font-size: 16px; text-indent: 10px;">
+                            {{ adjustment.name }}
+                        </div>
+                        <div ng-hide="removingAdjustment == adjustment" class="column" style="width: 25%; font-size: 16px;" >
+                            {{ adjustment.lineItem | currency }}
+                        </div>
+                        <div ng-show="removingAdjustment == adjustment" class="column" style="width: 25%; font-size: 16px;"
+                             ng-click="removeAdjustment(adjustment, true); $event.stopPropagation();">
+                            remove?
+                        </div>
                     </div>
                 </div>
             </div>

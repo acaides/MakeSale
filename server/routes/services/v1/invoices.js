@@ -32,6 +32,14 @@ module.exports = {
                                     res.send(500, { error: err });
                                 } else {
                                     invoice.adjustments = invoiceAdjustments;
+                                    invoice.subtotalAfterConstantAdjustments = invoice.subtotal;
+
+                                    _.forEach(invoiceAdjustments, function (ia) {
+                                        if(ia.typeId === 1) {
+                                            invoice.subtotalAfterConstantAdjustments += ia.value;
+                                        }
+                                    });
+
                                     res.send(200, invoice);
                                 }
                             });

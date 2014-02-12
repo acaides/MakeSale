@@ -114,6 +114,11 @@ define([ './app' ], function (app) {
             controller: 'AddAdjustmentController'
         });
 
+        $routeProvider.when('/invoices/:invoiceId/adjustments/:adjustmentId', {
+            templateUrl: '/html/views/invoices/singleAdjustment.html',
+            controller: 'SingleAdjustmentController'
+        });
+
         $routeProvider.when('/invoices/:invoiceId', {
             templateUrl: '/html/views/invoices/singleInvoice.html',
             controller: 'SingleInvoiceController'

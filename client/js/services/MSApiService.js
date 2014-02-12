@@ -614,6 +614,23 @@ define([ './module' ], function (services) {
                 return sendAck;
             },
 
+            getAdjustmentById: function MSApiGetAdjustmentById (invoiceId, adjustmentId, cb) {
+                var adj = {},
+                    c = _.isFunction(cb) ? cb : function () {};
+
+                $http({ method: 'GET', url: SB + 'invoices/' +invoiceId + '/adjustments/' + adjustmentId }).
+                    success(function(data, status, headers, config) {
+                        _.extend(adj, data);
+                        c(adj);
+                    }).
+                    error(function(data, status, headers, config) {
+                        _.extend(adj, data);
+                        c(adj);
+                    });
+
+                return adj;
+            },
+
             createAuthentication: function MSApiServiceCreateAuthentication (email, password, name, cb) {
                 var auth = {},
                     c = _.isFunction(cb) ? cb : function () {};
@@ -628,6 +645,7 @@ define([ './module' ], function (services) {
                         c(auth);
                     });
 
+                return auth;
             },
 
             deleteAuthentication: function MSApiServiceDeleteAuthentication (authId, cb) {

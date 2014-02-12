@@ -18,6 +18,7 @@ define([
     './SingleInvoiceController',
     './AddOrderController',
     './AddAdjustmentController',
+    './SingleAdjustmentController',
     './StartInvoiceController',
     './CustomersController',
     './SingleCustomerController',

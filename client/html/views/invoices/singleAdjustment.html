@@ -1,0 +1,39 @@
+<div class="view" ms-auth>
+    <div class="header">
+        <a class="headerTitle" href="/invoices/{{ invoice.id }}">
+            Adjustment To Invoice #{{ invoice.id }}
+        </a>
+    </div>
+
+    <form>
+        <div>
+            <div style="background: #E5D9CF;">
+                Adjustment Type:
+            </div>
+            <div>
+                <div class="buttonRow"
+                     ng-class="{ selectedRow: adjustment.typeName == 'CONSTANT', notSelectedRow: adjustment.typeName && adjustment.typeName != 'CONSTANT' }"
+                     ng-click="adjustment.typeName = 'CONSTANT'; adjustment.typeId = 1;">Fixed Amount</div>
+                <div class="buttonRow"
+                     ng-class="{ selectedRow: adjustment.typeName == 'RATIO', notSelectedRow: adjustment.typeName && adjustment.typeName != 'RATIO' }"
+                     ng-click="adjustment.typeName = 'RATIO'; adjustment.typeId = 2;">Percentage</div>
+            </div>
+        </div>
+        <div>
+            <div style="background: #E5D9CF;">
+                Adjustment Value:
+            </div>
+            <input class="textInputRow" type="number" ng-model="adjustment.value" required>
+        </div>
+    </form>
+
+    <div class="footer">
+        <div class="footerText">
+            <span ng-show="adjustment.type == 'CONSTANT'">{{ adjustment.value | currency }} Adjustment</span>
+            <span ng-show="adjustment.type == 'RATIO' ">{{ (adjustment.value / 100) * invoice.subtotalAfterConstantAdjustments | currency }} Adjustment</span>
+        </div>
+        <div class="footerActions">
+            <a class="footerAction" ng-click="update()">update</a>
+        </div>
+    </div>
+</div>

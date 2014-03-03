@@ -1,5 +1,4 @@
 var db = require('../../../db'),
-    docs = require('../../../docs'),
     crypto = require('crypto'),
     _ = require('lodash');
 

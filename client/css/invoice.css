@@ -23,6 +23,7 @@ body {
     position: relative;
     top: -0.25in;
     float: right;
+    margin-right: 0.25in;
     text-align: right;
     text-align: center;
     background: lightgray;
@@ -31,13 +32,17 @@ body {
 
 .header .docNum {
     position: relative;
-    top: -0.1in;
+/*    top: -0.1in;*/
     font-size: smaller;
 }
 
-.date {
+.issueDate, .dueDate {
     font-weight: normal;
     font-size: larger;
+}
+
+.dueDate {
+    color: red;
 }
 
 .topBoxes {
@@ -50,6 +55,17 @@ body {
     display: inline-block;
     padding: 0.1in;
     vertical-align: top;
+    position: relative;
+}
+
+.dueDateSummary {
+    position: absolute;
+    bottom: -0.25in;
+    width: 100%;
+    left: -0.005in;
+    text-align: center;
+    color: red;
+    font-weight: bold;
 }
 
 .billedTo {
@@ -72,9 +88,9 @@ body {
     font-weight: bold;
 }
 
-.orderTable, .footerTable {
+.orderTable, .footerTable, .bottomNote {
     margin-left: 0.5in;
-    width: 7in;
+    width: 7.5in;
     border-spacing: 0;
 }
 
@@ -123,7 +139,8 @@ body {
     font-size: large;
     font-weight: bold;
     text-align: center;
-    padding: 0.25in;
+    padding-top: 0.25in;
+    width: 7.5in;
 }
 
 .rightCell {
@@ -134,3 +151,9 @@ body {
     font-style: italic;
 }
 
+.dueDateCallout {
+    margin: 0.075in;
+    padding: 0.075in 0.15in 0.075in 0.15in;
+    border: solid 4px red;
+    border-radius: 1in;
+}

@@ -17,7 +17,9 @@ html(lang="en")
                 span.headerText 773 998 2371
                 br
                 span.headerText beurrage.com
-                div.headerText.date #{moment(invoice.modifiedTimestamp).format('dddd, MMMM Do YYYY') }
+                div.headerText.issueDate Issued On: #{moment().format('dddd, MMMM Do YYYY') }
+                //div.headerText.issueDate Issued On: #{moment(invoice.modifiedTimestamp).format('dddd, MMMM Do YYYY') }
+                //- div.headerText.dueDate Payment Due By: #{moment(invoice.modifiedTimestamp).add('days', 15).format('dddd, MMMM Do YYYY') }
         div.topBoxes
             div.summary Invoice Summary:
                 table
@@ -39,10 +41,12 @@ html(lang="en")
                         //    td
                         //    td $#{_.str.numberFormat(invoice.subtotal, 2)}
                         tr.totalDue
+                            //- td Total Due by #{moment(invoice.modifiedTimestamp).add('days', 15).format('MMM Do \'YY') }
                             td Total Due
                             td
                             td
                             td.rightCell $#{_.str.numberFormat(invoice.total, 2)}
+                span.dueDateSummary Payment due by #{moment().add('days', 15).format('MMM Do YYYY') }
             div.billedTo Billed to:
                 br
                 = invoice.billedToName
@@ -114,4 +118,10 @@ html(lang="en")
                         td
                         td
                         td.rightCell $#{_.str.numberFormat(invoice.total, 2)}
-        div.bottomNote Thanks!
+        div.bottomNote
+            span We ask that you submit payment for this invoice by
+            span.dueDateCallout #{moment().add('days', 15).format('dddd, MMMM Do YYYY') }
+            //- span.dueDateCallout #{moment(invoice.modifiedTimestamp).add('days', 15).format('dddd, MMMM Do YYYY') }
+            br
+            br
+            span Thanks!

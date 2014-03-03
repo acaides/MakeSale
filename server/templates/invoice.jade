@@ -119,7 +119,7 @@ html(lang="en")
                         td
                         td.rightCell $#{_.str.numberFormat(invoice.total, 2)}
         div.bottomNote
-            span We ask that you submit payment for this invoice by
+            span Please submit payment for this invoice by
             span.dueDateCallout #{moment().add('days', 15).format('dddd, MMMM Do YYYY') }
             //- span.dueDateCallout #{moment(invoice.modifiedTimestamp).add('days', 15).format('dddd, MMMM Do YYYY') }
             br

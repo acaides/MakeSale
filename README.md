@@ -1,5 +1,4 @@
-MakeSale
-========
+# MakeSale
 
 MakeSale is a web-based platform that helps makers make and sell their wares.
 
@@ -22,3 +21,15 @@ for worker time management.
 - Accounting: Balance tracking integrated with invoicing, ordering, and banks.
 - Reporting: Automatic generation of key business metrics like sales, expenses,
 etc and reporting tools for tax and other government filing.
+
+## Local Development
+
+To run MakeSale locally, you need node and npm.
+
+To get setup, run:
+
+    npm install
+
+Then, to start the server:
+
+    node server/app.js -c "config.dev.json"

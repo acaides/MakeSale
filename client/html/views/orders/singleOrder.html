@@ -1,48 +1,50 @@
-<div class="view" ms-auth style="margin-top: 150px;">
+<div class="view" ms-auth>
+    <div class="header">
+        <a class="headerTitle" href="{{ from || '/orders' }}">
+            <span ng-hide="order.loading">
+                Order #{{ order.id }} <span ng-hide="order.statusId == 1">{{ order.status.toUpperCase() }}
+            </span>
+            <span ng-show="order.loading">
+                Loading Order...
+            </span>
+        </a>
+        <div class="headerActions">
+            <a class="headerAction" href="/orders/{{ order.id }}/edit" ng-show="order.statusId == 1">
+                edit
+            </a>
+        </div>
+    </div>
+
     <div class="viewMessage" ng-show="order.loading">
         Loading...
     </div>
+
     <div class="viewMessage" ng-show="order.error">
         There was an error loading that order.<br>
         {{ order.error }} <br><br>
         <a href="/orders" style="font-weight: bold;">list all orders</a>
     </div>
-    <div ng-hide="order.error" style="position: relative;">
-        <div class="header">
-            <a class="headerTitle" href="{{ from || '/orders' }}">
-                Order #{{ order.id }} <span ng-hide="order.statusId == 1">{{ order.status.toUpperCase() }}</span>
-            </a>
-            <div class="headerActions">
-                <a class="headerAction" href="/orders/{{ order.id }}/edit" ng-show="order.statusId == 1">
-                    edit
-                </a>
-            </div>
-            <div class="subHeader">
-                <div style="text-indent: 4px;">
-                    <div style="font-size: 14px">
-                        {{ order.name || order.createdTimestamp.toDateString() }} for {{ order.customerName }}
-                    </div>
-                    <div style="font-size: 12px">
-                        <div ng-show="order.customerPhone">phone #: {{ order.customerPhone }}</div>
-                        <div ng-show="order.customerEmail">email: {{ order.customerEmail }}</div>
-                        <div ng-hide="order.customerPhone"><br></div>
-                        <div>started on {{ order.createdTimestamp.toLocaleString() }}</div>
-                        <div>last updated {{ order.modifiedTimestamp.toLocaleString() }}</div>
-                    </div>
-                    <div class="columnHeaders" ng-show="order.items.length">
-                        <div class="columnHeader" style="width: 25%;">Qty</div>
-                        <div class="columnHeader" style="width: 50%">Name</div>
-                        <div class="columnHeader" style="width: 25%;">Total</div>
-                    </div>
+
+    <div ng-hide="order.error || order.loading" style="position: relative;">
+        <div style="margin-bottom: 50px;">
+            <div class="card">
+                <div style="font-size: 16px">
+                    {{ (order.name || order.createdTimestamp) | moment:'ddd, MMM Do \'YY' }} for {{ order.customerName }}
+                </div>
+                <div style="font-size: 14px">
+                    <div ng-show="order.customerPhone">phone #: {{ order.customerPhone }}</div>
+                    <div ng-show="order.customerEmail">email: {{ order.customerEmail }}</div>
+                    <div ng-hide="order.customerPhone"><br></div>
+                    <div>started on {{ order.createdTimestamp.toLocaleString() }}</div>
+                    <div>last updated {{ order.modifiedTimestamp.toLocaleString() }}</div>
                 </div>
             </div>
-        </div>
 
-        <div style="margin-bottom: 50px;">
-            <div ng-hide="order.items.length" style="text-align: center; margin-top: 200px;">
+            <div ng-hide="order.items.length" style="text-align: center; margin-top: 100px;">
                 There are no items in this order.<br><br>
                 <a ng-show="order.statusId == 1" href="/orders/{{ order.id }}/addItem" style="font-weight: bold;">add an item now</a>
             </div>
+
             <div>
                 <div class="row" ng-repeat="item in order.items" ng-click="selectItem(item); $event.stopPropagation()" ng-class="{ selectedRow: selectedItem == item }">
                     <div class="columns" style="height: 100%;">
@@ -77,23 +79,22 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
         <div class="footer" ng-show="order.items.length">
             <div class="footerText" ng-show="order.statusId == 1 && !confirmComplete">
                 {{ itemCountText(order) }}, {{ order.total | currency }}
             </div>
             <div class="footerText" ng-show="order.statusId == 1 && confirmComplete">
-                Permanently lock the order?
+                Lock the order?
             </div>
             <div class="footerActions">
-                <a class="footerAction" ng-show="order.statusId == 1 && !confirmComplete" href="/orders/{{ order.id }}/addItem">add item</a>
+                <a class="footerAction" ng-show="order.statusId == 1 && !confirmComplete" href="/orders/{{ order.id }}/addItem">+ item</a>
                 <a class="footerAction" ng-show="order.statusId == 1 && !confirmComplete" ng-click="confirmComplete = true">complete</a>
-                <a class="footerAction" ng-show="order.statusId == 1 && confirmComplete" ng-click="complete()">YES</a>
-                <a class="footerAction" ng-show="order.statusId == 1 && confirmComplete" ng-click="confirmComplete = false">cancel</a>
+                <a class="footerAction" ng-show="order.statusId == 1 && confirmComplete" ng-click="complete()">yes</a>
+                <a class="footerAction" ng-show="order.statusId == 1 && confirmComplete" ng-click="confirmComplete = false">no</a>
                 <a class="footerAction" ng-show="order.statusId == 2 && !confirmComplete" ng-click="addToInvoice()">add to invoice</a>
             </div>
         </div>
     </div>
-
 </div>

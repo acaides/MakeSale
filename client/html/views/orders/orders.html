@@ -3,7 +3,7 @@
         <a href="/" class="headerTitle">
             Orders
         </a>
-        <div class="headerActions">
+        <div class="headerActions" ng-hide="loading">
             <a class="headerAction" ng-hide="showingCompleted" ng-click="toggleShowingCompleted()">
                 show completed
             </a>
@@ -22,7 +22,7 @@
             </div>
         </div> -->
     </div>
-    <div>
+    <div ng-hide="loading">
         <a class="linkedRow" ng-repeat="order in orders" href="/orders/{{ order.id }}">
             <div class="columns" style="position: relative; top: 12px;">
                 <div class="column" style="text-indent: 5px; width: 33%; font-size: 16px;">{{ order.customerName }}</div>
@@ -38,9 +38,12 @@
             </div> -->
         </a>
     </div>
-    <div class="viewMessage" ng-hide="orders.length" style="margin-top: 100px;">
+    <div class="viewMessage" ng-hide="orders.length || loading" style="margin-top: 100px;">
         No incomplete orders.<br><br><br><br>
         <a href="/orders/start">start a new order</a><br><br><br>
         <a ng-click="toggleShowingCompleted()">view completed orders</a>
+    </div>
+    <div class="viewMessage" ng-show="loading" style="margin-top: 100px;">
+        Loading orders...
     </div>
 </div>

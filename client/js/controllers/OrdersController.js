@@ -1,6 +1,8 @@
 define([ './module' ], function (controllers) {
     'use strict';
     controllers.controller('OrdersController', [ '$scope', 'MSApi', function ($, MSApi) {
+        $.loading = true;
+
         MSApi.getOrders(function (orders) {
             $.allOrders = orders;
             $.incompleteOrders = [];
@@ -12,6 +14,7 @@ define([ './module' ], function (controllers) {
             });
 
             $.orders = $.incompleteOrders;
+            $.loading = false;
         });
 
         $.showingCompleted = false;

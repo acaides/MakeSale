@@ -43,7 +43,8 @@ body {
 
 .header {
     top: 0;
-    height: 48px;
+    height: 45px;
+    border-bottom: solid 3px rgba(104, 46, 0, 1);
 }
 
 .footer {

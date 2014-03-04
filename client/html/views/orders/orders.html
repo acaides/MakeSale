@@ -1,4 +1,4 @@
-<div class="view" ms-auth style="margin-top: 68px;">
+<div class="view" ms-auth>
     <div class="header">
         <a href="/" class="headerTitle">
             Orders
@@ -14,28 +14,28 @@
                 start
             </a>
         </div>
-        <div class="subHeader">
+<!--         <div class="subHeader">
             <div class="columnHeaders">
                 <div class="columnHeader" style="width: 36%;">Customer</div>
                 <div class="columnHeader" style="width: 38%;">Name</div>
                 <div class="columnHeader" style="width: 16%;">Total</div>
             </div>
-        </div>
+        </div> -->
     </div>
     <div>
         <a class="linkedRow" ng-repeat="order in orders" href="/orders/{{ order.id }}">
-            <div class="columns" style="position: relative; top: 6px;">
-                <div class="column" style="width: 36%;">{{ order.customerName }}</div>
-                <div class="column" style="width: 38%;">{{ order.name || order.createdTimestamp.toDateString() }}</div>
-                <div class="column" style="width: 16%;">{{ order.total | currency }}</div>
+            <div class="columns" style="position: relative; top: 12px;">
+                <div class="column" style="text-indent: 5px; width: 33%; font-size: 16px;">{{ order.customerName }}</div>
+                <div class="column" style="width: 45%; font-size: 16px;">{{ (order.name || order.createdTimestamp) | moment:'ddd, MMM Do \'YY' }}</div>
+                <div class="column" style="width: 16%; font-size: 16px;">{{ order.total | currency }}</div>
             </div>
 
-            <div ng-show="order.statusId == 1" class="rowFootnote">
+<!--             <div ng-show="order.statusId == 1" class="rowFootnote">
                 #{{ order.id }}, {{ itemCountText(order) }}, modified {{ order.modifiedTimestamp.toLocaleString() }}
             </div>
             <div ng-hide="order.statusId == 1" class="rowFootnote">
                 #{{ order.id }}, {{ itemCountText(order) }}, {{ order.status.toUpperCase() }}
-            </div>
+            </div> -->
         </a>
     </div>
     <div class="viewMessage" ng-hide="orders.length" style="margin-top: 100px;">

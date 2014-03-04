@@ -1,12 +1,12 @@
 /* TEAM */
 	Designer/Developer: Isaiah Simpson
-	Contact: isaiah [at] acaides.com
+	Contact: isaiah@acaides.com
 	Twitter: @acaides
 	From: Chicago, Illinois, USA
 
 /* THANKS */
 	QA/Guinea Pig: Jeffrey Hallenbeck
-	Contact: jeff [at] beurrage.com
+	Contact: jeff@beurrage.com
 	Twitter: @jeff_hallenbeck
 	From: Chicago, Illinois, USA
 
@@ -14,4 +14,4 @@
 	Last update: 2014/02/09
 	Language: English
 	Doctype: HTML5
-	IDE: IntelliJ, Sublime Text, Chrome
+	IDE: Atom, Chrome

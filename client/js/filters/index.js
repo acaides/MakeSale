@@ -1,1 +1,1 @@
-define([  ], function () {});
+define([ './MSMomentFormatFilter' ], function () {});

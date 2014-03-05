@@ -1,6 +1,8 @@
 define([ './module' ], function (controllers) {
     'use strict';
     controllers.controller('InvoicesController', [ '$scope', 'MSApi', function ($, MSApi) {
+        $.loading = true;
+
         MSApi.getInvoices(function (invoices) {
             $.allInvoices = invoices;
             $.unpaidInvoices = [];
@@ -12,6 +14,7 @@ define([ './module' ], function (controllers) {
             });
 
             $.invoices = $.unpaidInvoices;
+            $.loading = false;
         });
 
         $.showingPaid = false;

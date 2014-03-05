@@ -32,4 +32,4 @@ To get setup, run:
 
 Then, to start the server:
 
-    node server/app.js -c "config.dev.json"
+    node server/app.js -c "./config.dev.json"

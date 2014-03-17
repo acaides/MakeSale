@@ -17,13 +17,24 @@ define([ './module' ], function (controllers) {
         $.complete = function () {
             MSApi.updateInvoice($.invoice.id, { statusId: 2 }, function (invoice) {
                 _.extend($.invoice, invoice);
-                //$location.path('/invoices');
             });
         };
 
         $.send = function () {
             MSApi.sendInvoice($.invoice.id, function (ack) {
                 _.extend($.sendAck, ack);
+            });
+        };
+
+        $.markSent = function () {
+            MSApi.updateInvoice($.invoice.id, { statusId: 3 }, function (invoice) {
+                _.extend($.invoice, invoice);
+            });
+        };
+
+        $.markPaid = function () {
+            MSApi.updateInvoice($.invoice.id, { statusId: 4 }, function (invoice) {
+                _.extend($.invoice, invoice);
             });
         };
 

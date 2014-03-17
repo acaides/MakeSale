@@ -24,12 +24,15 @@
 
     <div ng-hide="invoice.error || invoice.loading" style="position: relative;">
         <div class="card">
-            <div style="text-indent: 4px; font-size: 17px; margin-bottom: 2px;">
+            <div style="text-indent: 4px; font-size: 17px; margin-bottom: 2px; position: relative;">
                 <div>{{ invoice.name || invoice.createdTimestamp.toDateString() }} billed to {{ invoice.billedToName }}</div>
                 <div ng-show="invoice.billedToPhone">phone: {{ invoice.billedToPhone }}</div>
                 <div ng-show="invoice.billedToEmail">email: {{ invoice.billedToEmail }}</div>
                 <div ng-hide="invoice.billedToPhone"><br></div>
                 <div ng-hide="invoice.billedToEmail"><br></div>
+                <span class="indicator" ng-show="invoice.statusId == 4" style="position: absolute; bottom: 3px; right: 3px;">
+                    PAID
+                </span>
             </div>
         </div>
 
@@ -103,8 +106,9 @@
                 <a class="footerAction" target="_blank" ng-href="/documents/invoices/{{ invoice.id }}?ac={{ invoice.accessCode }}">html</a>
                 <a class="footerAction" target="_blank" ng-href="/documents/invoices/{{ invoice.id }}.pdf?ac={{ invoice.accessCode }}">pdf</a>
                 <a class="footerAction" ng-show="invoice.statusId == 1" ng-click="complete()">complete</a>
-                <a class="footerAction" ng-show="invoice.statusId == 2 && !sendAck.loading" ng-click="send()">send</a>
-                <a class="footerAction" ng-show="invoice.statusId == 2 && sendAck.loading" >sending...</a>
+                <a class="footerAction" ng-show="invoice.statusId == 2" ng-click="markSent()">sent</a>
+                <a class="footerAction" ng-show="invoice.statusId == 3" ng-click="markPaid()">paid</a>
+                <!--<a class="footerAction" ng-show="invoice.statusId == 2 && sendAck.loading" >sending...</a>-->
             </div>
         </div>
     </div>

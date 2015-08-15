@@ -12,7 +12,7 @@ Features include:
 Planned Features:
 
 - Improved Invoicing: automatic emailing and online payment links on invoices.
-- Production Management: Product "receipes", batches, and production run
+- Production Management: Product "recipes", batches, and production run
 modeling.
 - Inventory Management: Tracking of inventory resources integrated with
 production runs and suppliers.
